@@ -1,3 +1,10 @@
 {
-  "cSpell.words": ["astro", "astrojs", "biomejs", "shadowroot", "webcomponents"]
+  "cSpell.words": [
+    "astro",
+    "astrojs",
+    "biomejs",
+    "shadowroot",
+    "tsconfigs",
+    "webcomponents"
+  ]
 }
