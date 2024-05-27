@@ -1,6 +1,14 @@
 {
-  "extends": "astro/tsconfigs/strictest",
-  "compilerOptions": {
-    "experimentalDecorators": true
-  }
+	"extends": "astro/tsconfigs/strictest",
+	"compilerOptions": {
+		"experimentalDecorators": true,
+		"baseUrl": ".",
+		"paths": {
+			"@components/*": ["src/components/*"],
+			"@layouts/*": ["src/layouts/*"],
+			"@utils/*": ["src/utils/*"],
+			"@server/*": ["src/server/*"],
+			"@modules/*": ["src/modules/*"]
+		}
+	}
 }
