@@ -20,14 +20,11 @@ export const lucia = new Lucia(adapter, {
 	},
 });
 
-const authorizeEndpoint = "https://github.com/login/oauth/authorize";
-const tokenEndpoint = "https://github.com/login/oauth/access_token";
-
 export const client = new OAuth2Client(
-	import.meta.env.CLIENT_ID,
-	authorizeEndpoint,
-	tokenEndpoint,
-	{ redirectURI: "http://localhost:3000/login/github/callback" },
+	import.meta.env.MASTODON_CLIENT_ID,
+	`${import.meta.env.MASTODON_AUTHORIZE_ENDPOINT}/oauth/authorize`,
+	`${import.meta.env.MASTODON_TOKEN_ENDPOINT}/oauth/token`,
+	{ redirectURI: import.meta.env.MASTODON_REDIRECT_URL },
 );
 
 declare module "lucia" {
