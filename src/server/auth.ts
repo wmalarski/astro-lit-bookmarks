@@ -30,6 +30,8 @@ export const createAuthorizationUrl = async (
 	context.cookies.set(STATE_KEY, state, COOKIE_OPTIONS);
 	context.cookies.set(CODE_VERIFIER_KEY, codeVerifier, COOKIE_OPTIONS);
 
+	console.log({ state, codeVerifier });
+
 	return url.toString();
 };
 
@@ -42,9 +44,62 @@ export const validateAuthorizationCode = (
 	const storedState = context.cookies.get(STATE_KEY)?.value;
 	const storedCodeVerifier = context.cookies.get(CODE_VERIFIER_KEY)?.value;
 
+	console.log({
+		code,
+		state,
+		storedState,
+		storedCodeVerifier,
+		sp: Object.fromEntries(context.url.searchParams.entries()),
+		ck: Array.from(context.cookies.headers()),
+	});
+
 	if (!code || !storedState || !storedCodeVerifier || state !== storedState) {
 		return Promise.resolve(null);
 	}
+
+	const body = new URLSearchParams();
+	body.set("code", authorizationCode);
+	body.set("client_id", this.clientId);
+	body.set("grant_type", "authorization_code");
+	if (this.redirectURI !== null) {
+		body.set("redirect_uri", this.redirectURI);
+	}
+	if (options?.codeVerifier !== undefined) {
+		body.set("code_verifier", options.codeVerifier);
+	}
+
+	const headers = new Headers();
+        headers.set("Content-Type", "application/x-www-form-urlencoded");
+        headers.set("Accept", "application/json");
+        headers.set("User-Agent", "oslo");
+        if (options?.credentials !== undefined) {
+            const authenticateWith = options?.authenticateWith ?? "http_basic_auth";
+            if (authenticateWith === "http_basic_auth") {
+                const encodedCredentials = base64.encode(new TextEncoder().encode(`${this.clientId}:${options.credentials}`));
+                headers.set("Authorization", `Basic ${encodedCredentials}`);
+            }
+            else if (authenticateWith === "request_body") {
+                body.set("client_secret", options.credentials);
+            }
+            else {
+                throw new TypeError(`Invalid value for 'authenticateWith': ${authenticateWith}`);
+            }
+        }
+        const request = new Request(this.tokenEndpoint, {
+            method: "POST",
+            headers,
+            body
+        });
+        const response = await fetch(request);
+        const result = await response.json();
+        // providers are allowed to return non-400 status code for errors
+        if (!("access_token" in result) && "error" in result) {
+            throw new OAuth2RequestError(request, result);
+        }
+        else if (!response.ok) {
+            throw new OAuth2RequestError(request, {});
+        }
+        return result;
 
 	return client.validateAuthorizationCode(code, {
 		codeVerifier: storedCodeVerifier,

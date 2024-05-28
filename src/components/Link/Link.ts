@@ -20,11 +20,11 @@ export class AlbAnchor extends LitElement {
 	static override styles = [buttonStyles];
 
 	override render() {
-		return html`<button class=${buttonRecipe({
+		return html`<a class=${buttonRecipe({
 			size: this.size,
 			variant: this.variant,
 		})} href=${this.href}>
       <slot></slot>
-    </button>`;
+    </a>`;
 	}
 }
