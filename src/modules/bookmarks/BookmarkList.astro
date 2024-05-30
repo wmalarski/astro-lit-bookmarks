@@ -1,0 +1,7 @@
+---
+const bookmarks = await Astro.locals.mastoClient?.v1.bookmarks.list({
+    limit: 2,
+});
+---
+
+<pre>{JSON.stringify(bookmarks, null, 2)}</pre>

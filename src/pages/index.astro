@@ -2,14 +2,11 @@
 import Layout from "../layouts/Layout.astro";
 import "../components/Button/Button";
 import { paths } from "@utils/paths";
+import BookmarkList from "@modules/bookmarks/BookmarkList.astro";
 
 if (!Astro.locals.session) {
   return Astro.redirect(paths.login);
 }
-
-const bookmarks = await Astro.locals.mastoClient?.v1.bookmarks.list({
-  limit: 2,
-});
 ---
 
 <Layout title="Welcome to Astro.">
@@ -24,6 +21,6 @@ const bookmarks = await Astro.locals.mastoClient?.v1.bookmarks.list({
     <a href={paths.loginMastodon}>Sign in with Mastodon</a>
     <a href={paths.logout}>Sign out</a>
 
-    <pre>{JSON.stringify(bookmarks, null, 2)}</pre>
+    <BookmarkList />
   </main>
 </Layout>
