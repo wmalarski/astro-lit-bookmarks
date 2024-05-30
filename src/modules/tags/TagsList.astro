@@ -1,7 +1,7 @@
 ---
 import { findTags } from "@server/tags";
 
-const tags = findTags();
+const tags = findTags(Astro);
 ---
 
 <pre>{JSON.stringify(tags, null, 2)}</pre>

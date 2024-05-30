@@ -4,10 +4,13 @@ import { validateContextSession } from "./auth";
 import type { ActionAPIContext } from "astro/actions/runtime/store.js";
 import { ActionError } from "astro:actions";
 import { DB_ERROR } from "./errors";
+import type { APIContext } from "astro";
 
 const TAG_LIMIT = 100;
 
-export const findTags = () => {
+export const findTags = (context: APIContext) => {
+	validateContextSession(context);
+
 	return db.select().from(tagTable).limit(TAG_LIMIT).all();
 };
 
