@@ -7,7 +7,7 @@ import {
 	gte,
 	lt,
 } from "drizzle-orm";
-import { bookmarkTable, db } from "./db";
+import { bookmarkTable, bookmarkTagTable, db, tagTable } from "./db";
 import { validateContextSession } from "./auth";
 import type { ActionAPIContext } from "astro/actions/runtime/store.js";
 import { ActionError } from "astro:actions";
@@ -18,11 +18,17 @@ type FindMastoBookmarksArgs = {
 	mastoBookmarks: mastodon.v1.Status[];
 };
 
-export const findMastoBookmarks = (
+export const findBookmarksByMastoIds = (
 	context: ActionAPIContext,
 	{ mastoBookmarks }: FindMastoBookmarksArgs,
 ) => {
 	const session = validateContextSession(context);
+	const bookmarks = new Map<string, InferSelectModel<typeof bookmarkTable>>();
+	const tags = new Map<string, InferSelectModel<typeof tagTable>[]>();
+
+	if (mastoBookmarks.length === 0) {
+		return { bookmarks, tags };
+	}
 
 	const mastoIds = mastoBookmarks.map((bookmark) => bookmark.id);
 
@@ -35,17 +41,31 @@ export const findMastoBookmarks = (
 				eq(bookmarkTable.userId, session.userId),
 			),
 		)
+		.leftJoin(
+			bookmarkTagTable,
+			eq(bookmarkTable.id, bookmarkTagTable.bookmarkId),
+		)
+		.leftJoin(tagTable, eq(bookmarkTagTable.tagId, tagTable.id))
 		.all();
 
-	const map = new Map<string, InferSelectModel<typeof bookmarkTable>>();
+	for (const entry of response) {
+		const mastoBookmarkId = entry.bookmark.mastoBookmarkId;
+		if (mastoBookmarkId) {
+			bookmarks.set(mastoBookmarkId, entry.bookmark);
 
-	for (const bookmark of response) {
-		if (bookmark.mastoBookmarkId) {
-			map.set(bookmark.mastoBookmarkId, bookmark);
+			if (entry.tag) {
+				const array = tags.get(mastoBookmarkId);
+
+				if (array) {
+					array.push(entry.tag);
+				} else {
+					tags.set(mastoBookmarkId, [entry.tag]);
+				}
+			}
 		}
 	}
 
-	return map;
+	return { bookmarks, tags };
 };
 
 type FindBookmarksArgs = {
@@ -59,7 +79,7 @@ export const findBookmarks = (
 ) => {
 	const session = validateContextSession(context);
 
-	return db
+	const response = db
 		.select()
 		.from(bookmarkTable)
 		.where(
@@ -70,7 +90,31 @@ export const findBookmarks = (
 				to ? lt(bookmarkTable.createdAt, to) : undefined,
 			),
 		)
+		.leftJoin(
+			bookmarkTagTable,
+			eq(bookmarkTable.id, bookmarkTagTable.bookmarkId),
+		)
+		.leftJoin(tagTable, eq(bookmarkTagTable.tagId, tagTable.id))
 		.all();
+
+	const bookmarks = new Array<InferSelectModel<typeof bookmarkTable>>();
+	const tags = new Map<string, InferSelectModel<typeof tagTable>[]>();
+
+	for (const entry of response) {
+		bookmarks.push(entry.bookmark);
+
+		if (entry.tag) {
+			const array = tags.get(entry.bookmark.id);
+
+			if (array) {
+				array.push(entry.tag);
+			} else {
+				tags.set(entry.bookmark.id, [entry.tag]);
+			}
+		}
+	}
+
+	return { bookmarks, tags };
 };
 
 type CreateBookmarkArgs = {

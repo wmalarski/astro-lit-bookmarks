@@ -1,7 +1,55 @@
 ---
-const bookmarks = await Astro.locals.mastoClient?.v1.bookmarks.list({
-    limit: 2,
+import { findBookmarks, findBookmarksByMastoIds } from "@server/bookmarks";
+
+const mastoBookmarks = await Astro.locals.mastoClient?.v1.bookmarks.list({
+    limit: 10,
+});
+
+const bookmarksByMastoIds = findBookmarksByMastoIds(Astro, {
+    mastoBookmarks: mastoBookmarks ?? [],
+});
+
+const bookmarks = findBookmarks(Astro, {
+    to: new Date(),
 });
 ---
 
-<pre>{JSON.stringify(bookmarks, null, 2)}</pre>
+<ul>
+    {
+        mastoBookmarks?.map((mastoBookmark) => (
+            <li>
+                <pre>
+                    {JSON.stringify(
+                        {
+                            mastoBookmark,
+                            bookmark: bookmarksByMastoIds.bookmarks.get(
+                                mastoBookmark.id,
+                            ),
+                            tags: bookmarksByMastoIds.tags.get(
+                                mastoBookmark.id,
+                            ),
+                        },
+                        null,
+                        2,
+                    )}
+                </pre>
+            </li>
+        ))
+    }
+    {
+        bookmarks.bookmarks.map((bookmark) => (
+            <li>
+                <pre>
+                    {JSON.stringify(
+                        {
+                            bookmark,
+                            tags: bookmarks.tags.get(bookmark.id),
+                        },
+                        null,
+                        2,
+                    )}
+                </pre>
+            </li>
+        ))
+    }
+</ul>
