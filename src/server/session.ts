@@ -15,8 +15,6 @@ export const lucia = new Lucia(adapter, {
 		};
 	},
 	getSessionAttributes: (attributes) => {
-		console.log("attributes", attributes);
-
 		return {
 			accessToken: attributes.accessToken,
 		};

@@ -21,8 +21,6 @@ export const GET = async (context: APIContext): Promise<Response> => {
 
 		const existingUser = getUserByMastoId(mastoUser.id);
 
-		console.log({ mastoUser, tokens, existingUser });
-
 		if (existingUser) {
 			await setSessionCookie(context, existingUser.id, tokens);
 
@@ -30,8 +28,6 @@ export const GET = async (context: APIContext): Promise<Response> => {
 		}
 
 		const newUser = insertUser(mastoUser);
-
-		console.log({ newUser });
 
 		await setSessionCookie(context, newUser.id, tokens);
 
