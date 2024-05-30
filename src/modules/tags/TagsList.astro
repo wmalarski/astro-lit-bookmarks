@@ -1,0 +1,7 @@
+---
+import { findTags } from "@server/tags";
+
+const tags = findTags();
+---
+
+<pre>{JSON.stringify(tags, null, 2)}</pre>

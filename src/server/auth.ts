@@ -4,6 +4,9 @@ import type { APIContext, AstroCookieSetOptions } from "astro";
 import { client, lucia } from "@server/session";
 import { verifyRequestOrigin } from "lucia";
 import { createOAuthAPIClient } from "masto";
+import { ActionError } from "astro:actions";
+import { UNAUTHORIZED_ERROR } from "./errors";
+import type { ActionAPIContext } from "astro/actions/runtime/store.js";
 
 const CODE_KEY = "code";
 const CODE_VERIFIER_KEY = "code_verifier";
@@ -124,4 +127,14 @@ export const authMiddleware = async (context: APIContext) => {
 
 	context.locals.session = session;
 	context.locals.user = user;
+};
+
+export const validateContextSession = (
+	context: APIContext | ActionAPIContext,
+) => {
+	const session = context.locals.session;
+	if (!session) {
+		throw new ActionError(UNAUTHORIZED_ERROR);
+	}
+	return session;
 };
