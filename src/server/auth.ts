@@ -4,6 +4,7 @@ import type { APIContext, AstroCookieSetOptions } from "astro";
 import { client, lucia } from "@server/session";
 import { verifyRequestOrigin } from "lucia";
 import { createOAuthAPIClient } from "masto";
+import { db, sessionTable } from "./db";
 
 const CODE_KEY = "code";
 const CODE_VERIFIER_KEY = "code_verifier";
@@ -63,8 +64,22 @@ export const setSessionCookie = async (
 	userId: string,
 	tokens: Tokens,
 ) => {
-	const session = await lucia.createSession(userId, tokens);
+	const session = await lucia.createSession(userId, {
+		accessToken: tokens.accessToken,
+	});
+
+	const sessions = db.select().from(sessionTable).all();
+
+	console.log({ sessions });
+
 	const sessionCookie = lucia.createSessionCookie(session.id);
+
+	console.log({
+		session,
+		userId,
+		tokens,
+		sessionCookie,
+	});
 
 	context.cookies.set(
 		sessionCookie.name,

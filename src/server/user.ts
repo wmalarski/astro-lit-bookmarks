@@ -1,4 +1,3 @@
-import { generateId } from "lucia";
 import { db, userTable } from "./db";
 import { eq } from "drizzle-orm";
 import { createRestAPIClient } from "masto";
@@ -8,7 +7,6 @@ export const verifyMastoCredentials = (tokens: Tokens) => {
 	const client = createRestAPIClient({
 		url: import.meta.env.MASTODON_URL,
 		accessToken: tokens.accessToken,
-		log: "debug",
 	});
 
 	return client.v1.accounts.verifyCredentials();
@@ -21,10 +19,8 @@ export const getUserByMastoId = (id: string) => {
 type AccountCredentials = Awaited<ReturnType<typeof verifyMastoCredentials>>;
 
 export const insertUser = (accountCredentials: AccountCredentials) => {
-	const userId = generateId(15);
-
 	const values = {
-		id: userId,
+		id: accountCredentials.id,
 		name: accountCredentials.displayName,
 	};
 

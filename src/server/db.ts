@@ -17,4 +17,5 @@ export const sessionTable = sqliteTable("session", {
 		.notNull()
 		.references(() => userTable.id),
 	expiresAt: integer("expires_at").notNull(),
+	accessToken: text("access_token").notNull(),
 });

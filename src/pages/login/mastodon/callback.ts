@@ -13,19 +13,15 @@ export const GET = async (context: APIContext): Promise<Response> => {
 	try {
 		const tokens = await validateAuthorizationCode(context);
 
-		console.log({ tokens });
-
 		if (!tokens) {
 			return new Response(null, { status: 400 });
 		}
 
 		const mastoUser = await verifyMastoCredentials(tokens);
 
-		console.log({ mastoUser });
-
 		const existingUser = getUserByMastoId(mastoUser.id);
 
-		console.log({ existingUser });
+		console.log({ mastoUser, tokens, existingUser });
 
 		if (existingUser) {
 			await setSessionCookie(context, existingUser.id, tokens);

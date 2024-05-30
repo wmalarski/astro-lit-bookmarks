@@ -3,6 +3,7 @@ import { Lucia } from "lucia";
 import { OAuth2Client } from "oslo/oauth2";
 import { db, sessionTable, userTable } from "./db";
 import type { InferSelectModel } from "drizzle-orm";
+import type { Tokens } from "arctic";
 
 export const adapter = new DrizzleSQLiteAdapter(db, sessionTable, userTable);
 
@@ -11,6 +12,13 @@ export const lucia = new Lucia(adapter, {
 		return {
 			name: attributes.name,
 			id: attributes.id,
+		};
+	},
+	getSessionAttributes: (attributes) => {
+		console.log("attributes", attributes);
+
+		return {
+			accessToken: attributes.accessToken,
 		};
 	},
 	sessionCookie: {
@@ -34,5 +42,6 @@ declare module "lucia" {
 	interface Register {
 		Lucia: typeof lucia;
 		DatabaseUserAttributes: InferSelectModel<typeof userTable>;
+		DatabaseSessionAttributes: Pick<Tokens, "accessToken">;
 	}
 }
