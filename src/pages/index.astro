@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../components/Button/Button";
+import { paths } from "@utils/paths";
 ---
 
 <Layout title="Welcome to Astro.">
@@ -12,6 +13,7 @@ import "../components/Button/Button";
     <alb-button size="medium">Medium</alb-button>
     <alb-button size="large">Large</alb-button>
 
-    <a href="/login/mastodon">Sign in with Mastodon</a>
+    <a href={paths.loginMastodon}>Sign in with Mastodon</a>
+    <a href={paths.logout}>Sign out</a>
   </main>
 </Layout>

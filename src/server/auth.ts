@@ -58,8 +58,12 @@ export const validateAuthorizationCode = async (
 	});
 };
 
-export const setSessionCookie = async (context: APIContext, userId: string) => {
-	const session = await lucia.createSession(userId, {});
+export const setSessionCookie = async (
+	context: APIContext,
+	userId: string,
+	tokens: Tokens,
+) => {
+	const session = await lucia.createSession(userId, tokens);
 	const sessionCookie = lucia.createSessionCookie(session.id);
 
 	context.cookies.set(

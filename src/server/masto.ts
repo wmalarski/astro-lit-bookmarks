@@ -1,12 +1,13 @@
 import type { APIContext } from "astro";
+import { createRestAPIClient } from "masto";
 
 export const mastoMiddleware = async (context: APIContext) => {
 	console.log(context.locals);
 
-	// const mastoRestAPIClient = createRestAPIClient({
-	// 	url: import.meta.env.MASTODON_URL,
-	// 	accessToken: import.meta.env.MASTODON_ACCESS_TOKEN,
-	// });
+	const mastoRestAPIClient = createRestAPIClient({
+		url: import.meta.env.MASTODON_URL,
+		accessToken: import.meta.env.MASTODON_ACCESS_TOKEN,
+	});
 
 	// const mastoOAuthAPIClient = createOAuthAPIClient({
 	// 	url: import.meta.env.MASTODON_URL,
