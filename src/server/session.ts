@@ -20,10 +20,12 @@ export const lucia = new Lucia(adapter, {
 	},
 });
 
+export const TOKEN_ENDPOINT = `${import.meta.env.MASTODON_URL}/oauth/token`;
+
 export const client = new OAuth2Client(
 	import.meta.env.MASTODON_CLIENT_ID,
 	`${import.meta.env.MASTODON_URL}/oauth/authorize`,
-	`${import.meta.env.MASTODON_URL}/oauth/token`,
+	TOKEN_ENDPOINT,
 	{ redirectURI: import.meta.env.MASTODON_REDIRECT_URL },
 );
 

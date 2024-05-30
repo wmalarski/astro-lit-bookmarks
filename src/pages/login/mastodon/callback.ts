@@ -2,7 +2,12 @@ import { OAuth2RequestError } from "arctic";
 
 import type { APIContext } from "astro";
 import { paths } from "@utils/paths";
-import { validateAuthorizationCode } from "@server/auth";
+import { setSessionCookie, validateAuthorizationCode } from "@server/auth";
+import {
+	getUserByMastoId,
+	insertUser,
+	verifyMastoCredentials,
+} from "@server/user";
 
 export const GET = async (context: APIContext): Promise<Response> => {
 	try {
@@ -14,19 +19,25 @@ export const GET = async (context: APIContext): Promise<Response> => {
 			return new Response(null, { status: 400 });
 		}
 
-		// const googleUser = await getGoogleUser(tokens);
+		const mastoUser = await verifyMastoCredentials(tokens);
 
-		// const existingUser = await getUserByGoogleId(googleUser.sub);
+		console.log({ mastoUser });
 
-		// if (existingUser) {
-		// 	await setSessionCookie(context, existingUser.id);
+		const existingUser = getUserByMastoId(mastoUser.id);
 
-		// 	return context.redirect(paths.index());
-		// }
+		console.log({ existingUser });
 
-		// const newUser = await insertUser(googleUser);
+		if (existingUser) {
+			await setSessionCookie(context, existingUser.id);
 
-		// await setSessionCookie(context, newUser.id);
+			return context.redirect(paths.index());
+		}
+
+		const newUser = insertUser(mastoUser);
+
+		console.log({ newUser });
+
+		await setSessionCookie(context, newUser.id);
 
 		return context.redirect(paths.index());
 	} catch (error) {
