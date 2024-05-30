@@ -75,29 +75,36 @@ export const findBookmarks = (
 
 type CreateBookmarkArgs = {
 	content: string;
+	mastoBookmarkId: string | null;
+	priority: number;
+	tagIds: string[];
 };
 
-export const createBookmark = (
+export const createBookmark = async (
 	context: ActionAPIContext,
-	{ content }: CreateBookmarkArgs,
+	{ content, mastoBookmarkId, priority }: CreateBookmarkArgs,
 ) => {
 	const session = validateContextSession(context);
 
-	const result = db
+	const bookmarkId = crypto.randomUUID();
+	const result = await db
 		.insert(bookmarkTable)
 		.values({
 			content,
 			userId: session.userId,
 			createdAt: new Date(),
-			id: crypto.randomUUID(),
+			id: bookmarkId,
+			mastoBookmarkId,
+			priority,
 		})
-		.run();
+		.returning()
+		.execute();
 
-	if (result.changes === 0) {
+	if (result.length === 0) {
 		throw new ActionError(DB_ERROR);
 	}
 
-	return result;
+	return result[1];
 };
 
 type UpdateBookmarkArgs = {
