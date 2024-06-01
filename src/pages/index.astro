@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import "../components/Button/Button";
 import { paths } from "@utils/paths";
 import BookmarkList from "@modules/bookmarks/BookmarkList.astro";
+import TagsList from "@modules/tags/TagsList.astro";
 
 if (!Astro.locals.session) {
   return Astro.redirect(paths.login);
@@ -21,6 +22,7 @@ if (!Astro.locals.session) {
     <a href={paths.loginMastodon}>Sign in with Mastodon</a>
     <a href={paths.logout}>Sign out</a>
 
+    <TagsList />
     <BookmarkList />
   </main>
 </Layout>

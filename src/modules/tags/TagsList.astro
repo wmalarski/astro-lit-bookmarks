@@ -1,7 +1,8 @@
 ---
 import { findTags } from "@server/tags";
+import { TypedAlbTagsList } from "./TagsList";
 
 const tags = findTags(Astro);
 ---
 
-<pre>{JSON.stringify(tags, null, 2)}</pre>
+<TypedAlbTagsList tags={tags} />
