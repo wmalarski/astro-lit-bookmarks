@@ -2,6 +2,7 @@
 	"extends": "astro/tsconfigs/strictest",
 	"compilerOptions": {
 		"experimentalDecorators": true,
+		"useDefineForClassFields": false,
 		"baseUrl": ".",
 		"paths": {
 			"@components/*": ["src/components/*"],

@@ -5,24 +5,31 @@ import { AddTodoEvent } from "./events";
 
 @customElement("alb-create-tag-form")
 export class TodoForm extends LitElement {
+	onSubmit(event: Event) {
+		console.log("onSubmit");
+		event.preventDefault();
+
+		const { value } = this.newTagInput;
+		console.log({ value });
+	}
 	override render() {
-		return html`<input 
-            @change=${this.#onChange} 
-            @keydown=${this.#onKeydown} 
+		return html`<form @submit=${this.onSubmit}>
+			<input
             class="new-todo" 
             autofocus 
             autocomplete="off" 
             placeholder="What needs to be done?"
-        />`;
+        />
+	</form>`;
 	}
 
-	@query("input", true) newTodoInput!: HTMLInputElement;
+	@query("input", true) newTagInput!: HTMLInputElement;
 
 	#onChange() {
-		const { value } = this.newTodoInput;
+		const { value } = this.newTagInput;
 		if (value.length > 0) this.dispatchEvent(new AddTodoEvent(value));
 
-		this.newTodoInput.value = "";
+		this.newTagInput.value = "";
 	}
 
 	#onKeydown(e: KeyboardEvent) {

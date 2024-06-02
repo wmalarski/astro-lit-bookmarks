@@ -2,6 +2,7 @@ import type { tagTable } from "@server/db";
 import type { InferSelectModel } from "drizzle-orm";
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import "./CreateTagForm";
 
 type AlbTagsListProps = {
 	tags: InferSelectModel<typeof tagTable>[];
@@ -13,7 +14,7 @@ type AlbTagsListComponent = (props: AlbTagsListProps) => any;
 @customElement("alb-tags-list")
 export class AlbTagsList extends LitElement {
 	@property({ attribute: false })
-	tags?: InferSelectModel<typeof tagTable>[];
+	tags: InferSelectModel<typeof tagTable>[] = [];
 
 	override render() {
 		return html`<div>
