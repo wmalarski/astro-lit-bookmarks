@@ -11,15 +11,15 @@ export const tags = {
 		},
 	}),
 	updateTag: defineAction({
-		accept: "form",
+		accept: "json",
 		input: z.object({ tagId: z.string(), name: z.string() }),
 		handler: async (args, context) => {
 			updateTag(context, args);
 			return { success: true };
 		},
 	}),
-	deleteReview: defineAction({
-		accept: "form",
+	deleteTag: defineAction({
+		accept: "json",
 		input: z.object({ tagId: z.string() }),
 		handler: async (args, context) => {
 			deleteTag(context, args);

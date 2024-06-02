@@ -3,7 +3,8 @@ import type { InferSelectModel } from "drizzle-orm";
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import "./CreateTagForm";
-import type { CreateTagEvent } from "./events";
+import "./TagsListItem";
+import type { CreateTagEvent, DeleteTagEvent } from "./events";
 import { Task } from "@lit/task";
 import { actions } from "astro:actions";
 
@@ -27,7 +28,16 @@ export class AlbTagsList extends LitElement {
 		<div>
 			<alb-create-tag-form @tag-create=${this.onCreateTag}></alb-create-tag-form>
 			<pre>${JSON.stringify(this.optimisticTag, null, 2)}</pre>
-			<pre>${JSON.stringify(this.tags, null, 2)}</pre>
+			<ul>
+				${this.tags.map(
+					(tag) => html`
+					<alb-tags-list-item 
+						.tag=${tag}
+						@tag-delete=${this.onDeleteTag}
+					></alb-tags-list-item>
+					`,
+				)}
+			</ul>
 		</div>`;
 	}
 
@@ -49,8 +59,12 @@ export class AlbTagsList extends LitElement {
 	});
 
 	onCreateTag = async (event: CreateTagEvent) => {
-		this.optimisticTag = event.text;
-		await this.createTagTask.run([event.text]);
+		this.optimisticTag = event.name;
+		await this.createTagTask.run([event.name]);
+	};
+
+	onDeleteTag = async (event: DeleteTagEvent) => {
+		console.log(event.id);
 	};
 }
 
