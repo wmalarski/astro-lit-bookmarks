@@ -1,13 +1,10 @@
-/**
- * An event that represents a request to add a new todo.
- */
-export class AddTodoEvent extends Event {
-	static readonly eventName = "todo-add" as const;
+export class CreateTagEvent extends Event {
+	static readonly eventName = "tag-create" as const;
 
 	readonly text: string;
 
 	constructor(text: string) {
-		super(AddTodoEvent.eventName, { bubbles: true, composed: true });
+		super(CreateTagEvent.eventName, { bubbles: true, composed: true });
 		this.text = text;
 	}
 }
@@ -65,7 +62,7 @@ export class ClearCompletedEvent extends Event {
 declare global {
 	// eslint-disable-next-line no-unused-vars
 	interface HTMLElementEventMap {
-		"todo-add": AddTodoEvent;
+		"tag-create": CreateTagEvent;
 		"todo-delete": DeleteTodoEvent;
 		// "todo-edit": EditTodoEvent;
 		"todo-toggle-all": ToggleAllTodoEvent;

@@ -19,11 +19,13 @@ export class AlbButton extends LitElement {
 	static override styles = [buttonStyles];
 
 	override render() {
-		return html`<button class=${buttonRecipe({
-			size: this.size,
-			variant: this.variant,
-		})} type=${this.type} disabled=${this.disabled}>
-      <slot></slot>
-    </button>`;
+		return html`
+		<button 
+			class=${buttonRecipe({ size: this.size, variant: this.variant })} 
+			type=${this.type} 
+			?disabled=${this.disabled}>
+	      <slot></slot>
+    	</button>
+		`;
 	}
 }
