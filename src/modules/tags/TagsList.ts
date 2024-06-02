@@ -3,7 +3,7 @@ import type { InferSelectModel } from "drizzle-orm";
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import "./CreateTagForm";
-import { CreateTagEvent } from "./events";
+import type { CreateTagEvent } from "./events";
 
 type AlbTagsListProps = {
 	tags: InferSelectModel<typeof tagTable>[];
@@ -17,24 +17,16 @@ export class AlbTagsList extends LitElement {
 	@property({ attribute: false })
 	tags: InferSelectModel<typeof tagTable>[] = [];
 
-	constructor() {
-		super();
-
-		console.log(this.addEventListener);
-
-		this.addEventListener(CreateTagEvent.eventName, this.onCreateTag);
-	}
-
 	override render() {
 		return html`
 		<div>
-			<alb-create-tag-form></alb-create-tag-form>
+			<alb-create-tag-form @tag-create=${this.onCreateTag}></alb-create-tag-form>
 			<pre>${JSON.stringify(this.tags, null, 2)}</pre>
 		</div>`;
 	}
 
 	onCreateTag = (event: CreateTagEvent) => {
-		console.log({ event });
+		console.log("AA", { event });
 	};
 }
 
