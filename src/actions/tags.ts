@@ -3,11 +3,11 @@ import { createTag, deleteTag, updateTag } from "@server/tags";
 
 export const tags = {
 	createTag: defineAction({
-		accept: "form",
+		accept: "json",
 		input: z.object({ name: z.string() }),
 		handler: async (args, context) => {
-			createTag(context, args);
-			return { success: true };
+			const tag = createTag(context, args);
+			return { success: true, tag };
 		},
 	}),
 	updateTag: defineAction({

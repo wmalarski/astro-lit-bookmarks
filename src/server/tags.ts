@@ -27,9 +27,10 @@ export const createTag = (
 	const result = db
 		.insert(tagTable)
 		.values({ name, id: crypto.randomUUID() })
-		.run();
+		.returning()
+		.get();
 
-	if (result.changes === 0) {
+	if (!result) {
 		throw new ActionError(DB_ERROR);
 	}
 
