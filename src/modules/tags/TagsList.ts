@@ -64,7 +64,7 @@ export class AlbTagsList extends LitElement {
 	};
 
 	onDeleteTag = async (event: DeleteTagEvent) => {
-		console.log(event.id);
+		this.tags = this.tags.filter((tag) => tag.id !== event.id);
 	};
 }
 

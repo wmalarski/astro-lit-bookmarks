@@ -52,9 +52,10 @@ export const updateTag = (
 		.update(tagTable)
 		.set({ name })
 		.where(eq(tagTable.id, tagId))
-		.run();
+		.returning()
+		.get();
 
-	if (result.changes === 0) {
+	if (!result) {
 		throw new ActionError(DB_ERROR);
 	}
 
@@ -71,9 +72,13 @@ export const deleteTag = (
 ) => {
 	validateContextSession(context);
 
-	const result = db.delete(tagTable).where(eq(tagTable.id, tagId)).run();
+	const result = db
+		.delete(tagTable)
+		.where(eq(tagTable.id, tagId))
+		.returning()
+		.get();
 
-	if (result.changes === 0) {
+	if (!result) {
 		throw new ActionError(DB_ERROR);
 	}
 

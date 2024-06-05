@@ -14,16 +14,16 @@ export const tags = {
 		accept: "json",
 		input: z.object({ tagId: z.string(), name: z.string() }),
 		handler: async (args, context) => {
-			updateTag(context, args);
-			return { success: true };
+			const tag = updateTag(context, args);
+			return { success: true, tag };
 		},
 	}),
 	deleteTag: defineAction({
 		accept: "json",
 		input: z.object({ tagId: z.string() }),
 		handler: async (args, context) => {
-			deleteTag(context, args);
-			return { success: true };
+			const tag = deleteTag(context, args);
+			return { success: true, tag };
 		},
 	}),
 };
