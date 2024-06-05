@@ -1,7 +1,13 @@
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { query } from "lit/decorators/query.js";
-import { CreateTagEvent } from "./events";
+import {
+	CreateTagEvent,
+	SubmitNewTagEvent,
+	SubmitTagFailEvent,
+} from "./events";
+import { Task } from "@lit/task";
+import { actions } from "astro:actions";
 
 @customElement("alb-create-tag-form")
 export class CreateTagForm extends LitElement {
@@ -18,13 +24,32 @@ export class CreateTagForm extends LitElement {
 
 	@query("input", true) newTagInput!: HTMLInputElement;
 
-	onSubmit(event: Event) {
+	private createTagTask = new Task<
+		[string],
+		Awaited<ReturnType<typeof actions.createTag>>
+	>(this, {
+		autoRun: false,
+		task: ([name]) => actions.createTag({ name }),
+		onComplete: (result) => {
+			this.dispatchEvent(
+				result.success
+					? new CreateTagEvent(result.tag)
+					: new SubmitTagFailEvent(),
+			);
+		},
+		onError: () => {
+			this.dispatchEvent(new SubmitTagFailEvent());
+		},
+	});
+
+	async onSubmit(event: Event) {
 		event.preventDefault();
 
 		const { value } = this.newTagInput;
 
 		if (value.length > 0) {
-			this.dispatchEvent(new CreateTagEvent(value));
+			this.dispatchEvent(new SubmitNewTagEvent(value));
+			await this.createTagTask.run([value]);
 			this.newTagInput.value = "";
 		}
 	}

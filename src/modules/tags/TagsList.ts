@@ -4,9 +4,11 @@ import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import "./CreateTagForm";
 import "./TagsListItem";
-import type { CreateTagEvent, DeleteTagEvent } from "./events";
-import { Task } from "@lit/task";
-import { actions } from "astro:actions";
+import type {
+	CreateTagEvent,
+	DeleteTagEvent,
+	SubmitNewTagEvent,
+} from "./events";
 
 type AlbTagsListProps = {
 	tags: InferSelectModel<typeof tagTable>[];
@@ -26,7 +28,11 @@ export class AlbTagsList extends LitElement {
 	override render() {
 		return html`
 		<div>
-			<alb-create-tag-form @tag-create=${this.onCreateTag}></alb-create-tag-form>
+			<alb-create-tag-form 
+				@tag-submit-new=${this.onSubmitNewTag}
+				@tag-create=${this.onCreateTag}
+				@tag-submit-fail=${this.onSubmitTagFail}
+			></alb-create-tag-form>
 			<pre>${JSON.stringify(this.optimisticTag, null, 2)}</pre>
 			<ul>
 				${this.tags.map(
@@ -41,30 +47,21 @@ export class AlbTagsList extends LitElement {
 		</div>`;
 	}
 
-	private createTagTask = new Task<
-		[string],
-		Awaited<ReturnType<typeof actions.createTag>>
-	>(this, {
-		autoRun: false,
-		task: ([name]) => actions.createTag({ name }),
-		onComplete: (result) => {
-			if (result.success) {
-				this.optimisticTag = null;
-				this.tags = [result.tag, ...this.tags];
-			}
-		},
-		onError: () => {
-			this.optimisticTag = null;
-		},
-	});
-
-	onCreateTag = async (event: CreateTagEvent) => {
+	onSubmitNewTag(event: SubmitNewTagEvent) {
 		this.optimisticTag = event.name;
-		await this.createTagTask.run([event.name]);
-	};
+	}
+
+	onCreateTag(event: CreateTagEvent) {
+		this.tags = [event.tag, ...this.tags];
+		this.optimisticTag = null;
+	}
+
+	onSubmitTagFail() {
+		this.optimisticTag = null;
+	}
 
 	onDeleteTag = async (event: DeleteTagEvent) => {
-		this.tags = this.tags.filter((tag) => tag.id !== event.id);
+		this.tags = this.tags.filter((tag) => tag.id !== event.tagId);
 	};
 }
 
