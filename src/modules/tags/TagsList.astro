@@ -1,8 +1,0 @@
----
-import { findTags } from "@server/tags";
-import { TypedAlbTagsList } from "./TagsList";
-
-const tags = findTags(Astro);
----
-
-<TypedAlbTagsList client:load tags={tags} />

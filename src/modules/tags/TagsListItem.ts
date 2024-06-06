@@ -55,7 +55,6 @@ export class TagsListItem extends LitElement {
 }
 
 declare global {
-	// eslint-disable-next-line no-unused-vars
 	interface HTMLElementTagNameMap {
 		"alb-tags-list-item": TagsListItem;
 	}

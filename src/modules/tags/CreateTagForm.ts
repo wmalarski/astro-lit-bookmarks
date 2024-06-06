@@ -56,7 +56,6 @@ export class CreateTagForm extends LitElement {
 }
 
 declare global {
-	// eslint-disable-next-line no-unused-vars
 	interface HTMLElementTagNameMap {
 		"alb-create-tag-form": CreateTagForm;
 	}

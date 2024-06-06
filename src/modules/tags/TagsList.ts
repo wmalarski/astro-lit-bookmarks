@@ -1,7 +1,7 @@
 import type { tagTable } from "@server/db";
 import type { InferSelectModel } from "drizzle-orm";
 import { LitElement, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import "./CreateTagForm";
 import "./TagsListItem";
 import type {
@@ -10,16 +10,16 @@ import type {
 	SubmitNewTagEvent,
 } from "./events";
 
-type AlbTagsListProps = {
+type TagsListProps = {
 	tags: InferSelectModel<typeof tagTable>[];
 };
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-type AlbTagsListComponent = (props: AlbTagsListProps) => any;
+type TagsListComponent = (props: TagsListProps) => any;
 
 @customElement("alb-tags-list")
-export class AlbTagsList extends LitElement {
-	@property({ attribute: false })
+export class TagsList extends LitElement {
+	@state()
 	optimisticTag: string | null = null;
 
 	@property({ attribute: false })
@@ -66,10 +66,9 @@ export class AlbTagsList extends LitElement {
 }
 
 declare global {
-	// eslint-disable-next-line no-unused-vars
 	interface HTMLElementTagNameMap {
-		"alb-tags-list": AlbTagsList;
+		"alb-tags-list": TagsList;
 	}
 }
 
-export const TypedAlbTagsList = AlbTagsList as unknown as AlbTagsListComponent;
+export const TypedTagsList = TagsList as unknown as TagsListComponent;
