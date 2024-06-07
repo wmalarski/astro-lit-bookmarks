@@ -6,6 +6,7 @@ import { findTags } from "@server/tags";
 import { TypedTagsList } from "@modules/tags/TagsList";
 import { findBookmarks, findBookmarksByMastoIds } from "@server/bookmarks";
 import { TypedBookmarkList } from "@modules/bookmarks/BookmarkList";
+import { matchBookmarks } from "@modules/bookmarks/matchBookmarks";
 
 if (!Astro.locals.session) {
   return Astro.redirect(paths.login);
@@ -17,12 +18,19 @@ const mastoBookmarks = await Astro.locals.mastoClient?.v1.bookmarks.list({
   limit: 10,
 });
 
-const mastoBookmarksMatched = findBookmarksByMastoIds(Astro, {
+const bookmarksForMasto = findBookmarksByMastoIds(Astro, {
   mastoBookmarks: mastoBookmarks ?? [],
 });
 
-const bookmarks = findBookmarks(Astro, {
+const bookmarksResult = findBookmarks(Astro, {
   to: new Date(),
+});
+
+const matchedBookmarks = matchBookmarks({
+  bookmarksForMasto,
+  bookmarksResult,
+  mastoBookmarks: mastoBookmarks ?? [],
+  tags,
 });
 ---
 
@@ -39,11 +47,6 @@ const bookmarks = findBookmarks(Astro, {
     <a href={paths.logout}>Sign out</a>
 
     <TypedTagsList client:load tags={tags} />
-    <TypedBookmarkList
-      client:load
-      bookmarks={bookmarks}
-      mastoBookmarks={mastoBookmarksMatched}
-      tags={tags}
-    />
+    <TypedBookmarkList client:load bookmarks={matchedBookmarks} />
   </main>
 </Layout>
