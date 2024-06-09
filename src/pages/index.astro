@@ -47,6 +47,6 @@ const matchedBookmarks = matchBookmarks({
     <a href={paths.logout}>Sign out</a>
 
     <TypedTagsList client:load tags={tags} />
-    <TypedBookmarkList client:load bookmarks={matchedBookmarks} />
+    <TypedBookmarkList client:load tags={tags} bookmarks={matchedBookmarks} />
   </main>
 </Layout>
