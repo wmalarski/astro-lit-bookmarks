@@ -1,8 +1,10 @@
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
-import { property, query } from "lit/decorators.js";
+import { property, query, state } from "lit/decorators.js";
 import type { InferSelectModel } from "drizzle-orm";
 import type { tagTable } from "@server/db";
+import { Task } from "@lit/task";
+import { actions } from "astro:actions";
 
 @customElement("alb-bookmark-tags-form")
 export class BookmarkTagsForm extends LitElement {
@@ -12,20 +14,36 @@ export class BookmarkTagsForm extends LitElement {
 	@property({ attribute: false })
 	allTags: InferSelectModel<typeof tagTable>[] = [];
 
+	@property({ attribute: false })
+	bookmarkId: string | undefined = undefined;
+
+	@property({ attribute: false })
+	mastoBookmarkId: string | undefined = undefined;
+
 	@query("select", true)
 	tagSelect!: HTMLSelectElement;
 
+	@state()
+	optimisticTagId: string | null = null;
+
+	@state()
+	error = false;
+
 	override render() {
 		const tagsIds = new Set(this.tags.map((tag) => tag.id));
+		const optimisticTag =
+			this.optimisticTagId &&
+			this.allTags.find((tag) => tag.id === this.optimisticTagId);
 
 		return html`
             <form @change=${this.onChange}>
 				<ul>
-				${this.tags.map(
-					(tag) => html`<li>
-						<span>${tag.name}</span>
-					</li>`,
-				)}
+					${optimisticTag && html`<span>${optimisticTag.name}</span>`}
+					${this.tags.map(
+						(tag) => html`<li>
+							<span>${tag.name}</span>
+						</li>`,
+					)}
 				</ul>
 				<label>
 					Tags
@@ -40,9 +58,59 @@ export class BookmarkTagsForm extends LitElement {
         `;
 	}
 
-	async onChange(event: Event) {
-		const value = this.tagSelect.value;
-		console.log("event", value);
+	private createBookmarkTask = new Task<
+		[string, string],
+		Awaited<ReturnType<typeof actions.createBookmark>>
+	>(this, {
+		autoRun: false,
+		task: ([id, tagId]) => {
+			return actions.createBookmark({ tagIds: [tagId], mastoBookmarkId: id });
+		},
+		onError: () => {
+			this.optimisticTagId = null;
+			this.error = true;
+		},
+	});
+
+	private createMastoBookmarkTask = new Task<
+		[string, string],
+		Awaited<ReturnType<typeof actions.createBookmark>>
+	>(this, {
+		autoRun: false,
+		task: ([id, tagId]) => {
+			return actions.createMastoBookmark({ tagIds: [tagId], bookmarkId: id });
+		},
+		onError: () => {
+			this.optimisticTagId = null;
+			this.error = true;
+		},
+	});
+
+	async onChange() {
+		const tagId = this.tagSelect.value;
+
+		if (!tagId) {
+			return;
+		}
+
+		this.error = false;
+		this.optimisticTagId = tagId;
+
+		if (this.bookmarkId) {
+			await this.createMastoBookmarkTask.run([this.bookmarkId, tagId]);
+		} else if (this.mastoBookmarkId) {
+			await this.createBookmarkTask.run([this.mastoBookmarkId, tagId]);
+		}
+
+		this.optimisticTagId = null;
+
+		const tag = this.allTags.find((tag) => tag.id === tagId);
+
+		if (!tag) {
+			return;
+		}
+
+		this.tags = [tag, ...this.tags];
 	}
 }
 
