@@ -49,8 +49,8 @@ export class CreateTagForm extends LitElement {
 
 		if (value.length > 0) {
 			this.dispatchEvent(new SubmitNewTagEvent(value));
-			await this.createTagTask.run([value]);
-			this.newTagInput.value = "";
+			// await this.createTagTask.run([value]);
+			// this.newTagInput.value = "";
 		}
 	}
 }

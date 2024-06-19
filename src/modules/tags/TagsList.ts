@@ -28,14 +28,13 @@ export class TagsList extends LitElement {
 	@property({ attribute: false })
 	tags: InferSelectModel<typeof tagTable>[] = [];
 
-	@consume({ context: tagsContext })
+	@consume({ context: tagsContext, subscribe: true })
 	contextTags: TagsContextValue = tagsContextDefault;
 
 	override render() {
 		return html`
 		<div>
 			<alb-create-tag-form 
-				@tag-submit-new=${this.onSubmitNewTag}
 				@tag-create=${this.onCreateTag}
 				@tag-submit-fail=${this.onSubmitTagFail}
 			></alb-create-tag-form>
@@ -52,10 +51,6 @@ export class TagsList extends LitElement {
 				)}
 			</ul>
 		</div>`;
-	}
-
-	onSubmitNewTag(event: SubmitNewTagEvent) {
-		this.optimisticTag = event.name;
 	}
 
 	onCreateTag(event: CreateTagEvent) {

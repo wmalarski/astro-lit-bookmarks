@@ -1,34 +1,75 @@
 import { LitElement, html } from "lit";
 import { provide } from "@lit/context";
 import { customElement, state } from "lit/decorators.js";
-import { tagsContext, type TagsContextValue } from "./TagsContext";
+import {
+	tagsContext,
+	tagsContextDefault,
+	type TagsContextValue,
+} from "./TagsContext";
+import type { SubmitNewTagEvent } from "./events";
+import { Task } from "@lit/task";
+import { actions } from "astro:actions";
 
 @customElement("alb-tags-provider")
 export class TagsProvider extends LitElement {
 	@provide({ context: tagsContext })
 	@state()
-	logger: TagsContextValue = { optimisticTag: "hello", tags: [] };
+	value: TagsContextValue = tagsContextDefault;
+
+	private createTagTask = new Task<
+		[string],
+		Awaited<ReturnType<typeof actions.createTag>>
+	>(this, {
+		autoRun: false,
+		task: ([name]) => actions.createTag({ name }),
+		onComplete: (result) => {
+			if (result.success) {
+				this.value = {
+					optimisticTag: null,
+					isPending: false,
+					tags: [result.tag, ...this.value.tags],
+					error: null,
+				};
+				return;
+			}
+			this.value = {
+				...this.value,
+				optimisticTag: null,
+				isPending: false,
+				error: "Tag submission error",
+			};
+		},
+		onError: () => {
+			this.value = {
+				...this.value,
+				optimisticTag: null,
+				isPending: false,
+				error: "Tag submission error",
+			};
+		},
+	});
 
 	override render() {
-		return html`<div><slot></slot></div>`;
+		return html`<slot
+            @tag-submit-new=${this.onSubmitNewTag}
+        ></slot>`;
 	}
-}
 
-@customElement("alb-tags-provider-wrapper")
-export class TagsProviderWrapper extends LitElement {
-	override render() {
-		return html`
-            <alb-tags-provider>
-                <slot></slot>
-            </alb-tags-provider>
-        `;
+	async onSubmitNewTag(event: SubmitNewTagEvent) {
+		this.value = {
+			...this.value,
+			optimisticTag: event.name,
+			isPending: true,
+			error: null,
+		};
+
+		await this.createTagTask.run([event.name]);
 	}
 }
 
 declare global {
 	interface HTMLElementTagNameMap {
 		"alb-tags-provider": TagsProvider;
-		"alb-tags-provider-wrapper": TagsProviderWrapper;
 	}
 }
 
