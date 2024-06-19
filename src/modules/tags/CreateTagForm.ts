@@ -26,6 +26,8 @@ export class CreateTagForm extends LitElement {
 		if (value.length > 0) {
 			this.dispatchEvent(new SubmitNewTagEvent(value));
 		}
+
+		this.newTagInput.value = "";
 	}
 }
 

@@ -1,6 +1,6 @@
 import { LitElement, html } from "lit";
 import { provide } from "@lit/context";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 import {
 	tagsContext,
 	tagsContextDefault,
@@ -9,8 +9,6 @@ import {
 import type { DeleteTagEvent, SubmitNewTagEvent } from "./events";
 import { Task } from "@lit/task";
 import { actions } from "astro:actions";
-import type { InferSelectModel } from "drizzle-orm";
-import type { tagTable } from "@server/db";
 
 type TagsListProps = {
 	value: TagsContextValue;
@@ -18,9 +16,6 @@ type TagsListProps = {
 
 @customElement("alb-tags-provider")
 export class TagsProvider extends LitElement {
-	// @property({ attribute: false })
-	// tags: InferSelectModel<typeof tagTable>[] = [];
-
 	@provide({ context: tagsContext })
 	@property({ attribute: false })
 	value: TagsContextValue = tagsContextDefault;

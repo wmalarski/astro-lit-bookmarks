@@ -52,7 +52,7 @@ const matchedBookmarks = matchBookmarks({
       client:only="lit"
       value={{ ...tagsContextDefault, tags }}
     >
-      <TypedTagsList client:only="lit" tags={tags} />
+      <TypedTagsList client:only="lit" />
       <TypedBookmarkList
         client:only="lit"
         tags={tags}
