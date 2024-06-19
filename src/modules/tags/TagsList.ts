@@ -4,11 +4,7 @@ import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import "./CreateTagForm";
 import "./TagsListItem";
-import type {
-	CreateTagEvent,
-	DeleteTagEvent,
-	SubmitNewTagEvent,
-} from "./events";
+import type { CreateTagEvent, DeleteTagEvent } from "./events";
 import {
 	tagsContext,
 	tagsContextDefault,
@@ -29,7 +25,7 @@ export class TagsList extends LitElement {
 	tags: InferSelectModel<typeof tagTable>[] = [];
 
 	@consume({ context: tagsContext, subscribe: true })
-	contextTags: TagsContextValue = tagsContextDefault;
+	tagsContext: TagsContextValue = tagsContextDefault;
 
 	override render() {
 		return html`
@@ -38,10 +34,10 @@ export class TagsList extends LitElement {
 				@tag-create=${this.onCreateTag}
 				@tag-submit-fail=${this.onSubmitTagFail}
 			></alb-create-tag-form>
-			<pre>${JSON.stringify(this.contextTags.optimisticTag, null, 2)}</pre>
+			<pre>${JSON.stringify(this.tagsContext.optimisticTag, null, 2)}</pre>
 			<pre>${JSON.stringify(this.optimisticTag, null, 2)}</pre>
 			<ul>
-				${this.tags.map(
+				${this.tagsContext.tags.map(
 					(tag) => html`
 					<alb-tags-list-item 
 						.tag=${tag}

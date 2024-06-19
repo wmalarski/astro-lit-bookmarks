@@ -7,6 +7,12 @@ import type { tagTable } from "@server/db";
 import "@components/Button/Button";
 import { Task } from "@lit/task";
 import { actions } from "astro:actions";
+import {
+	tagsContext,
+	tagsContextDefault,
+	type TagsContextValue,
+} from "./TagsContext";
+import { consume } from "@lit/context";
 
 @customElement("alb-tags-list-item")
 export class TagsListItem extends LitElement {
@@ -15,6 +21,9 @@ export class TagsListItem extends LitElement {
 
 	@state()
 	private isRemoving = false;
+
+	@consume({ context: tagsContext, subscribe: true })
+	tagsContext: TagsContextValue = tagsContextDefault;
 
 	override render() {
 		return this.isRemoving
@@ -48,8 +57,9 @@ export class TagsListItem extends LitElement {
 
 	async onDeleteClick() {
 		if (this.tag?.id) {
+			this.dispatchEvent(new DeleteTagEvent(this.tag.id));
 			this.isRemoving = true;
-			await this.deleteTagTask.run([this.tag.id]);
+			// await this.deleteTagTask.run([this.tag.id]);
 		}
 	}
 }

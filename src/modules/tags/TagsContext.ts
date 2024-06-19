@@ -6,7 +6,7 @@ export type TagsContextValue = {
 	tags: InferSelectModel<typeof tagTable>[];
 	optimisticTag: string | null;
 	error: string | null;
-	isPending: boolean;
+	removingTagId: string | null;
 };
 
 export const tagsContext = createContext<TagsContextValue>("tags");
@@ -15,5 +15,5 @@ export const tagsContextDefault: TagsContextValue = {
 	optimisticTag: null,
 	tags: [],
 	error: null,
-	isPending: false,
+	removingTagId: null,
 };

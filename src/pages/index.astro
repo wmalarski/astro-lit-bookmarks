@@ -8,6 +8,7 @@ import { TypedTagsProvider } from "@modules/tags/TagsProvider";
 import { findBookmarks, findBookmarksByMastoIds } from "@server/bookmarks";
 import { TypedBookmarkList } from "@modules/bookmarks/BookmarkList";
 import { matchBookmarks } from "@modules/bookmarks/matchBookmarks";
+import { tagsContextDefault } from "@modules/tags/TagsContext";
 
 if (!Astro.locals.session) {
   return Astro.redirect(paths.login);
@@ -47,7 +48,10 @@ const matchedBookmarks = matchBookmarks({
     <a href={paths.loginMastodon}>Sign in with Mastodon</a>
     <a href={paths.logout}>Sign out</a>
 
-    <TypedTagsProvider client:only="lit">
+    <TypedTagsProvider
+      client:only="lit"
+      value={{ ...tagsContextDefault, tags }}
+    >
       <TypedTagsList client:only="lit" tags={tags} />
       <TypedBookmarkList
         client:only="lit"
