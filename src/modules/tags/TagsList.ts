@@ -9,13 +9,16 @@ import type {
 	DeleteTagEvent,
 	SubmitNewTagEvent,
 } from "./events";
+import {
+	tagsContext,
+	tagsContextDefault,
+	type TagsContextValue,
+} from "./TagsContext";
+import { consume } from "@lit/context";
 
 type TagsListProps = {
 	tags: InferSelectModel<typeof tagTable>[];
 };
-
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-type TagsListComponent = (props: TagsListProps) => any;
 
 @customElement("alb-tags-list")
 export class TagsList extends LitElement {
@@ -25,6 +28,9 @@ export class TagsList extends LitElement {
 	@property({ attribute: false })
 	tags: InferSelectModel<typeof tagTable>[] = [];
 
+	@consume({ context: tagsContext })
+	contextTags: TagsContextValue = tagsContextDefault;
+
 	override render() {
 		return html`
 		<div>
@@ -33,6 +39,7 @@ export class TagsList extends LitElement {
 				@tag-create=${this.onCreateTag}
 				@tag-submit-fail=${this.onSubmitTagFail}
 			></alb-create-tag-form>
+			<pre>${JSON.stringify(this.contextTags.optimisticTag, null, 2)}</pre>
 			<pre>${JSON.stringify(this.optimisticTag, null, 2)}</pre>
 			<ul>
 				${this.tags.map(
@@ -70,5 +77,8 @@ declare global {
 		"alb-tags-list": TagsList;
 	}
 }
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+type TagsListComponent = (props: TagsListProps) => any;
 
 export const TypedTagsList = TagsList as unknown as TagsListComponent;
