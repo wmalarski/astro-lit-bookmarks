@@ -53,11 +53,7 @@ const matchedBookmarks = matchBookmarks({
       value={{ ...tagsContextDefault, tags }}
     >
       <TypedTagsList client:only="lit" />
-      <TypedBookmarkList
-        client:only="lit"
-        tags={tags}
-        bookmarks={matchedBookmarks}
-      />
+      <TypedBookmarkList client:only="lit" bookmarks={matchedBookmarks} />
     </TypedTagsProvider>
   </main>
 </Layout>

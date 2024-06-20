@@ -17,14 +17,10 @@ export class BookmarkItem extends LitElement {
 	@property({ attribute: false })
 	tags: InferSelectModel<typeof tagTable>[] = [];
 
-	@property({ attribute: false })
-	allTags: InferSelectModel<typeof tagTable>[] = [];
-
 	override render() {
 		return html`
             <li>
-				<alb-bookmark-tags-form .tags=${this.tags}>
-				</alb-bookmark-tags-form>
+				<alb-bookmark-tags-form .tags=${this.tags}></alb-bookmark-tags-form>
                 <pre>${JSON.stringify(
 									{
 										bookmark: this.bookmark,
