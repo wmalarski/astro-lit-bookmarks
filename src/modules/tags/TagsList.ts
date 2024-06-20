@@ -35,8 +35,3 @@ declare global {
 		"alb-tags-list": TagsList;
 	}
 }
-
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-type TagsListComponent = () => any;
-
-export const TypedTagsList = TagsList as unknown as TagsListComponent;

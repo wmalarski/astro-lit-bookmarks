@@ -3,12 +3,14 @@ import Layout from "../layouts/Layout.astro";
 import "../components/Button/Button";
 import { paths } from "@utils/paths";
 import { findTags } from "@server/tags";
-import { TypedTagsList } from "@modules/tags/TagsList";
+import { TagsList } from "@modules/tags/TagsList";
 import { TypedTagsProvider } from "@modules/tags/TagsProvider";
 import { findBookmarks, findBookmarksByMastoIds } from "@server/bookmarks";
-import { TypedBookmarkList } from "@modules/bookmarks/BookmarkList";
+import { BookmarkList } from "@modules/bookmarks/BookmarkList";
 import { matchBookmarks } from "@modules/bookmarks/matchBookmarks";
 import { tagsContextDefault } from "@modules/tags/TagsContext";
+import { TypedBookmarkProvider } from "@modules/bookmarks/BookmarkProvider";
+import { bookmarkContextDefault } from "@modules/bookmarks/BookmarkContext";
 
 if (!Astro.locals.session) {
   return Astro.redirect(paths.login);
@@ -32,7 +34,6 @@ const matchedBookmarks = matchBookmarks({
   bookmarksForMasto,
   bookmarksResult,
   mastoBookmarks: mastoBookmarks ?? [],
-  tags,
 });
 ---
 
@@ -52,8 +53,13 @@ const matchedBookmarks = matchBookmarks({
       client:only="lit"
       value={{ ...tagsContextDefault, tags }}
     >
-      <TypedTagsList client:only="lit" />
-      <TypedBookmarkList client:only="lit" bookmarks={matchedBookmarks} />
+      <TypedBookmarkProvider
+        client:only="lit"
+        value={{ ...bookmarkContextDefault, bookmarks: matchedBookmarks }}
+      >
+        <TagsList client:only="lit" />
+        <BookmarkList client:only="lit" />
+      </TypedBookmarkProvider>
     </TypedTagsProvider>
   </main>
 </Layout>

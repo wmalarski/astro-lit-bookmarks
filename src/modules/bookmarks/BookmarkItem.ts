@@ -1,34 +1,19 @@
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators.js";
-import type { InferSelectModel } from "drizzle-orm";
-import type { bookmarkTable, tagTable } from "@server/db";
-import type { mastodon } from "masto";
 import "./BookmarkTagsForm";
+import type { MatchBookmarksResult } from "./matchBookmarks";
 
 @customElement("alb-bookmark-item")
 export class BookmarkItem extends LitElement {
 	@property({ attribute: false })
-	bookmark: InferSelectModel<typeof bookmarkTable> | null = null;
-
-	@property({ attribute: false })
-	mastoBookmark: mastodon.v1.Status | null = null;
-
-	@property({ attribute: false })
-	tags: InferSelectModel<typeof tagTable>[] = [];
+	item: MatchBookmarksResult | null = null;
 
 	override render() {
 		return html`
             <li>
-				<alb-bookmark-tags-form .tags=${this.tags}></alb-bookmark-tags-form>
-                <pre>${JSON.stringify(
-									{
-										bookmark: this.bookmark,
-										mastoBookmark: this.mastoBookmark,
-									},
-									null,
-									2,
-								)}</pre>
+				<alb-bookmark-tags-form .item=${this.item}></alb-bookmark-tags-form>
+                <pre>${JSON.stringify(this.item, null, 2)}</pre>
             </li>
         `;
 	}

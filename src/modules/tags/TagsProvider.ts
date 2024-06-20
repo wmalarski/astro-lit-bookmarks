@@ -27,10 +27,13 @@ export class TagsProvider extends LitElement {
 		autoRun: false,
 		task: ([name]) => actions.createTag({ name }),
 		onComplete: (result) => {
+			const tagsMap = new Map(this.value.tagsMap);
+			tagsMap.set(result.id, result);
 			this.value = {
 				...this.value,
 				optimisticTag: null,
 				tags: [result, ...this.value.tags],
+				tagsMap,
 				error: null,
 			};
 		},
@@ -50,8 +53,11 @@ export class TagsProvider extends LitElement {
 		autoRun: false,
 		task: ([tagId]) => actions.deleteTag({ tagId }),
 		onComplete: (result) => {
+			const tagsMap = new Map(this.value.tagsMap);
+			tagsMap.delete(result.id);
 			this.value = {
 				...this.value,
+				tagsMap,
 				tags: this.value.tags.filter((tag) => tag.id !== result.id),
 				removingTagId: null,
 			};

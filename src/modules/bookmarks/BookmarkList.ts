@@ -1,30 +1,24 @@
 import { LitElement, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import type { MatchBookmarksResult } from "./matchBookmarks";
+import { customElement } from "lit/decorators.js";
 import "./BookmarkItem";
-
-type BookmarkListProps = {
-	bookmarks: MatchBookmarksResult[];
-};
-
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-type BookmarkListComponent = (props: BookmarkListProps) => any;
+import {
+	bookmarkContext,
+	bookmarkContextDefault,
+	type BookmarkContextValue,
+} from "./BookmarkContext";
+import { consume } from "@lit/context";
 
 @customElement("alb-bookmark-list")
 export class BookmarkList extends LitElement {
-	@property({ attribute: false })
-	bookmarks: MatchBookmarksResult[] = [];
+	@consume({ context: bookmarkContext, subscribe: true })
+	bookmarkContext: BookmarkContextValue = bookmarkContextDefault;
 
 	override render() {
 		return html`
 			<ul>
-				${this.bookmarks.map(
-					({ bookmark, mastoBookmark, tags }) => html`
-						<alb-bookmark-item 
-							.bookmark=${bookmark}
-							.mastoBookmark=${mastoBookmark}
-							.tags=${tags}
-						></alb-bookmark-item>
+				${this.bookmarkContext.bookmarks.map(
+					(item) => html`
+						<alb-bookmark-item .item=${item}></alb-bookmark-item>
 					`,
 				)}
 			</ul>
@@ -37,6 +31,3 @@ declare global {
 		"alb-bookmark-list": BookmarkList;
 	}
 }
-
-export const TypedBookmarkList =
-	BookmarkList as unknown as BookmarkListComponent;

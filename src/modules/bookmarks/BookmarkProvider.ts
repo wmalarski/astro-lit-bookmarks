@@ -13,6 +13,7 @@ import {
 	tagsContextDefault,
 	type TagsContextValue,
 } from "@modules/tags/TagsContext";
+import type { CreateBookmarkEvent, CreateBookmarkTagEvent } from "./events";
 
 type BookmarkProviderProps = {
 	value: BookmarkContextValue;
@@ -32,8 +33,8 @@ export class BookmarkProvider extends LitElement {
 		Awaited<ReturnType<typeof actions.createBookmark>>
 	>(this, {
 		autoRun: false,
-		task: ([id, tagId]) =>
-			actions.createBookmark({ tagIds: [tagId], mastoBookmarkId: id }),
+		task: ([mastoBookmarkId, tagId]) =>
+			actions.createBookmark({ tagIds: [tagId], mastoBookmarkId }),
 		onComplete: (result) => {
 			this.value = {
 				...this.value,
@@ -55,18 +56,15 @@ export class BookmarkProvider extends LitElement {
 		},
 	});
 
-	private createBookmarkTagsTask = new Task<
+	private createBookmarkTagTask = new Task<
 		[string, string],
 		Awaited<ReturnType<typeof actions.createBookmarkTags>>
 	>(this, {
 		autoRun: false,
-		task: ([id, tagId]) =>
-			actions.createBookmarkTags({ tagIds: [tagId], bookmarkId: id }),
+		task: ([bookmarkId, tagId]) =>
+			actions.createBookmarkTags({ tagIds: [tagId], bookmarkId }),
 		onComplete: (result) => {
 			const resultBookmarkTag = result[0];
-			const tag = this.tagsContext.tags.find(
-				(tag) => tag.id === resultBookmarkTag?.tagId,
-			);
 
 			if (!resultBookmarkTag) {
 				return;
@@ -75,12 +73,12 @@ export class BookmarkProvider extends LitElement {
 			this.value = {
 				...this.value,
 				isPending: false,
+				error: null,
 				bookmarks: this.value.bookmarks.map((entry) =>
-					entry.bookmark?.id === resultBookmarkId
-						? { ...entry, tags: [...result, ...entry.tags] }
+					entry.bookmark?.id === resultBookmarkTag.bookmarkId
+						? { ...entry, bookmarkTags: [...result, ...entry.bookmarkTags] }
 						: entry,
 				),
-				error: null,
 			};
 		},
 		onError: () => {
@@ -92,55 +90,32 @@ export class BookmarkProvider extends LitElement {
 		},
 	});
 
-	private deleteTagTask = new Task<
-		[string],
-		Awaited<ReturnType<typeof actions.deleteTag>>
-	>(this, {
-		autoRun: false,
-		task: ([tagId]) => actions.deleteTag({ tagId }),
-		onComplete: (result) => {
-			this.value = {
-				...this.value,
-				// bookmarks:
-				tags: this.value.tags.filter((tag) => tag.id !== result.tag.id),
-				removingTagId: null,
-			};
-		},
-		onError: () => {
-			this.value = {
-				...this.value,
-				error: "Error removing tag",
-				removingTagId: null,
-			};
-		},
-	});
-
 	override render() {
 		return html`<slot
-            @tag-submit-new=${this.onSubmitNewTag}
-            @tag-delete=${this.onDeleteTag}
+            @bookmark-create=${this.onCreateBookmark}
+            @bookmark-tag-create=${this.onCreateBookmarkTag}
         ></slot>`;
 	}
 
-	async onSubmitNewTag(event: SubmitNewTagEvent) {
+	async onCreateBookmark(event: CreateBookmarkEvent) {
 		this.value = {
 			...this.value,
-			optimisticTag: event.name,
+			isPending: true,
 			error: null,
 		};
 
-		await this.createBookmarkTask.run([event.name]);
+		await this.createBookmarkTask.run([event.mastoBookmarkId, event.tagId]);
 	}
 
-	onDeleteTag = async (event: DeleteTagEvent) => {
+	async onCreateBookmarkTag(event: CreateBookmarkTagEvent) {
 		this.value = {
 			...this.value,
-			removingTagId: event.tagId,
+			isPending: true,
 			error: null,
 		};
 
-		await this.deleteTagTask.run([event.tagId]);
-	};
+		await this.createBookmarkTagTask.run([event.bookmarkId, event.tagId]);
+	}
 }
 
 declare global {

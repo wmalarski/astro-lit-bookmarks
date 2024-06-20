@@ -2,7 +2,7 @@ import type {
 	FindBookmarksByMastoIdsResult,
 	FindBookmarksResult,
 } from "@server/bookmarks";
-import type { bookmarkTable, tagTable } from "@server/db";
+import type { bookmarkTable, bookmarkTagTable } from "@server/db";
 import type { InferSelectModel } from "drizzle-orm";
 import type { mastodon } from "masto";
 
@@ -10,25 +10,24 @@ type MatchBookmarksArgs = {
 	mastoBookmarks: mastodon.v1.Status[];
 	bookmarksForMasto: FindBookmarksByMastoIdsResult;
 	bookmarksResult: FindBookmarksResult;
-	tags: InferSelectModel<typeof tagTable>[];
 };
 
 export type MatchBookmarksResult = {
 	bookmark: InferSelectModel<typeof bookmarkTable> | null;
 	mastoBookmark: mastodon.v1.Status | null;
-	tags: InferSelectModel<typeof tagTable>[];
+	bookmarkTags: InferSelectModel<typeof bookmarkTagTable>[];
 };
 
 export const matchBookmarks = ({
 	mastoBookmarks,
 	bookmarksResult,
 	bookmarksForMasto,
-	tags,
 }: MatchBookmarksArgs): MatchBookmarksResult[] => {
-	const tagsMap = new Map(tags.map((tag) => [tag.id, tag]));
-
 	const bookmarks = new Map<string, InferSelectModel<typeof bookmarkTable>>();
-	const bookmarkTags = new Map<string, InferSelectModel<typeof tagTable>[]>();
+	const bookmarkTags = new Map<
+		string,
+		InferSelectModel<typeof bookmarkTagTable>[]
+	>();
 
 	for (const entry of bookmarksForMasto) {
 		const mastoBookmarkId = entry.bookmark.mastoBookmarkId;
@@ -40,13 +39,7 @@ export const matchBookmarks = ({
 	}
 
 	for (const entry of [...bookmarksResult, ...bookmarksForMasto]) {
-		const tagId = entry.bookmark_tag?.tagId;
-		if (!tagId) {
-			continue;
-		}
-
-		const tag = tagsMap.get(tagId);
-		if (!tag) {
+		if (!entry.bookmark_tag) {
 			continue;
 		}
 
@@ -54,9 +47,9 @@ export const matchBookmarks = ({
 		const tags = bookmarkTags.get(bookmarkId);
 
 		if (tags) {
-			tags.push(tag);
+			tags.push(entry.bookmark_tag);
 		} else {
-			bookmarkTags.set(bookmarkId, [tag]);
+			bookmarkTags.set(bookmarkId, [entry.bookmark_tag]);
 		}
 	}
 
@@ -65,14 +58,14 @@ export const matchBookmarks = ({
 		return {
 			bookmark: bookmark ?? null,
 			mastoBookmark,
-			tags: bookmark ? bookmarkTags.get(bookmark.id) ?? [] : [],
+			bookmarkTags: bookmark ? bookmarkTags.get(bookmark.id) ?? [] : [],
 		};
 	});
 
 	const fromDb = bookmarksResult.map(({ bookmark }) => ({
 		bookmark,
 		mastoBookmark: null,
-		tags: bookmarkTags.get(bookmark.id) ?? [],
+		bookmarkTags: bookmarkTags.get(bookmark.id) ?? [],
 	}));
 
 	return [...fromMasto, ...fromDb];
