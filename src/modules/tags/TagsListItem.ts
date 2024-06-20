@@ -12,8 +12,10 @@ import {
 } from "./TagsContext";
 import { consume } from "@lit/context";
 
-@customElement("alb-tags-list-item")
+@customElement(TagsListItem.elementName)
 export class TagsListItem extends LitElement {
+	static readonly elementName = "tags-list-item" as const;
+
 	@property({ attribute: false })
 	tag?: InferSelectModel<typeof tagTable>;
 
@@ -42,6 +44,6 @@ export class TagsListItem extends LitElement {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"alb-tags-list-item": TagsListItem;
+		[TagsListItem.elementName]: TagsListItem;
 	}
 }

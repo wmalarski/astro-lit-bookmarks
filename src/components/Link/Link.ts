@@ -6,8 +6,10 @@ import {
 	type ButtonProps,
 } from "../Button/Button.styles";
 
-@customElement("alb-anchor")
+@customElement(AlbAnchor.elementName)
 export class AlbAnchor extends LitElement {
+	static readonly elementName = "alb-anchor" as const;
+
 	@property({ type: String, reflect: true })
 	variant: ButtonProps["variant"] = "primary";
 

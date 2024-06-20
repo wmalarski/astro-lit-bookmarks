@@ -8,8 +8,10 @@ import {
 } from "./BookmarkContext";
 import { consume } from "@lit/context";
 
-@customElement("alb-bookmark-list")
+@customElement(BookmarkList.elementName)
 export class BookmarkList extends LitElement {
+	static readonly elementName = "bookmark-list" as const;
+
 	@consume({ context: bookmarkContext, subscribe: true })
 	bookmarkContext: BookmarkContextValue = bookmarkContextDefault;
 
@@ -18,7 +20,7 @@ export class BookmarkList extends LitElement {
 			<ul>
 				${this.bookmarkContext.bookmarks.map(
 					(item) => html`
-						<alb-bookmark-item .item=${item}></alb-bookmark-item>
+						<bookmark-item .item=${item}></bookmark-item>
 					`,
 				)}
 			</ul>
@@ -28,6 +30,6 @@ export class BookmarkList extends LitElement {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"alb-bookmark-list": BookmarkList;
+		[BookmarkList.elementName]: BookmarkList;
 	}
 }

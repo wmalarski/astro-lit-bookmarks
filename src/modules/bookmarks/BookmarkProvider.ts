@@ -19,8 +19,10 @@ type BookmarkProviderProps = {
 	value: BookmarkContextValue;
 };
 
-@customElement("alb-bookmark-provider")
+@customElement(BookmarkProvider.elementName)
 export class BookmarkProvider extends LitElement {
+	static readonly elementName = "bookmark-provider" as const;
+
 	@provide({ context: bookmarkContext })
 	@property({ attribute: false })
 	value: BookmarkContextValue = bookmarkContextDefault;
@@ -120,7 +122,7 @@ export class BookmarkProvider extends LitElement {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"alb-bookmark-provider": BookmarkProvider;
+		[BookmarkProvider.elementName]: BookmarkProvider;
 	}
 }
 

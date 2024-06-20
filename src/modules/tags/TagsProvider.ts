@@ -14,8 +14,10 @@ type TagsListProps = {
 	value: TagsContextValue;
 };
 
-@customElement("alb-tags-provider")
+@customElement(TagsProvider.elementName)
 export class TagsProvider extends LitElement {
+	static readonly elementName = "tags-provider" as const;
+
 	@provide({ context: tagsContext })
 	@property({ attribute: false })
 	value: TagsContextValue = tagsContextDefault;
@@ -101,7 +103,7 @@ export class TagsProvider extends LitElement {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"alb-tags-provider": TagsProvider;
+		[TagsProvider.elementName]: TagsProvider;
 	}
 }
 

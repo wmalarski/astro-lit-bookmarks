@@ -3,8 +3,10 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { query } from "lit/decorators/query.js";
 import { SubmitNewTagEvent } from "./events";
 
-@customElement("alb-create-tag-form")
+@customElement(CreateTagForm.elementName)
 export class CreateTagForm extends LitElement {
+	static readonly elementName = "create-tag-form" as const;
+
 	override render() {
 		return html`
 		<form @submit=${this.onSubmit}>
@@ -33,6 +35,6 @@ export class CreateTagForm extends LitElement {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"alb-create-tag-form": CreateTagForm;
+		[CreateTagForm.elementName]: CreateTagForm;
 	}
 }

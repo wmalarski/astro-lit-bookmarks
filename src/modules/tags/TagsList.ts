@@ -9,21 +9,21 @@ import {
 } from "./TagsContext";
 import { consume } from "@lit/context";
 
-@customElement("alb-tags-list")
+@customElement("tags-list")
 export class TagsList extends LitElement {
+	static readonly elementName = "tags-list" as const;
+
 	@consume({ context: tagsContext, subscribe: true })
 	tagsContext: TagsContextValue = tagsContextDefault;
 
 	override render() {
 		return html`
 		<div>
-			<alb-create-tag-form></alb-create-tag-form>
+			<create-tag-form></create-tag-form>
 			<pre>${JSON.stringify(this.tagsContext.optimisticTag, null, 2)}</pre>
 			<ul>
 				${this.tagsContext.tags.map(
-					(tag) => html`
-					<alb-tags-list-item .tag=${tag}></alb-tags-list-item>
-					`,
+					(tag) => html`<tags-list-item .tag=${tag}></tags-list-item>`,
 				)}
 			</ul>
 		</div>`;
@@ -32,6 +32,6 @@ export class TagsList extends LitElement {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"alb-tags-list": TagsList;
+		[TagsList.elementName]: TagsList;
 	}
 }

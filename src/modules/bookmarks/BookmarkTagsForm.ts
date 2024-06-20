@@ -15,8 +15,10 @@ import {
 	type BookmarkContextValue,
 } from "./BookmarkContext";
 
-@customElement("alb-bookmark-tags-form")
+@customElement(BookmarkTagsForm.elementName)
 export class BookmarkTagsForm extends LitElement {
+	static readonly elementName = "bookmark-tags-form" as const;
+
 	@property({ attribute: false })
 	item: MatchBookmarksResult | null = null;
 
@@ -87,6 +89,6 @@ export class BookmarkTagsForm extends LitElement {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"alb-bookmark-tags-form": BookmarkTagsForm;
+		[BookmarkTagsForm.elementName]: BookmarkTagsForm;
 	}
 }

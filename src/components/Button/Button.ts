@@ -2,8 +2,10 @@ import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { buttonRecipe, buttonStyles, type ButtonProps } from "./Button.styles";
 
-@customElement("alb-button")
+@customElement(AlbButton.elementName)
 export class AlbButton extends LitElement {
+	static readonly elementName = "alb-button" as const;
+
 	@property({ type: String, reflect: true })
 	variant: ButtonProps["variant"] = "primary";
 

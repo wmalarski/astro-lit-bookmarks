@@ -4,15 +4,17 @@ import { property } from "lit/decorators.js";
 import "./BookmarkTagsForm";
 import type { MatchBookmarksResult } from "./matchBookmarks";
 
-@customElement("alb-bookmark-item")
+@customElement(BookmarkItem.elementName)
 export class BookmarkItem extends LitElement {
+	static readonly elementName = "bookmark-item" as const;
+
 	@property({ attribute: false })
 	item: MatchBookmarksResult | null = null;
 
 	override render() {
 		return html`
             <li>
-				<alb-bookmark-tags-form .item=${this.item}></alb-bookmark-tags-form>
+				<bookmark-tags-form .item=${this.item}></bookmark-tags-form>
                 <pre>${JSON.stringify(this.item, null, 2)}</pre>
             </li>
         `;
@@ -21,6 +23,6 @@ export class BookmarkItem extends LitElement {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		"alb-bookmark-item": BookmarkItem;
+		[BookmarkItem.elementName]: BookmarkItem;
 	}
 }
