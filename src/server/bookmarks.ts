@@ -80,14 +80,14 @@ type CreateBookmarkArgs = {
 	tagIds: string[];
 };
 
-export const createBookmark = async (
+export const createBookmark = (
 	context: ActionAPIContext,
 	{ content, mastoBookmarkId, priority }: CreateBookmarkArgs,
 ) => {
 	const session = validateContextSession(context);
 
 	const bookmarkId = crypto.randomUUID();
-	const result = await db
+	const result = db
 		.insert(bookmarkTable)
 		.values({
 			content,
@@ -98,13 +98,13 @@ export const createBookmark = async (
 			priority,
 		})
 		.returning()
-		.execute();
+		.get();
 
-	if (result.length === 0) {
+	if (!result) {
 		throw new ActionError(DB_ERROR);
 	}
 
-	return result[1];
+	return result;
 };
 
 type UpdateBookmarkArgs = {
@@ -129,9 +129,10 @@ export const updateBookmark = (
 				eq(bookmarkTable.userId, session.userId),
 			),
 		)
-		.run();
+		.returning()
+		.get();
 
-	if (result.changes === 0) {
+	if (!result) {
 		throw new ActionError(DB_ERROR);
 	}
 
@@ -156,9 +157,10 @@ export const deleteBookmark = (
 				eq(bookmarkTable.userId, session.userId),
 			),
 		)
-		.run();
+		.returning()
+		.get();
 
-	if (result.changes === 0) {
+	if (!result) {
 		throw new ActionError(DB_ERROR);
 	}
 

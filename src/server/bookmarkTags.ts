@@ -26,9 +26,10 @@ export const createBookmarkTags = (
 				id: crypto.randomUUID(),
 			})),
 		)
-		.run();
+		.returning()
+		.all();
 
-	if (result.changes === 0) {
+	if (result.length === 0) {
 		throw new ActionError(DB_ERROR);
 	}
 
@@ -53,9 +54,10 @@ export const deleteBookmarkTag = (
 				eq(bookmarkTagTable.userId, session.userId),
 			),
 		)
-		.run();
+		.returning()
+		.get();
 
-	if (result.changes === 0) {
+	if (!result) {
 		throw new ActionError(DB_ERROR);
 	}
 

@@ -27,19 +27,11 @@ export class TagsProvider extends LitElement {
 		autoRun: false,
 		task: ([name]) => actions.createTag({ name }),
 		onComplete: (result) => {
-			if (result.success) {
-				this.value = {
-					...this.value,
-					optimisticTag: null,
-					tags: [result.tag, ...this.value.tags],
-					error: null,
-				};
-				return;
-			}
 			this.value = {
 				...this.value,
 				optimisticTag: null,
-				error: "Tag submission error",
+				tags: [result, ...this.value.tags],
+				error: null,
 			};
 		},
 		onError: () => {
@@ -58,17 +50,9 @@ export class TagsProvider extends LitElement {
 		autoRun: false,
 		task: ([tagId]) => actions.deleteTag({ tagId }),
 		onComplete: (result) => {
-			if (result.success) {
-				this.value = {
-					...this.value,
-					tags: this.value.tags.filter((tag) => tag.id !== result.tag.id),
-					removingTagId: null,
-				};
-				return;
-			}
 			this.value = {
 				...this.value,
-				error: "Error removing tag",
+				tags: this.value.tags.filter((tag) => tag.id !== result.id),
 				removingTagId: null,
 			};
 		},

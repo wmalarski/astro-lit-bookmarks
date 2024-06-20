@@ -84,7 +84,7 @@ export class BookmarkTagsForm extends LitElement {
 	>(this, {
 		autoRun: false,
 		task: ([id, tagId]) => {
-			return actions.createMastoBookmark({ tagIds: [tagId], bookmarkId: id });
+			return actions.createBookmarkTags({ tagIds: [tagId], bookmarkId: id });
 		},
 		onError: () => {
 			this.optimisticTagId = null;

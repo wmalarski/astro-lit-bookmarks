@@ -9,22 +9,17 @@ export const bookmarks = {
 			mastoBookmarkId: z.string(),
 			tagIds: z.array(z.string()),
 		}),
-		handler: async (args, context) => {
+		handler: (args, context) =>
 			createBookmark(context, {
 				content: "",
 				mastoBookmarkId: args.mastoBookmarkId,
 				priority: 0,
 				tagIds: args.tagIds,
-			});
-			return { success: true };
-		},
+			}),
 	}),
-	createMastoBookmark: defineAction({
+	createBookmarkTags: defineAction({
 		accept: "json",
 		input: z.object({ bookmarkId: z.string(), tagIds: z.array(z.string()) }),
-		handler: async (args, context) => {
-			createBookmarkTags(context, args);
-			return { success: true };
-		},
+		handler: async (args, context) => createBookmarkTags(context, args),
 	}),
 };

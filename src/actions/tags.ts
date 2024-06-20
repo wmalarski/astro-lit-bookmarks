@@ -5,25 +5,16 @@ export const tags = {
 	createTag: defineAction({
 		accept: "json",
 		input: z.object({ name: z.string() }),
-		handler: async (args, context) => {
-			const tag = createTag(context, args);
-			return { success: true, tag };
-		},
+		handler: (args, context) => createTag(context, args),
 	}),
 	updateTag: defineAction({
 		accept: "json",
 		input: z.object({ tagId: z.string(), name: z.string() }),
-		handler: async (args, context) => {
-			const tag = updateTag(context, args);
-			return { success: true, tag };
-		},
+		handler: (args, context) => updateTag(context, args),
 	}),
 	deleteTag: defineAction({
 		accept: "json",
 		input: z.object({ tagId: z.string() }),
-		handler: async (args, context) => {
-			const tag = deleteTag(context, args);
-			return { success: true, tag };
-		},
+		handler: (args, context) => deleteTag(context, args),
 	}),
 };
