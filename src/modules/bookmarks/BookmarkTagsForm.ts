@@ -5,14 +5,17 @@ import type { InferSelectModel } from "drizzle-orm";
 import type { tagTable } from "@server/db";
 import { Task } from "@lit/task";
 import { actions } from "astro:actions";
+import { consume } from "@lit/context";
+import {
+	tagsContext,
+	tagsContextDefault,
+	type TagsContextValue,
+} from "@modules/tags/TagsContext";
 
 @customElement("alb-bookmark-tags-form")
 export class BookmarkTagsForm extends LitElement {
 	@property({ attribute: false })
 	tags: InferSelectModel<typeof tagTable>[] = [];
-
-	@property({ attribute: false })
-	allTags: InferSelectModel<typeof tagTable>[] = [];
 
 	@property({ attribute: false })
 	bookmarkId: string | undefined = undefined;
@@ -29,11 +32,14 @@ export class BookmarkTagsForm extends LitElement {
 	@state()
 	error = false;
 
+	@consume({ context: tagsContext, subscribe: true })
+	tagsContext: TagsContextValue = tagsContextDefault;
+
 	override render() {
 		const tagsIds = new Set(this.tags.map((tag) => tag.id));
 		const optimisticTag =
 			this.optimisticTagId &&
-			this.allTags.find((tag) => tag.id === this.optimisticTagId);
+			this.tagsContext.tags.find((tag) => tag.id === this.optimisticTagId);
 
 		return html`
             <form @change=${this.onChange}>
@@ -49,7 +55,7 @@ export class BookmarkTagsForm extends LitElement {
 					Tags
 					<select name="tag">
 						<option value="" selected>Please choose</option>
-						${this.allTags
+						${this.tagsContext.tags
 							.filter((tag) => !tagsIds.has(tag.id))
 							.map((tag) => html`<option value=${tag.id}>${tag.name}</option>`)}
 					</select>
@@ -104,7 +110,7 @@ export class BookmarkTagsForm extends LitElement {
 
 		this.optimisticTagId = null;
 
-		const tag = this.allTags.find((tag) => tag.id === tagId);
+		const tag = this.tagsContext.tags.find((tag) => tag.id === tagId);
 
 		if (!tag) {
 			return;

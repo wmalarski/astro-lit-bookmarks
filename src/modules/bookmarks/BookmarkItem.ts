@@ -23,7 +23,7 @@ export class BookmarkItem extends LitElement {
 	override render() {
 		return html`
             <li>
-				<alb-bookmark-tags-form .tags=${this.tags} .allTags=${this.allTags}>
+				<alb-bookmark-tags-form .tags=${this.tags}>
 				</alb-bookmark-tags-form>
                 <pre>${JSON.stringify(
 									{
