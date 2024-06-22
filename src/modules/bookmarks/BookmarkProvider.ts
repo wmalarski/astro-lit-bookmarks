@@ -41,12 +41,13 @@ export class BookmarkProvider extends LitElement {
 		autoRun: false,
 		task: ([args]) => actions.createBookmark(args),
 		onComplete: (result) => {
+			const mastoBookmarkId = result.bookmark.mastoBookmarkId;
 			this.value = {
 				...this.value,
 				isPending: false,
 				bookmarks: this.value.bookmarks.map((entry) =>
-					entry.mastoBookmark?.id === result.mastoBookmarkId
-						? { ...entry, bookmark: result }
+					entry.mastoBookmark?.id === mastoBookmarkId
+						? { ...entry, ...result }
 						: entry,
 				),
 				error: null,

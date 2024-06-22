@@ -77,7 +77,6 @@ type CreateBookmarkArgs = {
 	content: string;
 	mastoBookmarkId: string | null;
 	priority: number;
-	tagIds: string[];
 };
 
 export const createBookmark = (

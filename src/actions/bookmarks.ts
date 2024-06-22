@@ -9,13 +9,20 @@ export const bookmarks = {
 			mastoBookmarkId: z.string(),
 			tagIds: z.array(z.string()),
 		}),
-		handler: (args, context) =>
-			createBookmark(context, {
+		handler: (args, context) => {
+			const bookmark = createBookmark(context, {
 				content: "",
 				mastoBookmarkId: args.mastoBookmarkId,
 				priority: 0,
+			});
+
+			const bookmarkTags = createBookmarkTags(context, {
+				bookmarkId: bookmark.id,
 				tagIds: args.tagIds,
-			}),
+			});
+
+			return { bookmark, bookmarkTags };
+		},
 	}),
 	createBookmarkTags: defineAction({
 		accept: "json",

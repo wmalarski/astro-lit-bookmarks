@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators.js";
 import "./BookmarkTagsForm";
@@ -21,6 +21,17 @@ export class BookmarkItem extends LitElement {
 	@consume({ context: tagsContext, subscribe: true })
 	tagsContext: TagsContextValue = tagsContextDefault;
 
+	static override styles = css`
+	li { 
+		border: var(--border);
+	}
+	
+	pre {
+		max-width: 400px;
+		overflow-x: hidden;
+	 }
+  `;
+
 	override render() {
 		const assignedTags = this.item.bookmarkTags.flatMap((bookmarkTag) => {
 			const tag = this.tagsContext.tagsMap.get(bookmarkTag.tagId);
@@ -37,7 +48,6 @@ export class BookmarkItem extends LitElement {
 					)}
 				</ul>
 				<bookmark-tags-form .item=${this.item}></bookmark-tags-form>
-				<pre>${JSON.stringify(assignedTags, null, 2)}</pre>
                 <pre>${JSON.stringify(this.item, null, 2)}</pre>
             </li>
         `;

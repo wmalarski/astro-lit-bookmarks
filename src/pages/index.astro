@@ -61,9 +61,19 @@ const matchedBookmarks = matchBookmarks({
         client:only="lit"
         value={{ ...bookmarkContextDefault, bookmarks: matchedBookmarks }}
       >
-        <TagsList client:only="lit" />
-        <BookmarkList client:only="lit" />
+        <div class="container">
+          <BookmarkList client:only="lit" />
+          <TagsList client:only="lit" />
+        </div>
       </TypedBookmarkProvider>
     </TypedTagsProvider>
   </main>
 </Layout>
+
+<style>
+  .container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+  }
+</style>
