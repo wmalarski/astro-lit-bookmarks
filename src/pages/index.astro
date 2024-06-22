@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../components/Button/Button";
+import "../components/Link/Link";
 import { paths } from "@utils/paths";
 import { findTags } from "@server/tags";
 import { TagsList } from "@modules/tags/TagsList";
@@ -38,42 +39,66 @@ const matchedBookmarks = matchBookmarks({
 ---
 
 <Layout title="Welcome to Astro.">
-  <main>
-    <alb-button>Primary</alb-button>
-    <alb-button variant="secondary">Secondary</alb-button>
-    <alb-button disabled>AAA</alb-button>
-    <alb-button size="small">Small</alb-button>
-    <alb-button size="medium">Medium</alb-button>
-    <alb-button size="large">Large</alb-button>
-
-    <a href={paths.loginMastodon}>Sign in with Mastodon</a>
-    <a href={paths.logout}>Sign out</a>
-
-    <TypedTagsProvider
+  <TypedTagsProvider
+    client:only="lit"
+    value={{
+      ...tagsContextDefault,
+      tags,
+      tagsMap: new Map(tags.map((tag) => [tag.id, tag])),
+    }}
+  >
+    <TypedBookmarkProvider
       client:only="lit"
-      value={{
-        ...tagsContextDefault,
-        tags,
-        tagsMap: new Map(tags.map((tag) => [tag.id, tag])),
-      }}
+      value={{ ...bookmarkContextDefault, bookmarks: matchedBookmarks }}
     >
-      <TypedBookmarkProvider
-        client:only="lit"
-        value={{ ...bookmarkContextDefault, bookmarks: matchedBookmarks }}
-      >
+      <main>
+        <nav class="nav">
+          <alb-anchor href={paths.index()}>Home</alb-anchor>
+          <alb-anchor href={paths.loginMastodon}>
+            Sign in with Mastodon
+          </alb-anchor>
+          <alb-anchor href={paths.logout}>Sign out</alb-anchor>
+        </nav>
+
         <div class="container">
           <BookmarkList client:only="lit" />
-          <TagsList client:only="lit" />
+          <aside class="aside">
+            <TagsList client:only="lit" />
+          </aside>
         </div>
-      </TypedBookmarkProvider>
-    </TypedTagsProvider>
-  </main>
+      </main>
+    </TypedBookmarkProvider>
+  </TypedTagsProvider>
 </Layout>
 
 <style>
+  main {
+    position: relative;
+  }
+
+  .nav {
+    display: flex;
+    padding: 1.5rem;
+    border-bottom: var(--border);
+    gap: 1rem;
+    position: sticky;
+    top: 0px;
+    background-color: rgb(var(--background));
+    z-index: 1;
+  }
+
   .container {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 1rem;
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+
+  .aside {
+    display: block;
+    position: sticky;
+    top: 0px;
+    border-right: var(--border);
   }
 </style>

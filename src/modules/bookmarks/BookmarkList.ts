@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import "./BookmarkItem";
 import {
@@ -14,6 +14,16 @@ export class BookmarkList extends LitElement {
 
 	@consume({ context: bookmarkContext, subscribe: true })
 	bookmarkContext: BookmarkContextValue = bookmarkContextDefault;
+
+	static override styles = css`
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style-type: none;
+			border-left: var(--border);
+			border-right: var(--border);
+		}
+	`;
 
 	override render() {
 		return html`
