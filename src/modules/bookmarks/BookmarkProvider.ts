@@ -141,7 +141,9 @@ export class BookmarkProvider extends LitElement {
 			error: null,
 		};
 
-		await this.createBookmarkTask.run([event]);
+		await this.createBookmarkTask.run([
+			{ mastoBookmarkId: event.mastoBookmarkId, tagIds: event.tagIds },
+		]);
 	}
 
 	async onCreateBookmarkTag(event: CreateBookmarkTagEvent) {
@@ -151,7 +153,9 @@ export class BookmarkProvider extends LitElement {
 			error: null,
 		};
 
-		await this.createBookmarkTagTask.run([event]);
+		await this.createBookmarkTagTask.run([
+			{ bookmarkId: event.bookmarkId, tagIds: event.tagIds },
+		]);
 	}
 
 	async onRemoveBookmarkTag(event: RemoveBookmarkTagEvent) {
@@ -161,7 +165,9 @@ export class BookmarkProvider extends LitElement {
 			error: null,
 		};
 
-		await this.removeBookmarkTagTask.run([event]);
+		await this.removeBookmarkTagTask.run([
+			{ bookmarkTagId: event.bookmarkTagId },
+		]);
 	}
 }
 

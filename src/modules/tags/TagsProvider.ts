@@ -87,7 +87,7 @@ export class TagsProvider extends LitElement {
 			error: null,
 		};
 
-		await this.createTagTask.run([event]);
+		await this.createTagTask.run([{ name: event.name }]);
 	}
 
 	onDeleteTag = async (event: DeleteTagEvent) => {
@@ -97,7 +97,7 @@ export class TagsProvider extends LitElement {
 			error: null,
 		};
 
-		await this.deleteTagTask.run([event]);
+		await this.deleteTagTask.run([{ tagId: event.tagId }]);
 	};
 }
 
