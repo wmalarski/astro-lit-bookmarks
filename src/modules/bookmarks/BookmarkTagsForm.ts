@@ -13,11 +13,6 @@ import {
 	CreateBookmarkTagEvent,
 	RemoveBookmarkTagEvent,
 } from "./events";
-import {
-	bookmarkContext,
-	bookmarkContextDefault,
-	type BookmarkContextValue,
-} from "./BookmarkContext";
 import type { InferSelectModel } from "drizzle-orm";
 import type { bookmarkTagTable, tagTable } from "@server/db";
 
@@ -58,15 +53,7 @@ export class BookmarkTagsForm extends LitElement {
 	@consume({ context: tagsContext, subscribe: true })
 	tagsContext: TagsContextValue = tagsContextDefault;
 
-	@consume({ context: bookmarkContext, subscribe: true })
-	bookmarkContext: BookmarkContextValue = bookmarkContextDefault;
-
 	override render() {
-		const assignedTags = this.item.bookmarkTags.flatMap((bookmarkTag) => {
-			const tag = this.tagsContext.tagsMap.get(bookmarkTag.tagId);
-			return tag ? [{ tag, bookmarkTag }] : [];
-		});
-
 		const tagsIds = new Set(
 			this.item.bookmarkTags.map((bookmarkTag) => bookmarkTag.tagId),
 		);
@@ -75,27 +62,17 @@ export class BookmarkTagsForm extends LitElement {
 		);
 
 		return html`
-			<div>
-				${this.bookmarkContext.isPending ? html`<span>Loading</span>` : null}
-				<ul>
-					${assignedTags?.map(
-						({ tag, bookmarkTag }) => html`
-						<bookmark-tag .tag=${tag} .bookmarkTag=${bookmarkTag}></bookmark-tag>
-					`,
-					)}
-				</ul>
-				<form @change=${this.onChange}>
-					<label>
-						Tags
-						<select name="tag">
-							<option value="" selected>Please choose</option>
-							${unassignedTags.map(
-								(tag) => html`<option value=${tag.id}>${tag.name}</option>`,
-							)}
-						</select>
-					</label>
-				</form>
-			</div>
+			<form @change=${this.onChange}>
+				<label>
+					Tags
+					<select name="tag">
+						<option value="" selected>Please choose</option>
+						${unassignedTags.map(
+							(tag) => html`<option value=${tag.id}>${tag.name}</option>`,
+						)}
+					</select>
+				</label>
+			</form>
         `;
 	}
 

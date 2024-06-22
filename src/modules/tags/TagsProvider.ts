@@ -23,11 +23,11 @@ export class TagsProvider extends LitElement {
 	value: TagsContextValue = tagsContextDefault;
 
 	private createTagTask = new Task<
-		[string],
+		Parameters<typeof actions.createTag>,
 		Awaited<ReturnType<typeof actions.createTag>>
 	>(this, {
 		autoRun: false,
-		task: ([name]) => actions.createTag({ name }),
+		task: ([args]) => actions.createTag(args),
 		onComplete: (result) => {
 			const tagsMap = new Map(this.value.tagsMap);
 			tagsMap.set(result.id, result);
@@ -49,11 +49,11 @@ export class TagsProvider extends LitElement {
 	});
 
 	private deleteTagTask = new Task<
-		[string],
+		Parameters<typeof actions.deleteTag>,
 		Awaited<ReturnType<typeof actions.deleteTag>>
 	>(this, {
 		autoRun: false,
-		task: ([tagId]) => actions.deleteTag({ tagId }),
+		task: ([args]) => actions.deleteTag(args),
 		onComplete: (result) => {
 			const tagsMap = new Map(this.value.tagsMap);
 			tagsMap.delete(result.id);
@@ -87,7 +87,7 @@ export class TagsProvider extends LitElement {
 			error: null,
 		};
 
-		await this.createTagTask.run([event.name]);
+		await this.createTagTask.run([event]);
 	}
 
 	onDeleteTag = async (event: DeleteTagEvent) => {
@@ -97,7 +97,7 @@ export class TagsProvider extends LitElement {
 			error: null,
 		};
 
-		await this.deleteTagTask.run([event.tagId]);
+		await this.deleteTagTask.run([event]);
 	};
 }
 

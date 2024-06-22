@@ -35,12 +35,11 @@ export class BookmarkProvider extends LitElement {
 	tagsContext: TagsContextValue = tagsContextDefault;
 
 	private createBookmarkTask = new Task<
-		[string, string],
+		Parameters<typeof actions.createBookmark>,
 		Awaited<ReturnType<typeof actions.createBookmark>>
 	>(this, {
 		autoRun: false,
-		task: ([mastoBookmarkId, tagId]) =>
-			actions.createBookmark({ tagIds: [tagId], mastoBookmarkId }),
+		task: ([args]) => actions.createBookmark(args),
 		onComplete: (result) => {
 			this.value = {
 				...this.value,
@@ -63,12 +62,11 @@ export class BookmarkProvider extends LitElement {
 	});
 
 	private createBookmarkTagTask = new Task<
-		[string, string],
+		Parameters<typeof actions.createBookmarkTags>,
 		Awaited<ReturnType<typeof actions.createBookmarkTags>>
 	>(this, {
 		autoRun: false,
-		task: ([bookmarkId, tagId]) =>
-			actions.createBookmarkTags({ tagIds: [tagId], bookmarkId }),
+		task: ([args]) => actions.createBookmarkTags(args),
 		onComplete: (result) => {
 			const resultBookmarkTag = result[0];
 
@@ -97,11 +95,11 @@ export class BookmarkProvider extends LitElement {
 	});
 
 	private removeBookmarkTagTask = new Task<
-		[string],
+		Parameters<typeof actions.removeBookmarkTag>,
 		Awaited<ReturnType<typeof actions.removeBookmarkTag>>
 	>(this, {
 		autoRun: false,
-		task: ([bookmarkTagId]) => actions.removeBookmarkTag({ bookmarkTagId }),
+		task: ([args]) => actions.removeBookmarkTag(args),
 		onComplete: (result) => {
 			this.value = {
 				...this.value,
@@ -143,7 +141,7 @@ export class BookmarkProvider extends LitElement {
 			error: null,
 		};
 
-		await this.createBookmarkTask.run([event.mastoBookmarkId, event.tagId]);
+		await this.createBookmarkTask.run([event]);
 	}
 
 	async onCreateBookmarkTag(event: CreateBookmarkTagEvent) {
@@ -153,7 +151,7 @@ export class BookmarkProvider extends LitElement {
 			error: null,
 		};
 
-		await this.createBookmarkTagTask.run([event.bookmarkId, event.tagId]);
+		await this.createBookmarkTagTask.run([event]);
 	}
 
 	async onRemoveBookmarkTag(event: RemoveBookmarkTagEvent) {
@@ -163,7 +161,7 @@ export class BookmarkProvider extends LitElement {
 			error: null,
 		};
 
-		await this.removeBookmarkTagTask.run([event.bookmarkTagId]);
+		await this.removeBookmarkTagTask.run([event]);
 	}
 }
 
