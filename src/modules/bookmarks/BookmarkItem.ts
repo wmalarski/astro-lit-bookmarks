@@ -37,6 +37,7 @@ export class BookmarkItem extends LitElement {
 					)}
 				</ul>
 				<bookmark-tags-form .item=${this.item}></bookmark-tags-form>
+				<pre>${JSON.stringify(assignedTags, null, 2)}</pre>
                 <pre>${JSON.stringify(this.item, null, 2)}</pre>
             </li>
         `;

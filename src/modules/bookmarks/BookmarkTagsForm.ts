@@ -8,37 +8,7 @@ import {
 	type TagsContextValue,
 } from "@modules/tags/TagsContext";
 import type { MatchBookmarksResult } from "./matchBookmarks";
-import {
-	CreateBookmarkEvent,
-	CreateBookmarkTagEvent,
-	RemoveBookmarkTagEvent,
-} from "./events";
-import type { InferSelectModel } from "drizzle-orm";
-import type { bookmarkTagTable, tagTable } from "@server/db";
-
-@customElement(BookmarkTag.elementName)
-export class BookmarkTag extends LitElement {
-	static readonly elementName = "bookmark-tag" as const;
-
-	@property({ attribute: false })
-	tag!: InferSelectModel<typeof tagTable>;
-
-	@property({ attribute: false })
-	bookmarkTag!: InferSelectModel<typeof bookmarkTagTable>;
-
-	override render() {
-		return html`
-			<li>
-				<span>${this.tag.name}</span>
-				<button type="button" @click=${this.onRemoveClick}>Remove</button>
-			</li>
-		`;
-	}
-
-	onRemoveClick() {
-		this.dispatchEvent(new RemoveBookmarkTagEvent(this.bookmarkTag.id));
-	}
-}
+import { CreateBookmarkEvent, CreateBookmarkTagEvent } from "./events";
 
 @customElement(BookmarkTagsForm.elementName)
 export class BookmarkTagsForm extends LitElement {
@@ -96,6 +66,5 @@ export class BookmarkTagsForm extends LitElement {
 declare global {
 	interface HTMLElementTagNameMap {
 		[BookmarkTagsForm.elementName]: BookmarkTagsForm;
-		[BookmarkTag.elementName]: BookmarkTag;
 	}
 }
