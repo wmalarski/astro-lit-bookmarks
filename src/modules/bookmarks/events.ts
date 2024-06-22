@@ -24,9 +24,21 @@ export class CreateBookmarkTagEvent extends Event {
 	}
 }
 
+export class RemoveBookmarkTagEvent extends Event {
+	static readonly eventName = "bookmark-tag-remove" as const;
+
+	readonly bookmarkTagId: string;
+
+	constructor(bookmarkTagId: string) {
+		super(RemoveBookmarkTagEvent.eventName, { bubbles: true, composed: true });
+		this.bookmarkTagId = bookmarkTagId;
+	}
+}
+
 declare global {
 	interface HTMLElementEventMap {
 		[CreateBookmarkEvent.eventName]: CreateBookmarkEvent;
 		[CreateBookmarkTagEvent.eventName]: CreateBookmarkTagEvent;
+		[RemoveBookmarkTagEvent.eventName]: RemoveBookmarkTagEvent;
 	}
 }

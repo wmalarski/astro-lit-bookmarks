@@ -1,5 +1,5 @@
 import { and, eq } from "drizzle-orm";
-import { bookmarkTagTable, db, tagTable } from "./db";
+import { bookmarkTagTable, db } from "./db";
 import { validateContextSession } from "./auth";
 import type { ActionAPIContext } from "astro/actions/runtime/store.js";
 import { ActionError } from "astro:actions";
@@ -47,7 +47,7 @@ export const deleteBookmarkTag = (
 	const session = validateContextSession(context);
 
 	const result = db
-		.delete(tagTable)
+		.delete(bookmarkTagTable)
 		.where(
 			and(
 				eq(bookmarkTagTable.id, bookmarkTagId),
