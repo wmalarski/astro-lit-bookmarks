@@ -1,26 +1,25 @@
-export class CreateBookmarkEvent extends Event {
-	static readonly eventName = "bookmark-create" as const;
-
-	readonly tagIds: string[];
-	readonly mastoBookmarkId: string;
-
-	constructor(mastoBookmarkId: string, tagId: string) {
-		super(CreateBookmarkEvent.eventName, { bubbles: true, composed: true });
-		this.mastoBookmarkId = mastoBookmarkId;
-		this.tagIds = [tagId];
-	}
-}
+type CreateBookmarkTagEventArgs = {
+	tagIds: string[];
+	bookmarkId: string | undefined;
+	mastoBookmarkId: string | undefined;
+};
 
 export class CreateBookmarkTagEvent extends Event {
 	static readonly eventName = "bookmark-tag-create" as const;
 
 	readonly tagIds: string[];
-	readonly bookmarkId: string;
+	readonly bookmarkId?: string | undefined;
+	readonly mastoBookmarkId?: string | undefined;
 
-	constructor(bookmarkId: string, tagId: string) {
+	constructor({
+		bookmarkId,
+		mastoBookmarkId,
+		tagIds,
+	}: CreateBookmarkTagEventArgs) {
 		super(CreateBookmarkTagEvent.eventName, { bubbles: true, composed: true });
 		this.bookmarkId = bookmarkId;
-		this.tagIds = [tagId];
+		this.mastoBookmarkId = mastoBookmarkId;
+		this.tagIds = tagIds;
 	}
 }
 
@@ -62,8 +61,8 @@ export class CheckDoneBookmarkEvent extends Event {
 
 declare global {
 	interface HTMLElementEventMap {
-		[CreateBookmarkEvent.eventName]: CreateBookmarkEvent;
 		[CreateBookmarkTagEvent.eventName]: CreateBookmarkTagEvent;
 		[RemoveBookmarkTagEvent.eventName]: RemoveBookmarkTagEvent;
+		[CheckDoneBookmarkEvent.eventName]: CheckDoneBookmarkEvent;
 	}
 }

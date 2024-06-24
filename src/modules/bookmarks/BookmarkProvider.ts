@@ -14,7 +14,7 @@ import {
 	type TagsContextValue,
 } from "@modules/tags/TagsContext";
 import type {
-	CreateBookmarkEvent,
+	CheckDoneBookmarkEvent,
 	CreateBookmarkTagEvent,
 	RemoveBookmarkTagEvent,
 } from "./events";
@@ -34,34 +34,6 @@ export class BookmarkProvider extends LitElement {
 	@consume({ context: tagsContext, subscribe: true })
 	tagsContext: TagsContextValue = tagsContextDefault;
 
-	private createBookmarkTask = new Task<
-		Parameters<typeof actions.createBookmark>,
-		Awaited<ReturnType<typeof actions.createBookmark>>
-	>(this, {
-		autoRun: false,
-		task: ([args]) => actions.createBookmark(args),
-		onComplete: (result) => {
-			const mastoBookmarkId = result.bookmark.mastoBookmarkId;
-			this.value = {
-				...this.value,
-				isPending: false,
-				bookmarks: this.value.bookmarks.map((entry) =>
-					entry.mastoBookmark?.id === mastoBookmarkId
-						? { ...entry, ...result }
-						: entry,
-				),
-				error: null,
-			};
-		},
-		onError: () => {
-			this.value = {
-				...this.value,
-				isPending: false,
-				error: "Tag submission error",
-			};
-		},
-	});
-
 	private createBookmarkTagTask = new Task<
 		Parameters<typeof actions.createBookmarkTags>,
 		Awaited<ReturnType<typeof actions.createBookmarkTags>>
@@ -69,7 +41,7 @@ export class BookmarkProvider extends LitElement {
 		autoRun: false,
 		task: ([args]) => actions.createBookmarkTags(args),
 		onComplete: (result) => {
-			const resultBookmarkTag = result[0];
+			const resultBookmarkTag = result.bookmarkTags[0];
 
 			if (!resultBookmarkTag) {
 				return;
@@ -81,7 +53,11 @@ export class BookmarkProvider extends LitElement {
 				error: null,
 				bookmarks: this.value.bookmarks.map((entry) =>
 					entry.bookmark?.id === resultBookmarkTag.bookmarkId
-						? { ...entry, bookmarkTags: [...result, ...entry.bookmarkTags] }
+						? {
+								...entry,
+								bookmarkTags: [...result.bookmarkTags, ...entry.bookmarkTags],
+								bookmark: result.bookmark ?? entry.bookmark,
+							}
 						: entry,
 				),
 			};
@@ -129,22 +105,10 @@ export class BookmarkProvider extends LitElement {
 
 	override render() {
 		return html`<slot
-            @bookmark-create=${this.onCreateBookmark}
             @bookmark-tag-create=${this.onCreateBookmarkTag}
 			@bookmark-tag-remove=${this.onRemoveBookmarkTag}
+			@bookmark-check-done=${this.onCheckDoneBookmark}
         ></slot>`;
-	}
-
-	async onCreateBookmark(event: CreateBookmarkEvent) {
-		this.value = {
-			...this.value,
-			isPending: true,
-			error: null,
-		};
-
-		await this.createBookmarkTask.run([
-			{ mastoBookmarkId: event.mastoBookmarkId, tagIds: event.tagIds },
-		]);
 	}
 
 	async onCreateBookmarkTag(event: CreateBookmarkTagEvent) {
@@ -169,6 +133,10 @@ export class BookmarkProvider extends LitElement {
 		await this.removeBookmarkTagTask.run([
 			{ bookmarkTagId: event.bookmarkTagId },
 		]);
+	}
+
+	async onCheckDoneBookmark(event: CheckDoneBookmarkEvent) {
+		//
 	}
 }
 

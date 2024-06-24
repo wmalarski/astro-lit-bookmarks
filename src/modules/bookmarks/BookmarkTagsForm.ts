@@ -8,7 +8,7 @@ import {
 	type TagsContextValue,
 } from "@modules/tags/TagsContext";
 import type { MatchBookmarksResult } from "./matchBookmarks";
-import { CreateBookmarkEvent, CreateBookmarkTagEvent } from "./events";
+import { CreateBookmarkTagEvent } from "./events";
 
 @customElement(BookmarkTagsForm.elementName)
 export class BookmarkTagsForm extends LitElement {
@@ -53,13 +53,13 @@ export class BookmarkTagsForm extends LitElement {
 			return;
 		}
 
-		if (this.item.bookmark?.id) {
-			const event = new CreateBookmarkTagEvent(this.item.bookmark?.id, tagId);
-			this.dispatchEvent(event);
-		} else if (this.item.mastoBookmark?.id) {
-			const event = new CreateBookmarkEvent(this.item.mastoBookmark.id, tagId);
-			this.dispatchEvent(event);
-		}
+		this.dispatchEvent(
+			new CreateBookmarkTagEvent({
+				bookmarkId: this.item.bookmark?.id,
+				tagIds: [tagId],
+				mastoBookmarkId: this.item.mastoBookmark?.id,
+			}),
+		);
 	}
 }
 

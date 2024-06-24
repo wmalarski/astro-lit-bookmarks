@@ -3,31 +3,35 @@ import { createBookmarkTags, deleteBookmarkTag } from "@server/bookmarkTags";
 import { createBookmark } from "@server/bookmarks";
 
 export const bookmarks = {
-	createBookmark: defineAction({
+	createBookmarkTags: defineAction({
 		accept: "json",
 		input: z.object({
-			mastoBookmarkId: z.string(),
+			bookmarkId: z.string().optional(),
+			mastoBookmarkId: z.string().optional(),
 			tagIds: z.array(z.string()),
 		}),
 		handler: (args, context) => {
+			if (args.bookmarkId) {
+				const bookmarkTags = createBookmarkTags(context, {
+					bookmarkId: args.bookmarkId,
+					tagIds: args.tagIds,
+				});
+
+				return { bookmarkTags };
+			}
 			const bookmark = createBookmark(context, {
 				content: "",
-				mastoBookmarkId: args.mastoBookmarkId,
+				mastoBookmarkId: args.mastoBookmarkId ?? null,
 				priority: 0,
 			});
 
 			const bookmarkTags = createBookmarkTags(context, {
-				bookmarkId: bookmark.id,
+				bookmarkId: args.bookmarkId ?? bookmark?.id,
 				tagIds: args.tagIds,
 			});
 
 			return { bookmark, bookmarkTags };
 		},
-	}),
-	createBookmarkTags: defineAction({
-		accept: "json",
-		input: z.object({ bookmarkId: z.string(), tagIds: z.array(z.string()) }),
-		handler: (args, context) => createBookmarkTags(context, args),
 	}),
 	removeBookmarkTag: defineAction({
 		accept: "json",
