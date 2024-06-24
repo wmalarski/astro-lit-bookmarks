@@ -1,6 +1,6 @@
 import { defineAction, z } from "astro:actions";
 import { createBookmarkTags, deleteBookmarkTag } from "@server/bookmarkTags";
-import { createBookmark } from "@server/bookmarks";
+import { findOrCreateBookmark, updateBookmark } from "@server/bookmarks";
 
 export const bookmarks = {
 	createBookmarkTags: defineAction({
@@ -11,18 +11,12 @@ export const bookmarks = {
 			tagIds: z.array(z.string()),
 		}),
 		handler: (args, context) => {
-			if (args.bookmarkId) {
-				const bookmarkTags = createBookmarkTags(context, {
-					bookmarkId: args.bookmarkId,
-					tagIds: args.tagIds,
-				});
-
-				return { bookmarkTags };
-			}
-			const bookmark = createBookmark(context, {
+			const bookmark = findOrCreateBookmark(context, {
 				content: "",
 				mastoBookmarkId: args.mastoBookmarkId ?? null,
 				priority: 0,
+				done: false,
+				id: args.bookmarkId,
 			});
 
 			const bookmarkTags = createBookmarkTags(context, {
@@ -37,5 +31,29 @@ export const bookmarks = {
 		accept: "json",
 		input: z.object({ bookmarkTagId: z.string() }),
 		handler: (args, context) => deleteBookmarkTag(context, args),
+	}),
+	updateBookmarkDone: defineAction({
+		accept: "json",
+		input: z.object({
+			bookmarkId: z.string().optional(),
+			mastoBookmarkId: z.string().optional(),
+			done: z.boolean(),
+		}),
+		handler: (args, context) => {
+			const bookmark = findOrCreateBookmark(context, {
+				mastoBookmarkId: args.mastoBookmarkId ?? null,
+				content: "",
+				done: args.done,
+				priority: 0,
+				id: args.bookmarkId,
+			});
+
+			return updateBookmark(context, {
+				bookmarkId: bookmark.id,
+				content: bookmark.content,
+				done: args.done,
+				priority: bookmark.priority,
+			});
+		},
 	}),
 };

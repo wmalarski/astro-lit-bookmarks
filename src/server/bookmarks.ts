@@ -42,6 +42,27 @@ export type FindBookmarksByMastoIdsResult = ReturnType<
 	typeof findBookmarksByMastoIds
 >;
 
+type FindBookmarkArgs = {
+	id: string;
+};
+
+export const findBookmark = (
+	context: ActionAPIContext,
+	{ id }: FindBookmarkArgs,
+) => {
+	const session = validateContextSession(context);
+
+	return db
+		.select()
+		.from(bookmarkTable)
+		.where(
+			and(eq(bookmarkTable.userId, session.userId), eq(bookmarkTable.id, id)),
+		)
+		.get();
+};
+
+export type FindBookmarkResult = ReturnType<typeof findBookmark>;
+
 type FindBookmarksArgs = {
 	from?: Date;
 	to?: Date;
@@ -77,11 +98,12 @@ type CreateBookmarkArgs = {
 	content: string;
 	mastoBookmarkId: string | null;
 	priority: number;
+	done: boolean;
 };
 
 export const createBookmark = (
 	context: ActionAPIContext,
-	{ content, mastoBookmarkId, priority }: CreateBookmarkArgs,
+	{ content, mastoBookmarkId, priority, done }: CreateBookmarkArgs,
 ) => {
 	const session = validateContextSession(context);
 
@@ -92,6 +114,7 @@ export const createBookmark = (
 			content,
 			userId: session.userId,
 			createdAt: new Date(),
+			done,
 			id: bookmarkId,
 			mastoBookmarkId,
 			priority,
@@ -106,8 +129,25 @@ export const createBookmark = (
 	return result;
 };
 
+type FindOrCreateBookmarkArgs = CreateBookmarkArgs & {
+	id?: string | undefined;
+};
+
+export const findOrCreateBookmark = (
+	context: ActionAPIContext,
+	{ id, ...createArgs }: FindOrCreateBookmarkArgs,
+) => {
+	return id
+		? findBookmark(context, { id }) ?? createBookmark(context, createArgs)
+		: createBookmark(context, createArgs);
+};
+
+export type FindOrCreateBookmarkResult = ReturnType<
+	typeof findOrCreateBookmark
+>;
+
 type UpdateBookmarkArgs = {
-	content: string;
+	content: string | null;
 	priority: number;
 	done: boolean;
 	bookmarkId: string;

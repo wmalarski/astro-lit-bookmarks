@@ -103,6 +103,33 @@ export class BookmarkProvider extends LitElement {
 		},
 	});
 
+	private updateBookmarkDoneTask = new Task<
+		Parameters<typeof actions.updateBookmarkDone>,
+		Awaited<ReturnType<typeof actions.updateBookmarkDone>>
+	>(this, {
+		autoRun: false,
+		task: ([args]) => actions.updateBookmarkDone(args),
+		onComplete: (result) => {
+			this.value = {
+				...this.value,
+				isPending: false,
+				error: null,
+				bookmarks: this.value.bookmarks.map((entry) =>
+					entry.bookmark?.id === result.id
+						? { ...entry, bookmark: result }
+						: entry,
+				),
+			};
+		},
+		onError: () => {
+			this.value = {
+				...this.value,
+				isPending: false,
+				error: "Tag remove error",
+			};
+		},
+	});
+
 	override render() {
 		return html`<slot
             @bookmark-tag-create=${this.onCreateBookmarkTag}
@@ -111,12 +138,16 @@ export class BookmarkProvider extends LitElement {
         ></slot>`;
 	}
 
-	async onCreateBookmarkTag(event: CreateBookmarkTagEvent) {
+	startPending() {
 		this.value = {
 			...this.value,
 			isPending: true,
 			error: null,
 		};
+	}
+
+	async onCreateBookmarkTag(event: CreateBookmarkTagEvent) {
+		this.startPending();
 
 		await this.createBookmarkTagTask.run([
 			{ bookmarkId: event.bookmarkId, tagIds: event.tagIds },
@@ -124,11 +155,7 @@ export class BookmarkProvider extends LitElement {
 	}
 
 	async onRemoveBookmarkTag(event: RemoveBookmarkTagEvent) {
-		this.value = {
-			...this.value,
-			isPending: true,
-			error: null,
-		};
+		this.startPending();
 
 		await this.removeBookmarkTagTask.run([
 			{ bookmarkTagId: event.bookmarkTagId },
@@ -136,7 +163,15 @@ export class BookmarkProvider extends LitElement {
 	}
 
 	async onCheckDoneBookmark(event: CheckDoneBookmarkEvent) {
-		//
+		this.startPending();
+
+		await this.updateBookmarkDoneTask.run([
+			{
+				done: event.done,
+				bookmarkId: event.bookmarkId,
+				mastoBookmarkId: event.mastoBookmarkId,
+			},
+		]);
 	}
 }
 
