@@ -35,6 +35,31 @@ export class RemoveBookmarkTagEvent extends Event {
 	}
 }
 
+type CheckDoneBookmarkEventArgs = {
+	bookmarkId?: string | undefined;
+	mastoBookmarkId?: string | undefined;
+	done: boolean;
+};
+
+export class CheckDoneBookmarkEvent extends Event {
+	static readonly eventName = "bookmark-check-done" as const;
+
+	readonly bookmarkId: string | undefined;
+	readonly mastoBookmarkId: string | undefined;
+	readonly done: boolean;
+
+	constructor({
+		done,
+		bookmarkId,
+		mastoBookmarkId,
+	}: CheckDoneBookmarkEventArgs) {
+		super(CheckDoneBookmarkEvent.eventName, { bubbles: true, composed: true });
+		this.bookmarkId = bookmarkId;
+		this.mastoBookmarkId = mastoBookmarkId;
+		this.done = done;
+	}
+}
+
 declare global {
 	interface HTMLElementEventMap {
 		[CreateBookmarkEvent.eventName]: CreateBookmarkEvent;

@@ -3,6 +3,7 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators.js";
 import "./BookmarkTagsForm";
 import "./BookmarkTag";
+import "./BookmarkDoneCheckbox";
 import type { MatchBookmarksResult } from "./matchBookmarks";
 import { consume } from "@lit/context";
 import {
@@ -109,6 +110,7 @@ export class BookmarkItem extends LitElement {
 					`,
 					)}
 				</ul>
+				<bookmark-done-checkbox .item=${this.item}></bookmark-done-checkbox>
 				<bookmark-tags-form .item=${this.item}></bookmark-tags-form>
 				${
 					this.item.mastoBookmark
