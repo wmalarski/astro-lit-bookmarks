@@ -130,11 +130,35 @@ export class BookmarkProvider extends LitElement {
 		},
 	});
 
+	private findBookmarksTask = new Task<
+		Parameters<typeof actions.findBookmarks>,
+		Awaited<ReturnType<typeof actions.findBookmarks>>
+	>(this, {
+		autoRun: false,
+		task: ([args]) => actions.findBookmarks(args),
+		onComplete: (result) => {
+			this.value = {
+				...this.value,
+				isPending: false,
+				error: null,
+				bookmarks: [...this.value.bookmarks, ...result],
+			};
+		},
+		onError: () => {
+			this.value = {
+				...this.value,
+				isPending: false,
+				error: "Tag remove error",
+			};
+		},
+	});
+
 	override render() {
 		return html`<slot
             @bookmark-tag-create=${this.onCreateBookmarkTag}
 			@bookmark-tag-remove=${this.onRemoveBookmarkTag}
 			@bookmark-check-done=${this.onCheckDoneBookmark}
+			@bookmarks-load-more=${this.onLoadMoreBookmarks}
         ></slot>`;
 	}
 
@@ -172,6 +196,12 @@ export class BookmarkProvider extends LitElement {
 				mastoBookmarkId: event.mastoBookmarkId,
 			},
 		]);
+	}
+
+	async onLoadMoreBookmarks() {
+		this.startPending();
+
+		// await this.
 	}
 }
 

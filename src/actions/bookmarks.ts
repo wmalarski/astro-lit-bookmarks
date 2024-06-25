@@ -1,6 +1,11 @@
 import { defineAction, z } from "astro:actions";
 import { createBookmarkTags, deleteBookmarkTag } from "@server/bookmarkTags";
-import { findOrCreateBookmark, updateBookmark } from "@server/bookmarks";
+import {
+	DEFAULT_BOOKMARK_LIMIT,
+	findBookmarks,
+	findOrCreateBookmark,
+	updateBookmark,
+} from "@server/bookmarks";
 
 export const bookmarks = {
 	createBookmarkTags: defineAction({
@@ -55,5 +60,19 @@ export const bookmarks = {
 				priority: bookmark.priority,
 			});
 		},
+	}),
+	findBookmarks: defineAction({
+		accept: "json",
+		input: z.object({
+			page: z.number().int().positive(),
+			done: z.boolean(),
+			orderBy: z.union([z.literal("date"), z.literal("priority")]),
+		}),
+		handler: (args, context) =>
+			findBookmarks(context, {
+				done: args.done,
+				offset: DEFAULT_BOOKMARK_LIMIT * args.page,
+				orderBy: args.orderBy,
+			}),
 	}),
 };

@@ -59,10 +59,19 @@ export class CheckDoneBookmarkEvent extends Event {
 	}
 }
 
+export class LoadMoreBookmarksEvent extends Event {
+	static readonly eventName = "bookmarks-load-more" as const;
+
+	constructor() {
+		super(LoadMoreBookmarksEvent.eventName, { bubbles: true, composed: true });
+	}
+}
+
 declare global {
 	interface HTMLElementEventMap {
 		[CreateBookmarkTagEvent.eventName]: CreateBookmarkTagEvent;
 		[RemoveBookmarkTagEvent.eventName]: RemoveBookmarkTagEvent;
 		[CheckDoneBookmarkEvent.eventName]: CheckDoneBookmarkEvent;
+		[LoadMoreBookmarksEvent.eventName]: LoadMoreBookmarksEvent;
 	}
 }

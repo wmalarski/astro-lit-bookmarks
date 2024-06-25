@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
+import "@components/Button/Button";
 import "./BookmarkItem";
 import {
 	bookmarkContext,
@@ -7,6 +8,7 @@ import {
 	type BookmarkContextValue,
 } from "./BookmarkContext";
 import { consume } from "@lit/context";
+import { LoadMoreBookmarksEvent } from "./events";
 
 @customElement(BookmarkList.elementName)
 export class BookmarkList extends LitElement {
@@ -27,14 +29,23 @@ export class BookmarkList extends LitElement {
 
 	override render() {
 		return html`
-			<ul>
-				${this.bookmarkContext.bookmarks.map(
-					(item) => html`
-						<bookmark-item .item=${item}></bookmark-item>
-					`,
-				)}
-			</ul>
+			<div>
+				<ul>
+					${this.bookmarkContext.bookmarks.map(
+						(item) => html`
+							<bookmark-item .item=${item}></bookmark-item>
+						`,
+					)}
+				</ul>
+				<alb-button @click=${this.onLoadMoreClick}>
+					Load more
+				</alb-button>
+			</div>
 		`;
+	}
+
+	onLoadMoreClick() {
+		this.dispatchEvent(new LoadMoreBookmarksEvent());
 	}
 }
 
