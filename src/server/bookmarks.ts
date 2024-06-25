@@ -64,27 +64,14 @@ export const findBookmark = (
 export type FindBookmarkResult = ReturnType<typeof findBookmark>;
 
 type FindBookmarksArgs = {
-	from?: Date;
-	to?: Date;
-	limit?: number;
-	offset?: number;
+	startDate?: Date | undefined;
+	endDate?: Date | undefined;
 	done?: boolean;
-	orderBy?: "date" | "priority";
 };
-
-export const DEFAULT_BOOKMARK_LIMIT = 24;
-export const DEFAULT_BOOKMARK_OFFSET = 0;
 
 export const findBookmarks = (
 	context: ActionAPIContext,
-	{
-		from,
-		to,
-		done,
-		limit = DEFAULT_BOOKMARK_LIMIT,
-		offset = DEFAULT_BOOKMARK_OFFSET,
-		orderBy = "date",
-	}: FindBookmarksArgs,
+	{ startDate, endDate, done }: FindBookmarksArgs,
 ) => {
 	const session = validateContextSession(context);
 
@@ -95,19 +82,14 @@ export const findBookmarks = (
 			and(
 				isNull(bookmarkTable.mastoBookmarkId),
 				eq(bookmarkTable.userId, session.userId),
-				from ? gte(bookmarkTable.createdAt, from) : undefined,
-				to ? lt(bookmarkTable.createdAt, to) : undefined,
+				startDate ? gte(bookmarkTable.createdAt, startDate) : undefined,
+				endDate ? lt(bookmarkTable.createdAt, endDate) : undefined,
 				done !== undefined ? eq(bookmarkTable.done, done) : undefined,
 			),
 		)
 		.leftJoin(
 			bookmarkTagTable,
 			eq(bookmarkTable.id, bookmarkTagTable.bookmarkId),
-		)
-		.limit(limit)
-		.offset(offset)
-		.orderBy(
-			orderBy === "priority" ? bookmarkTable.priority : bookmarkTable.createdAt,
 		)
 		.all();
 };

@@ -1,11 +1,15 @@
 import { defineAction, z } from "astro:actions";
 import { createBookmarkTags, deleteBookmarkTag } from "@server/bookmarkTags";
 import {
-	DEFAULT_BOOKMARK_LIMIT,
 	findBookmarks,
+	findBookmarksByMastoIds,
 	findOrCreateBookmark,
 	updateBookmark,
 } from "@server/bookmarks";
+import {
+	getMastoBookmarkStartDate,
+	matchBookmarks,
+} from "@server/matchBookmarks";
 
 export const bookmarks = {
 	createBookmarkTags: defineAction({
@@ -42,7 +46,7 @@ export const bookmarks = {
 		input: z.object({
 			bookmarkId: z.string().optional(),
 			mastoBookmarkId: z.string().optional(),
-			done: z.boolean(),
+			done: z.coerce.boolean(),
 		}),
 		handler: (args, context) => {
 			const bookmark = findOrCreateBookmark(context, {
@@ -64,15 +68,39 @@ export const bookmarks = {
 	findBookmarks: defineAction({
 		accept: "json",
 		input: z.object({
-			page: z.number().int().positive(),
-			done: z.boolean(),
-			orderBy: z.union([z.literal("date"), z.literal("priority")]),
+			done: z.coerce.boolean(),
+			maxId: z.string(),
+			endDate: z.coerce.date(),
 		}),
-		handler: (args, context) =>
-			findBookmarks(context, {
+		handler: async (args, context) => {
+			const mastoBookmarks =
+				await context.locals.mastoClient?.v1.bookmarks.list({
+					limit: 10,
+					maxId: args.maxId,
+				});
+
+			if (!mastoBookmarks) {
+				return null;
+			}
+
+			const bookmarksForMasto = findBookmarksByMastoIds(context, {
+				mastoBookmarks,
+			});
+
+			const { startDate, minId } = getMastoBookmarkStartDate(mastoBookmarks);
+			const bookmarksResult = findBookmarks(context, {
 				done: args.done,
-				offset: DEFAULT_BOOKMARK_LIMIT * args.page,
-				orderBy: args.orderBy,
-			}),
+				endDate: args.endDate,
+				startDate,
+			});
+
+			const matchedBookmarks = matchBookmarks({
+				bookmarksForMasto,
+				bookmarksResult,
+				mastoBookmarks,
+			});
+
+			return { matchedBookmarks, startDate, minId };
+		},
 	}),
 };

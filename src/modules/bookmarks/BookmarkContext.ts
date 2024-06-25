@@ -6,7 +6,8 @@ export type BookmarkContextValue = {
 	isPending: boolean;
 	error: string | null;
 	removingBookmarkId: string | null;
-	page: number;
+	startDate: Date;
+	minId: string;
 };
 
 export const bookmarkContext = createContext<BookmarkContextValue>("bookmark");
@@ -16,5 +17,6 @@ export const bookmarkContextDefault: BookmarkContextValue = {
 	bookmarks: [],
 	error: null,
 	removingBookmarkId: null,
-	page: 0,
+	startDate: new Date(),
+	minId: "",
 };
