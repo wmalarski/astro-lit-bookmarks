@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property, query } from "lit/decorators.js";
-import type { MatchBookmarksResult } from "./matchBookmarks";
+import type { MatchBookmarksResult } from "../../server/matchBookmarks";
 import { CheckDoneBookmarkEvent } from "./events";
 
 @customElement(BookmarkDoneCheckbox.elementName)

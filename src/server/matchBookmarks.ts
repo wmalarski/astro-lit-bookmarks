@@ -1,8 +1,8 @@
 import type {
 	FindBookmarksByMastoIdsResult,
 	FindBookmarksResult,
-} from "@server/bookmarks";
-import type { bookmarkTable, bookmarkTagTable } from "@server/db";
+} from "./bookmarks";
+import type { bookmarkTable, bookmarkTagTable } from "./db";
 import type { InferSelectModel } from "drizzle-orm";
 import type { mastodon } from "masto";
 

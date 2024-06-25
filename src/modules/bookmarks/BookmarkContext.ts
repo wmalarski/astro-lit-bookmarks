@@ -1,5 +1,5 @@
 import { createContext } from "@lit/context";
-import type { MatchBookmarksResult } from "./matchBookmarks";
+import type { MatchBookmarksResult } from "../../server/matchBookmarks";
 
 export type BookmarkContextValue = {
 	bookmarks: MatchBookmarksResult[];

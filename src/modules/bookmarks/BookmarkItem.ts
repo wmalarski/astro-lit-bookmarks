@@ -4,7 +4,7 @@ import { property } from "lit/decorators.js";
 import "./BookmarkTagsForm";
 import "./BookmarkTag";
 import "./BookmarkDoneCheckbox";
-import type { MatchBookmarksResult } from "./matchBookmarks";
+import type { MatchBookmarksResult } from "../../server/matchBookmarks";
 import { consume } from "@lit/context";
 import {
 	tagsContext,

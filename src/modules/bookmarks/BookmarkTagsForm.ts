@@ -7,7 +7,7 @@ import {
 	tagsContextDefault,
 	type TagsContextValue,
 } from "@modules/tags/TagsContext";
-import type { MatchBookmarksResult } from "./matchBookmarks";
+import type { MatchBookmarksResult } from "../../server/matchBookmarks";
 import { CreateBookmarkTagEvent } from "./events";
 
 @customElement(BookmarkTagsForm.elementName)
