@@ -141,7 +141,9 @@ export class BookmarkProvider extends LitElement {
 				...this.value,
 				isPending: false,
 				error: null,
-				bookmarks: [...this.value.bookmarks, ...result],
+				minId: result.minId ?? this.value.minId,
+				startDate: result.startDate ?? this.value.startDate,
+				bookmarks: [...this.value.bookmarks, ...result.matchedBookmarks],
 			};
 		},
 		onError: () => {
@@ -199,9 +201,19 @@ export class BookmarkProvider extends LitElement {
 	}
 
 	async onLoadMoreBookmarks() {
+		if (!this.value.startDate || !this.value.minId) {
+			return;
+		}
+
 		this.startPending();
 
-		// await this.
+		await this.findBookmarksTask.run([
+			{
+				done: this.value.showDone,
+				endDate: this.value.startDate,
+				maxId: this.value.minId,
+			},
+		]);
 	}
 }
 

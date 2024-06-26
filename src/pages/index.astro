@@ -22,12 +22,13 @@ if (!Astro.locals.session) {
 
 const tags = findTags(Astro);
 
-const mastoBookmarks = await Astro.locals.mastoClient?.v1.bookmarks.list({
-  limit: 10,
-});
+const mastoBookmarks =
+  (await Astro.locals.mastoClient?.v1.bookmarks.list({
+    limit: 10,
+  })) ?? [];
 
 const bookmarksForMasto = findBookmarksByMastoIds(Astro, {
-  mastoBookmarks: mastoBookmarks ?? [],
+  mastoBookmarks,
 });
 
 const { startDate, minId } = getMastoBookmarkStartDate(mastoBookmarks);
@@ -39,7 +40,7 @@ const bookmarksResult = findBookmarks(Astro, {
 const matchedBookmarks = matchBookmarks({
   bookmarksForMasto,
   bookmarksResult,
-  mastoBookmarks: mastoBookmarks ?? [],
+  mastoBookmarks,
 });
 ---
 

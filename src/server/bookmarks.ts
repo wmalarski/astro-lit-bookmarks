@@ -64,8 +64,8 @@ export const findBookmark = (
 export type FindBookmarkResult = ReturnType<typeof findBookmark>;
 
 type FindBookmarksArgs = {
-	startDate?: Date | undefined;
-	endDate?: Date | undefined;
+	startDate: Date | null;
+	endDate: Date;
 	done?: boolean;
 };
 
@@ -82,8 +82,8 @@ export const findBookmarks = (
 			and(
 				isNull(bookmarkTable.mastoBookmarkId),
 				eq(bookmarkTable.userId, session.userId),
+				lt(bookmarkTable.createdAt, endDate),
 				startDate ? gte(bookmarkTable.createdAt, startDate) : undefined,
-				endDate ? lt(bookmarkTable.createdAt, endDate) : undefined,
 				done !== undefined ? eq(bookmarkTable.done, done) : undefined,
 			),
 		)

@@ -76,7 +76,7 @@ export const getMastoBookmarkStartDate = (
 ) => {
 	const last = mastoBookmarks[mastoBookmarks.length - 1];
 	return {
-		startDate: last && new Date(last.createdAt),
-		minId: last?.id,
+		startDate: last ? new Date(last.createdAt) : null,
+		minId: last ? last.id : null,
 	};
 };

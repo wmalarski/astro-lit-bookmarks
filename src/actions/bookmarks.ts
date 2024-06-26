@@ -80,7 +80,7 @@ export const bookmarks = {
 				});
 
 			if (!mastoBookmarks) {
-				return null;
+				return { matchedBookmarks: [] };
 			}
 
 			const bookmarksForMasto = findBookmarksByMastoIds(context, {
