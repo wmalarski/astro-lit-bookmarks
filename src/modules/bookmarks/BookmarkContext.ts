@@ -1,13 +1,16 @@
 import { createContext } from "@lit/context";
 import type { MatchBookmarksResult } from "../../server/matchBookmarks";
+import type { mastodon } from "masto";
 
 export type BookmarkContextValue = {
 	bookmarks: MatchBookmarksResult[];
 	isPending: boolean;
 	error: string | null;
 	removingBookmarkId: string | null;
-	startDate: Date | null;
-	minId: string | null;
+	paginator: mastodon.Paginator<
+		mastodon.v1.Status[],
+		mastodon.DefaultPaginationParams
+	> | null;
 	showDone: boolean;
 };
 
@@ -18,7 +21,6 @@ export const bookmarkContextDefault: BookmarkContextValue = {
 	bookmarks: [],
 	error: null,
 	removingBookmarkId: null,
-	startDate: new Date(),
-	minId: "",
+	paginator: null,
 	showDone: false,
 };

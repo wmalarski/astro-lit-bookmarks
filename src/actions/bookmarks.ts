@@ -73,6 +73,8 @@ export const bookmarks = {
 			endDate: z.coerce.date(),
 		}),
 		handler: async (args, context) => {
+			console.log("handler", { args });
+
 			const mastoBookmarks =
 				await context.locals.mastoClient?.v1.bookmarks.list({
 					limit: 10,
@@ -88,6 +90,9 @@ export const bookmarks = {
 			});
 
 			const { startDate, minId } = getMastoBookmarkStartDate(mastoBookmarks);
+
+			console.log("handler", { startDate, minId });
+
 			const bookmarksResult = findBookmarks(context, {
 				done: args.done,
 				endDate: args.endDate,

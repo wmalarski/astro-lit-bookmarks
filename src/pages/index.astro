@@ -27,11 +27,12 @@ const mastoBookmarks =
     limit: 10,
   })) ?? [];
 
+const { startDate, minId } = getMastoBookmarkStartDate(mastoBookmarks);
+
 const bookmarksForMasto = findBookmarksByMastoIds(Astro, {
   mastoBookmarks,
 });
 
-const { startDate, minId } = getMastoBookmarkStartDate(mastoBookmarks);
 const bookmarksResult = findBookmarks(Astro, {
   endDate: new Date(),
   startDate,
@@ -58,8 +59,6 @@ const matchedBookmarks = matchBookmarks({
       value={{
         ...bookmarkContextDefault,
         bookmarks: matchedBookmarks,
-        startDate,
-        minId,
       }}
     >
       <main>
