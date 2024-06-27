@@ -8,13 +8,11 @@ import { TagsList } from "@modules/tags/TagsList";
 import { TypedTagsProvider } from "@modules/tags/TagsProvider";
 import { findBookmarks, findBookmarksByMastoIds } from "@server/bookmarks";
 import { BookmarkList } from "@modules/bookmarks/BookmarkList";
-import {
-  getMastoBookmarkStartDate,
-  matchBookmarks,
-} from "@server/matchBookmarks";
+import { matchBookmarks } from "@server/matchBookmarks";
 import { tagsContextDefault } from "@modules/tags/TagsContext";
 import { TypedBookmarkProvider } from "@modules/bookmarks/BookmarkProvider";
 import { bookmarkContextDefault } from "@modules/bookmarks/BookmarkContext";
+import { TypedMastoProvider } from "@modules/masto/MastoProvider";
 
 if (!Astro.locals.session) {
   return Astro.redirect(paths.login);
@@ -27,15 +25,13 @@ const mastoBookmarks =
     limit: 10,
   })) ?? [];
 
-const { startDate, minId } = getMastoBookmarkStartDate(mastoBookmarks);
-
 const bookmarksForMasto = findBookmarksByMastoIds(Astro, {
   mastoBookmarks,
 });
 
 const bookmarksResult = findBookmarks(Astro, {
   endDate: new Date(),
-  startDate,
+  startDate: null,
 });
 
 const matchedBookmarks = matchBookmarks({
@@ -46,39 +42,45 @@ const matchedBookmarks = matchBookmarks({
 ---
 
 <Layout title="Welcome to Astro.">
-  <TypedTagsProvider
+  <TypedMastoProvider
     client:only="lit"
-    value={{
-      ...tagsContextDefault,
-      tags,
-      tagsMap: new Map(tags.map((tag) => [tag.id, tag])),
-    }}
+    url={import.meta.env.MASTODON_URL}
+    accessToken={Astro.locals.session.accessToken}
   >
-    <TypedBookmarkProvider
+    <TypedTagsProvider
       client:only="lit"
       value={{
-        ...bookmarkContextDefault,
-        bookmarks: matchedBookmarks,
+        ...tagsContextDefault,
+        tags,
+        tagsMap: new Map(tags.map((tag) => [tag.id, tag])),
       }}
     >
-      <main>
-        <nav class="nav">
-          <alb-anchor href={paths.index()}>Home</alb-anchor>
-          <alb-anchor href={paths.loginMastodon}>
-            Sign in with Mastodon
-          </alb-anchor>
-          <alb-anchor href={paths.logout}>Sign out</alb-anchor>
-        </nav>
+      <TypedBookmarkProvider
+        client:only="lit"
+        value={{
+          ...bookmarkContextDefault,
+          bookmarks: matchedBookmarks,
+        }}
+      >
+        <main>
+          <nav class="nav">
+            <alb-anchor href={paths.index()}>Home</alb-anchor>
+            <alb-anchor href={paths.loginMastodon}>
+              Sign in with Mastodon
+            </alb-anchor>
+            <alb-anchor href={paths.logout}>Sign out</alb-anchor>
+          </nav>
 
-        <div class="container">
-          <BookmarkList client:only="lit" />
-          <aside class="aside">
-            <TagsList client:only="lit" />
-          </aside>
-        </div>
-      </main>
-    </TypedBookmarkProvider>
-  </TypedTagsProvider>
+          <div class="container">
+            <BookmarkList client:only="lit" />
+            <aside class="aside">
+              <TagsList client:only="lit" />
+            </aside>
+          </div>
+        </main>
+      </TypedBookmarkProvider>
+    </TypedTagsProvider>
+  </TypedMastoProvider>
 </Layout>
 
 <style>
