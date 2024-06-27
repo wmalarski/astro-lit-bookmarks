@@ -3,21 +3,18 @@ import { consume, provide } from "@lit/context";
 import { customElement, property } from "lit/decorators.js";
 import { Task } from "@lit/task";
 import { actions } from "astro:actions";
-import {
-	bookmarkContext,
-	bookmarkContextDefault,
-	type BookmarkContextValue,
-} from "./BookmarkContext";
-import {
-	tagsContext,
-	tagsContextDefault,
-	type TagsContextValue,
-} from "@modules/tags/TagsContext";
+import { bookmarkContext, type BookmarkContextValue } from "./BookmarkContext";
+import { tagsContext, type TagsContextValue } from "@modules/tags/TagsContext";
 import type {
 	CheckDoneBookmarkEvent,
 	CreateBookmarkTagEvent,
 	RemoveBookmarkTagEvent,
 } from "./events";
+import {
+	mastoContext,
+	type MastoContextValue,
+} from "@modules/masto/MastoContext";
+import type { mastodon } from "masto";
 
 type BookmarkProviderProps = {
 	value: BookmarkContextValue;
@@ -29,10 +26,22 @@ export class BookmarkProvider extends LitElement {
 
 	@provide({ context: bookmarkContext })
 	@property({ attribute: false })
-	value: BookmarkContextValue = bookmarkContextDefault;
+	value!: BookmarkContextValue;
+
+	@consume({ context: mastoContext })
+	mastoContext!: MastoContextValue;
 
 	@consume({ context: tagsContext, subscribe: true })
-	tagsContext: TagsContextValue = tagsContextDefault;
+	tagsContext!: TagsContextValue;
+
+	constructor() {
+		super();
+
+		this.value = {
+			...this.value,
+			paginator: this.mastoContext.mastoClient.v1.bookmarks.list({ limit: 10 }),
+		};
+	}
 
 	private createBookmarkTagTask = new Task<
 		Parameters<typeof actions.createBookmarkTags>,
@@ -130,12 +139,9 @@ export class BookmarkProvider extends LitElement {
 		},
 	});
 
-	private findBookmarksTask = new Task<
-		Parameters<typeof actions.findBookmarks>,
-		Awaited<ReturnType<typeof actions.findBookmarks>>
-	>(this, {
+	private findBookmarksTask = new Task<[], mastodon.v1.Status[]>(this, {
 		autoRun: false,
-		task: ([args]) => actions.findBookmarks(args),
+		task: () => this.value.paginator?.next(),
 		onComplete: (result) => {
 			this.value = {
 				...this.value,
