@@ -81,11 +81,11 @@ export const getMastoBookmarkStartDate = (
 		minId: last ? last.id : null,
 	};
 
-	console.log({
-		mastoBookmarksIds: mastoBookmarks.map((mastoBookmark) => mastoBookmark.id),
-		mastoBookmarks,
-		start,
-	});
+	// console.log({
+	// 	mastoBookmarksIds: mastoBookmarks.map((mastoBookmark) => mastoBookmark.id),
+	// 	mastoBookmarks,
+	// 	start,
+	// });
 
 	return start;
 };

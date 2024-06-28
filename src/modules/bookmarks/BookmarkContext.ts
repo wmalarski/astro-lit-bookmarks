@@ -12,6 +12,8 @@ export type BookmarkContextValue = {
 		mastodon.DefaultPaginationParams
 	> | null;
 	showDone: boolean;
+	startDate: Date | null;
+	minId: string | null;
 };
 
 export const bookmarkContext = createContext<BookmarkContextValue>("bookmark");
@@ -23,4 +25,6 @@ export const bookmarkContextDefault: BookmarkContextValue = {
 	removingBookmarkId: null,
 	paginator: null,
 	showDone: false,
+	minId: null,
+	startDate: null,
 };

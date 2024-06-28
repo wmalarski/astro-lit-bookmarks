@@ -8,11 +8,13 @@ import { TagsList } from "@modules/tags/TagsList";
 import { TypedTagsProvider } from "@modules/tags/TagsProvider";
 import { findBookmarks, findBookmarksByMastoIds } from "@server/bookmarks";
 import { BookmarkList } from "@modules/bookmarks/BookmarkList";
-import { matchBookmarks } from "@server/matchBookmarks";
+import {
+  getMastoBookmarkStartDate,
+  matchBookmarks,
+} from "@server/matchBookmarks";
 import { tagsContextDefault } from "@modules/tags/TagsContext";
 import { TypedBookmarkProvider } from "@modules/bookmarks/BookmarkProvider";
 import { bookmarkContextDefault } from "@modules/bookmarks/BookmarkContext";
-import { TypedMastoProvider } from "@modules/masto/MastoProvider";
 
 if (!Astro.locals.session) {
   return Astro.redirect(paths.login);
@@ -24,6 +26,8 @@ const mastoBookmarks =
   (await Astro.locals.mastoClient?.v1.bookmarks.list({
     limit: 10,
   })) ?? [];
+
+const { minId, startDate } = getMastoBookmarkStartDate(mastoBookmarks);
 
 const bookmarksForMasto = findBookmarksByMastoIds(Astro, {
   mastoBookmarks,
@@ -42,45 +46,47 @@ const matchedBookmarks = matchBookmarks({
 ---
 
 <Layout title="Welcome to Astro.">
-  <TypedMastoProvider
+  <!-- <TypedMastoProvider
     client:only="lit"
     url={import.meta.env.MASTODON_URL}
     accessToken={Astro.locals.session.accessToken}
+  > -->
+  <TypedTagsProvider
+    client:only="lit"
+    value={{
+      ...tagsContextDefault,
+      tags,
+      tagsMap: new Map(tags.map((tag) => [tag.id, tag])),
+    }}
   >
-    <TypedTagsProvider
+    <TypedBookmarkProvider
       client:only="lit"
       value={{
-        ...tagsContextDefault,
-        tags,
-        tagsMap: new Map(tags.map((tag) => [tag.id, tag])),
+        ...bookmarkContextDefault,
+        bookmarks: matchedBookmarks,
+        minId,
+        startDate,
       }}
     >
-      <TypedBookmarkProvider
-        client:only="lit"
-        value={{
-          ...bookmarkContextDefault,
-          bookmarks: matchedBookmarks,
-        }}
-      >
-        <main>
-          <nav class="nav">
-            <alb-anchor href={paths.index()}>Home</alb-anchor>
-            <alb-anchor href={paths.loginMastodon}>
-              Sign in with Mastodon
-            </alb-anchor>
-            <alb-anchor href={paths.logout}>Sign out</alb-anchor>
-          </nav>
+      <main>
+        <nav class="nav">
+          <alb-anchor href={paths.index()}>Home</alb-anchor>
+          <alb-anchor href={paths.loginMastodon}>
+            Sign in with Mastodon
+          </alb-anchor>
+          <alb-anchor href={paths.logout}>Sign out</alb-anchor>
+        </nav>
 
-          <div class="container">
-            <BookmarkList client:only="lit" />
-            <aside class="aside">
-              <TagsList client:only="lit" />
-            </aside>
-          </div>
-        </main>
-      </TypedBookmarkProvider>
-    </TypedTagsProvider>
-  </TypedMastoProvider>
+        <div class="container">
+          <BookmarkList client:only="lit" />
+          <aside class="aside">
+            <TagsList client:only="lit" />
+          </aside>
+        </div>
+      </main>
+    </TypedBookmarkProvider>
+  </TypedTagsProvider>
+  <!-- </TypedMastoProvider> -->
 </Layout>
 
 <style>

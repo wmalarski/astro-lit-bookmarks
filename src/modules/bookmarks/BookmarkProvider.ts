@@ -10,11 +10,6 @@ import type {
 	CreateBookmarkTagEvent,
 	RemoveBookmarkTagEvent,
 } from "./events";
-import {
-	mastoContext,
-	type MastoContextValue,
-} from "@modules/masto/MastoContext";
-import type { mastodon } from "masto";
 
 type BookmarkProviderProps = {
 	value: BookmarkContextValue;
@@ -28,20 +23,20 @@ export class BookmarkProvider extends LitElement {
 	@property({ attribute: false })
 	value!: BookmarkContextValue;
 
-	@consume({ context: mastoContext })
-	mastoContext!: MastoContextValue;
+	// @consume({ context: mastoContext })
+	// mastoContext!: MastoContextValue;
 
 	@consume({ context: tagsContext, subscribe: true })
 	tagsContext!: TagsContextValue;
 
-	constructor() {
-		super();
+	// constructor() {
+	// 	super();
 
-		this.value = {
-			...this.value,
-			paginator: this.mastoContext.mastoClient.v1.bookmarks.list({ limit: 10 }),
-		};
-	}
+	// 	this.value = {
+	// 		...this.value,
+	// 		paginator: this.mastoContext.mastoClient.v1.bookmarks.list({ limit: 10 }),
+	// 	};
+	// }
 
 	private createBookmarkTagTask = new Task<
 		Parameters<typeof actions.createBookmarkTags>,
@@ -139,18 +134,21 @@ export class BookmarkProvider extends LitElement {
 		},
 	});
 
-	private findBookmarksTask = new Task<[], mastodon.v1.Status[]>(this, {
+	private findBookmarksTask = new Task<
+		Parameters<typeof actions.findBookmarks>,
+		Awaited<ReturnType<typeof actions.findBookmarks>>
+	>(this, {
 		autoRun: false,
-		task: () => this.value.paginator?.next(),
-		onComplete: (result) => {
-			this.value = {
-				...this.value,
-				isPending: false,
-				error: null,
-				minId: result.minId ?? this.value.minId,
-				startDate: result.startDate ?? this.value.startDate,
-				bookmarks: [...this.value.bookmarks, ...result.matchedBookmarks],
-			};
+		task: ([args]) => actions.findBookmarks(args),
+		onComplete: () => {
+			// this.value = {
+			// 	...this.value,
+			// 	isPending: false,
+			// 	error: null,
+			// 	minId: result.minId ?? this.value.minId,
+			// 	startDate: result.startDate ?? this.value.startDate,
+			// 	bookmarks: [...this.value.bookmarks, ...result.matchedBookmarks],
+			// };
 		},
 		onError: () => {
 			this.value = {
@@ -210,14 +208,12 @@ export class BookmarkProvider extends LitElement {
 		if (!this.value.startDate || !this.value.minId) {
 			return;
 		}
-
 		this.startPending();
-
 		await this.findBookmarksTask.run([
 			{
 				done: this.value.showDone,
-				endDate: this.value.startDate,
-				maxId: this.value.minId,
+				endDate: new Date(),
+				maxId: "",
 			},
 		]);
 	}

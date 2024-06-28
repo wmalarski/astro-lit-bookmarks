@@ -75,11 +75,24 @@ export const bookmarks = {
 		handler: async (args, context) => {
 			console.log("handler", { args });
 
-			const mastoBookmarks =
-				await context.locals.mastoClient?.v1.bookmarks.list({
-					limit: 10,
-					maxId: args.maxId,
-				});
+			if (!context.locals.session) {
+				return { mastoBookmarks: [] };
+			}
+
+			const response = await fetch(
+				`${import.meta.env.MASTODON_URL}/api/v1/bookmarks`,
+				{
+					headers: {
+						Authorization: `bearer ${context.locals.session.accessToken}`,
+					},
+				},
+			);
+
+			const link = response.headers.get("link");
+
+			const mastoBookmarks = await response.json();
+
+			console.log({ link, mastoBookmarks });
 
 			if (!mastoBookmarks) {
 				return { matchedBookmarks: [] };
