@@ -7,7 +7,7 @@ import {
 	updateBookmark,
 } from "@server/bookmarks";
 import { matchBookmarks } from "@server/matchBookmarks";
-import { getMastoBookmarkStartDate, listMastoBookmarks } from "@server/masto";
+import { listMastoBookmarks } from "@server/masto";
 
 export const bookmarks = {
 	createBookmarkTags: defineAction({

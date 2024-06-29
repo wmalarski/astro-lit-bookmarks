@@ -60,11 +60,11 @@ export class MastoBookmarkItem extends LitElement {
 	override render() {
 		return html`
             <div class="container">
-				<span>${this.mastoBookmark.createdAt}</span>
+				<span>${this.mastoBookmark.created_at}</span>
 				<span>${this.mastoBookmark.uri}</span>
 				<div>
-					<span>${this.mastoBookmark.account.displayName}</span>
-					<img class="avatar" src=${this.mastoBookmark.account.avatarStatic} />
+					<span>${this.mastoBookmark.account.display_name}</span>
+					<img class="avatar" src=${this.mastoBookmark.account.avatar_static} />
 				</div>
 				<div>${unsafeHTML(this.mastoBookmark.content)}</div>
 				${this.mastoBookmark.card?.image && html`<masto-bookmark-card .card=${this.mastoBookmark.card}></masto-bookmark-card>`}

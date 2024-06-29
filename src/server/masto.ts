@@ -1,5 +1,5 @@
 import type { APIContext } from "astro";
-import { createRestAPIClient, type mastodon } from "masto";
+import { createRestAPIClient } from "masto";
 import { validateContextSession } from "./auth";
 import { buildSearchParams } from "@utils/searchParams";
 import type { ActionAPIContext } from "astro/actions/runtime/store.js";
@@ -19,23 +19,6 @@ export const mastoMiddleware = async (context: APIContext) => {
 	context.locals.mastoClient = mastoRestAPIClient;
 };
 
-export const getMastoBookmarkStartDate = (mastoBookmarks: Status[]) => {
-	const last = mastoBookmarks[mastoBookmarks.length - 1];
-	// const last = mastoBookmarks[0];
-	const start = {
-		startDate: last ? new Date(last.createdAt) : null,
-		minId: last ? last.id : null,
-	};
-
-	// console.log({
-	// 	mastoBookmarksIds: mastoBookmarks.map((mastoBookmark) => mastoBookmark.id),
-	// 	mastoBookmarks,
-	// 	start,
-	// });
-
-	return start;
-};
-
 type ListMastoBookmarksArgs = {
 	maxId: string | null;
 };
@@ -53,24 +36,22 @@ export const listMastoBookmarks = async (
 		{ headers: { Authorization: `bearer ${session.accessToken}` } },
 	);
 
-	const data = await response.json();
-
-	const mastoBookmarks: Status[] = data;
+	const mastoBookmarks: Status[] = await response.json();
 
 	const link = response.headers.get("link");
 	const minId = link?.match(/min_id=(\d+)>/)?.[1] || null;
+	const newMaxId = link?.match(/max_id=(\d+)>/)?.[1] || null;
 
-	const last = data[data.length - 1];
+	const last = mastoBookmarks[mastoBookmarks.length - 1];
 	const startDate = last ? new Date(last.created_at) : null;
 
 	console.log({
 		link,
-		m: link?.match(/min_id=(\d+)>/),
+		maxId,
 		minId,
 		startDate,
-		last,
-		d: last?.createdAt,
+		d: last?.created_at,
 	});
 
-	return { mastoBookmarks, minId, startDate };
+	return { mastoBookmarks, minId, startDate, newMaxId };
 };
