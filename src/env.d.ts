@@ -1,5 +1,7 @@
 /// <reference path="../.astro/actions.d.ts" />
 /// <reference types="astro/client" />
+/// <reference types="vite-plugin-pwa/info" />
+/// <reference types="vite-plugin-pwa/vanillajs" />
 
 declare namespace App {
 	// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
