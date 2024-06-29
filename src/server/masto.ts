@@ -3,6 +3,7 @@ import { createRestAPIClient, type mastodon } from "masto";
 import { validateContextSession } from "./auth";
 import { buildSearchParams } from "@utils/searchParams";
 import type { ActionAPIContext } from "astro/actions/runtime/store.js";
+import type { Status } from "@type/mastodon";
 
 export const mastoMiddleware = async (context: APIContext) => {
 	const accessToken = context.locals.session?.accessToken;
@@ -18,9 +19,7 @@ export const mastoMiddleware = async (context: APIContext) => {
 	context.locals.mastoClient = mastoRestAPIClient;
 };
 
-export const getMastoBookmarkStartDate = (
-	mastoBookmarks: mastodon.v1.Status[],
-) => {
+export const getMastoBookmarkStartDate = (mastoBookmarks: Status[]) => {
 	const last = mastoBookmarks[mastoBookmarks.length - 1];
 	// const last = mastoBookmarks[0];
 	const start = {
@@ -56,12 +55,13 @@ export const listMastoBookmarks = async (
 
 	const data = await response.json();
 
+	const mastoBookmarks: Status[] = data;
+
 	const link = response.headers.get("link");
 	const minId = link?.match(/min_id=(\d+)>/)?.[1] || null;
 
 	const last = data[data.length - 1];
 	const startDate = last ? new Date(last.created_at) : null;
-	const mastoBookmarks: mastodon.v1.Status[] = data;
 
 	console.log({
 		link,

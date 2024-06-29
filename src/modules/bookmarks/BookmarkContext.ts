@@ -1,6 +1,7 @@
 import { createContext } from "@lit/context";
 import type { MatchBookmarksResult } from "../../server/matchBookmarks";
 import type { mastodon } from "masto";
+import type { Status } from "@type/mastodon";
 
 export type BookmarkContextValue = {
 	bookmarks: MatchBookmarksResult[];
@@ -8,7 +9,7 @@ export type BookmarkContextValue = {
 	error: string | null;
 	removingBookmarkId: string | null;
 	paginator: mastodon.Paginator<
-		mastodon.v1.Status[],
+		Status[],
 		mastodon.DefaultPaginationParams
 	> | null;
 	showDone: boolean;

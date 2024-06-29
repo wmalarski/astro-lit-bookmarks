@@ -11,15 +11,15 @@ import {
 	tagsContextDefault,
 	type TagsContextValue,
 } from "@modules/tags/TagsContext";
-import type { mastodon } from "masto";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import type { PreviewCard, Status } from "@type/mastodon";
 
 @customElement(MastoBookmarkCard.elementName)
 export class MastoBookmarkCard extends LitElement {
 	static readonly elementName = "masto-bookmark-card" as const;
 
 	@property({ attribute: false })
-	card!: mastodon.v1.PreviewCard;
+	card!: PreviewCard;
 
 	static override styles = css`
 		img {
@@ -41,7 +41,7 @@ export class MastoBookmarkItem extends LitElement {
 	static readonly elementName = "masto-bookmark-item" as const;
 
 	@property({ attribute: false })
-	mastoBookmark!: mastodon.v1.Status;
+	mastoBookmark!: Status;
 
 	static override styles = css`
 		.avatar {

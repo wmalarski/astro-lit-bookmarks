@@ -1,20 +1,20 @@
+import type { Status } from "@type/mastodon";
 import type {
 	FindBookmarksByMastoIdsResult,
 	FindBookmarksResult,
 } from "./bookmarks";
 import type { bookmarkTable, bookmarkTagTable } from "./db";
 import type { InferSelectModel } from "drizzle-orm";
-import type { mastodon } from "masto";
 
 type MatchBookmarksArgs = {
-	mastoBookmarks: mastodon.v1.Status[];
+	mastoBookmarks: Status[];
 	bookmarksForMasto: FindBookmarksByMastoIdsResult;
 	bookmarksResult: FindBookmarksResult;
 };
 
 export type MatchBookmarksResult = {
 	bookmark: InferSelectModel<typeof bookmarkTable> | null;
-	mastoBookmark: mastodon.v1.Status | null;
+	mastoBookmark: Status | null;
 	bookmarkTags: InferSelectModel<typeof bookmarkTagTable>[];
 };
 

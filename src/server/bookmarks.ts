@@ -4,10 +4,10 @@ import { validateContextSession } from "./auth";
 import type { ActionAPIContext } from "astro/actions/runtime/store.js";
 import { ActionError } from "astro:actions";
 import { DB_ERROR } from "./errors";
-import type { mastodon } from "masto";
+import type { Status } from "@type/mastodon";
 
 type FindMastoBookmarksArgs = {
-	mastoBookmarks: mastodon.v1.Status[];
+	mastoBookmarks: Status[];
 };
 
 export const findBookmarksByMastoIds = (
