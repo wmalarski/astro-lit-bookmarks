@@ -1,20 +1,17 @@
 import { defineConfig } from "astro/config";
 import AstroPWA from "@vite-pwa/astro";
 import lit from "@astrojs/lit";
+import basicSsl from "@vitejs/plugin-basic-ssl";
 
 import node from "@astrojs/node";
 
 // https://astro.build/config
 export default defineConfig({
 	output: "server",
-	// vite: {
-	// 	server: {
-	// 		fs: {
-	// 			// Allow serving files from hoisted root node_modules
-	// 			allow: ["../.."],
-	// 		},
-	// 	},
-	// },
+	vite: {
+		plugins: [basicSsl()],
+		server: { https: true },
+	},
 	integrations: [
 		lit(),
 		AstroPWA({
@@ -26,7 +23,13 @@ export default defineConfig({
 			manifest: {
 				name: "Lit Bookmarks",
 				short_name: "Lit Bookmarks",
-				theme_color: "#ffffff",
+				theme_color: "#afffff",
+				start_url: "/",
+				background_color: "#eeeeee",
+				display: "standalone",
+				description: "Lit Bookmarks",
+				orientation: "portrait",
+				display_override: ["standalone"],
 				icons: [
 					{
 						src: "pwa-192x192.png",
@@ -45,16 +48,20 @@ export default defineConfig({
 						purpose: "any maskable",
 					},
 				],
+				share_target: {
+					action: "/share-target/",
+					enctype: "multipart/form-data",
+					method: "POST",
+					params: {
+						title: "title",
+						text: "text",
+						url: "url",
+					},
+				},
 			},
-			workbox: {
-				navigateFallback: "/",
-			},
+			workbox: {},
 			devOptions: {
 				enabled: true,
-				navigateFallbackAllowlist: [/^\//],
-			},
-			experimental: {
-				directoryAndTrailingSlashHandler: true,
 			},
 		}),
 	],

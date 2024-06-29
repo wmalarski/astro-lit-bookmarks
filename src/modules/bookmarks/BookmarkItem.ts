@@ -67,9 +67,18 @@ export class MastoBookmarkItem extends LitElement {
 					<img class="avatar" src=${this.mastoBookmark.account.avatar_static} />
 				</div>
 				<div>${unsafeHTML(this.mastoBookmark.content)}</div>
+				<button type="button" @click=${this.onShareClick}>Share</button>
 				${this.mastoBookmark.card?.image && html`<masto-bookmark-card .card=${this.mastoBookmark.card}></masto-bookmark-card>`}
             </div>
         `;
+	}
+
+	onShareClick() {
+		navigator.share({
+			url: this.mastoBookmark.uri,
+			title: this.mastoBookmark.card?.title ?? "",
+			text: this.mastoBookmark.card?.description ?? "",
+		});
 	}
 }
 

@@ -75,6 +75,9 @@ importers:
       '@vite-pwa/astro':
         specifier: ^0.4.0
         version: 0.4.0(astro@4.11.1(@types/node@16.18.97)(terser@5.31.1)(typescript@5.5.2))(vite-plugin-pwa@0.20.0(vite@5.3.1(@types/node@16.18.97)(terser@5.31.1))(workbox-build@7.1.1(@types/babel__core@7.20.5))(workbox-window@7.1.0))
+      '@vitejs/plugin-basic-ssl':
+        specifier: ^1.1.0
+        version: 1.1.0(vite@5.3.1(@types/node@16.18.97)(terser@5.31.1))
       drizzle-kit:
         specifier: ^0.22.7
         version: 0.22.7
@@ -1776,6 +1779,12 @@ packages:
     peerDependenciesMeta:
       '@vite-pwa/assets-generator':
         optional: true
+
+  '@vitejs/plugin-basic-ssl@1.1.0':
+    resolution: {integrity: sha512-wO4Dk/rm8u7RNhOf95ZzcEmC9rYOncYgvq4z3duaJrCgjN8BxAnDVyndanfcJZ0O6XZzHz6Q0hTimxTg8Y9g/A==}
+    engines: {node: '>=14.6.0'}
+    peerDependencies:
+      vite: ^3.0.0 || ^4.0.0 || ^5.0.0
 
   '@volar/kit@2.2.5':
     resolution: {integrity: sha512-Bmn0UCaT43xUGGRwcmFG9lKhiCCLjRT4ScSLLPn5C9ltUcSGnIFFDlbZZa1PreHYHq25/4zkXt9Ap32klAh17w==}
@@ -5775,6 +5784,10 @@ snapshots:
     dependencies:
       astro: 4.11.1(@types/node@16.18.97)(terser@5.31.1)(typescript@5.5.2)
       vite-plugin-pwa: 0.20.0(vite@5.3.1(@types/node@16.18.97)(terser@5.31.1))(workbox-build@7.1.1(@types/babel__core@7.20.5))(workbox-window@7.1.0)
+
+  '@vitejs/plugin-basic-ssl@1.1.0(vite@5.3.1(@types/node@16.18.97)(terser@5.31.1))':
+    dependencies:
+      vite: 5.3.1(@types/node@16.18.97)(terser@5.31.1)
 
   '@volar/kit@2.2.5(typescript@5.5.2)':
     dependencies:
