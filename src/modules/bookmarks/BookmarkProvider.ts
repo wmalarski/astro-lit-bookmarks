@@ -23,20 +23,8 @@ export class BookmarkProvider extends LitElement {
 	@property({ attribute: false })
 	value!: BookmarkContextValue;
 
-	// @consume({ context: mastoContext })
-	// mastoContext!: MastoContextValue;
-
 	@consume({ context: tagsContext, subscribe: true })
 	tagsContext!: TagsContextValue;
-
-	// constructor() {
-	// 	super();
-
-	// 	this.value = {
-	// 		...this.value,
-	// 		paginator: this.mastoContext.mastoClient.v1.bookmarks.list({ limit: 10 }),
-	// 	};
-	// }
 
 	private createBookmarkTagTask = new Task<
 		Parameters<typeof actions.createBookmarkTags>,
@@ -141,13 +129,13 @@ export class BookmarkProvider extends LitElement {
 		autoRun: false,
 		task: ([args]) => actions.findBookmarks(args),
 		onComplete: (result) => {
-			console.log({ result });
 			this.value = {
 				...this.value,
 				isPending: false,
 				error: null,
-				minId: result.minId ?? this.value.minId,
-				startDate: result.startDate ?? this.value.startDate,
+				minId: result.minId,
+				maxId: result.maxId,
+				startDate: result.startDate,
 				bookmarks: [...this.value.bookmarks, ...result.matchedBookmarks],
 			};
 		},
@@ -206,7 +194,7 @@ export class BookmarkProvider extends LitElement {
 	}
 
 	async onLoadMoreBookmarks() {
-		if (!this.value.minId) {
+		if (!this.value.maxId) {
 			return;
 		}
 		this.startPending();
@@ -214,7 +202,7 @@ export class BookmarkProvider extends LitElement {
 			{
 				done: this.value.showDone,
 				endDate: new Date(),
-				maxId: this.value.minId,
+				maxId: this.value.maxId,
 			},
 		]);
 	}

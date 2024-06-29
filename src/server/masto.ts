@@ -45,13 +45,5 @@ export const listMastoBookmarks = async (
 	const last = mastoBookmarks[mastoBookmarks.length - 1];
 	const startDate = last ? new Date(last.created_at) : null;
 
-	console.log({
-		link,
-		maxId,
-		minId,
-		startDate,
-		d: last?.created_at,
-	});
-
-	return { mastoBookmarks, minId, startDate, newMaxId };
+	return { mastoBookmarks, minId, startDate, maxId: newMaxId };
 };

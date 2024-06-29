@@ -20,7 +20,7 @@ if (!Astro.locals.session) {
 
 const tags = findTags(Astro);
 
-const { mastoBookmarks, minId } = await listMastoBookmarks(Astro, {
+const { mastoBookmarks, minId, maxId } = await listMastoBookmarks(Astro, {
   maxId: null,
 });
 
@@ -41,11 +41,6 @@ const matchedBookmarks = matchBookmarks({
 ---
 
 <Layout title="Welcome to Astro.">
-  <!-- <TypedMastoProvider
-    client:only="lit"
-    url={import.meta.env.MASTODON_URL}
-    accessToken={Astro.locals.session.accessToken}
-  > -->
   <TypedTagsProvider
     client:only="lit"
     value={{
@@ -60,6 +55,7 @@ const matchedBookmarks = matchBookmarks({
         ...bookmarkContextDefault,
         bookmarks: matchedBookmarks,
         minId,
+        maxId,
       }}
     >
       <main>
@@ -80,7 +76,6 @@ const matchedBookmarks = matchBookmarks({
       </main>
     </TypedBookmarkProvider>
   </TypedTagsProvider>
-  <!-- </TypedMastoProvider> -->
 </Layout>
 
 <style>

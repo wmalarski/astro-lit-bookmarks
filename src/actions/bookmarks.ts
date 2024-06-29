@@ -71,18 +71,12 @@ export const bookmarks = {
 			endDate: z.coerce.date(),
 		}),
 		handler: async (args, context) => {
-			console.log("handler", { args });
-
-			const { mastoBookmarks, minId, startDate } = await listMastoBookmarks(
-				context,
-				{ maxId: args.maxId },
-			);
+			const { mastoBookmarks, minId, startDate, maxId } =
+				await listMastoBookmarks(context, { maxId: args.maxId });
 
 			const bookmarksForMasto = findBookmarksByMastoIds(context, {
 				mastoBookmarks,
 			});
-
-			console.log("handler", { startDate, minId });
 
 			const bookmarksResult = findBookmarks(context, {
 				done: args.done,
@@ -96,7 +90,7 @@ export const bookmarks = {
 				mastoBookmarks,
 			});
 
-			return { matchedBookmarks, startDate, minId };
+			return { matchedBookmarks, startDate, minId, maxId };
 		},
 	}),
 };
