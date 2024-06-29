@@ -6,10 +6,8 @@ import {
 	findOrCreateBookmark,
 	updateBookmark,
 } from "@server/bookmarks";
-import {
-	getMastoBookmarkStartDate,
-	matchBookmarks,
-} from "@server/matchBookmarks";
+import { matchBookmarks } from "@server/matchBookmarks";
+import { getMastoBookmarkStartDate, listMastoBookmarks } from "@server/masto";
 
 export const bookmarks = {
 	createBookmarkTags: defineAction({
@@ -75,34 +73,14 @@ export const bookmarks = {
 		handler: async (args, context) => {
 			console.log("handler", { args });
 
-			if (!context.locals.session) {
-				return { mastoBookmarks: [] };
-			}
-
-			const response = await fetch(
-				`${import.meta.env.MASTODON_URL}/api/v1/bookmarks`,
-				{
-					headers: {
-						Authorization: `bearer ${context.locals.session.accessToken}`,
-					},
-				},
+			const { mastoBookmarks, minId, startDate } = await listMastoBookmarks(
+				context,
+				{ maxId: args.maxId },
 			);
-
-			const link = response.headers.get("link");
-
-			const mastoBookmarks = await response.json();
-
-			console.log({ link, mastoBookmarks });
-
-			if (!mastoBookmarks) {
-				return { matchedBookmarks: [] };
-			}
 
 			const bookmarksForMasto = findBookmarksByMastoIds(context, {
 				mastoBookmarks,
 			});
-
-			const { startDate, minId } = getMastoBookmarkStartDate(mastoBookmarks);
 
 			console.log("handler", { startDate, minId });
 

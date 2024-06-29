@@ -70,22 +70,3 @@ export const matchBookmarks = ({
 
 	return [...fromMasto, ...fromDb];
 };
-
-export const getMastoBookmarkStartDate = (
-	mastoBookmarks: mastodon.v1.Status[],
-) => {
-	const last = mastoBookmarks[mastoBookmarks.length - 1];
-	// const last = mastoBookmarks[0];
-	const start = {
-		startDate: last ? new Date(last.createdAt) : null,
-		minId: last ? last.id : null,
-	};
-
-	// console.log({
-	// 	mastoBookmarksIds: mastoBookmarks.map((mastoBookmark) => mastoBookmark.id),
-	// 	mastoBookmarks,
-	// 	start,
-	// });
-
-	return start;
-};
