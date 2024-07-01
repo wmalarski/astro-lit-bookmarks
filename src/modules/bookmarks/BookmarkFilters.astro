@@ -1,0 +1,22 @@
+---
+import "../components/Button/Button";
+import "../components/Link/Link";
+---
+
+<form class="container" method="get">
+    <label>
+        <input name="done" type="checkbox" />
+        Done
+    </label>
+    <button type="submit">Filter</button>
+</form>
+
+<style>
+    .container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1rem;
+        max-width: 1024px;
+        margin: 0 auto;
+    }
+</style>

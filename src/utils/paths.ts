@@ -1,7 +1,7 @@
 import { buildSearchParams } from "./searchParams";
 
 export const paths = {
-	index: (page = 1) => `/?${buildSearchParams({ page })}`,
+	index: (done = false) => `/?${buildSearchParams({ done })}`,
 	login: "/login",
 	loginMastodon: "/login/mastodon",
 	logout: "/logout",
