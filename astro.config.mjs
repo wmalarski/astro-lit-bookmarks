@@ -10,11 +10,11 @@ export default defineConfig({
 	integrations: [
 		lit(),
 		AstroPWA({
-			mode: "development",
-			base: "/",
-			scope: "/",
+			// mode: "development",
+			// base: "/",
+			// scope: "/",
 			includeAssets: ["favicon.svg"],
-			registerType: "autoUpdate",
+			// registerType: "autoUpdate",
 			manifest: {
 				name: "Lit Bookmarks",
 				short_name: "Lit Bookmarks",
@@ -54,10 +54,10 @@ export default defineConfig({
 					},
 				},
 			},
-			workbox: {},
-			devOptions: {
-				enabled: true,
-			},
+			// workbox: {},
+			// devOptions: {
+			// 	enabled: true,
+			// },
 		}),
 	],
 	experimental: {

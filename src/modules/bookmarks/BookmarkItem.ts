@@ -67,18 +67,9 @@ export class MastoBookmarkItem extends LitElement {
 					<img class="avatar" src=${this.mastoBookmark.account.avatar_static} />
 				</div>
 				<div>${unsafeHTML(this.mastoBookmark.content)}</div>
-				<button type="button" @click=${this.onShareClick}>Share</button>
 				${this.mastoBookmark.card?.image && html`<masto-bookmark-card .card=${this.mastoBookmark.card}></masto-bookmark-card>`}
             </div>
         `;
-	}
-
-	onShareClick() {
-		navigator.share({
-			url: this.mastoBookmark.uri,
-			title: this.mastoBookmark.card?.title ?? "",
-			text: this.mastoBookmark.card?.description ?? "",
-		});
 	}
 }
 
@@ -103,6 +94,8 @@ export class BookmarkItem extends LitElement {
   `;
 
 	override render() {
+		const { text, title } = this.getCardDetails();
+
 		const assignedTags = this.item.bookmarkTags.flatMap((bookmarkTag) => {
 			const tag = this.tagsContext.tagsMap.get(bookmarkTag.tagId);
 			return tag ? [{ tag, bookmarkTag }] : [];
@@ -110,17 +103,24 @@ export class BookmarkItem extends LitElement {
 
 		return html`
             <li>
-				<strong>${this.item.mastoBookmark?.card?.title}</strong>
-				<span>${this.item.mastoBookmark?.card?.description}</span>
-				<ul>
-					${assignedTags?.map(
-						({ tag, bookmarkTag }) => html`
-						<bookmark-tag .tag=${tag} .bookmarkTag=${bookmarkTag}></bookmark-tag>
-					`,
-					)}
-				</ul>
+				<strong>${title}</strong>
+				<span>${text}</span>
+				${
+					assignedTags && assignedTags.length > 0
+						? html`
+					<ul>
+						${assignedTags.map(
+							({ tag, bookmarkTag }) => html`
+							<bookmark-tag .tag=${tag} .bookmarkTag=${bookmarkTag}></bookmark-tag>
+						`,
+						)}
+					</ul>					
+				`
+						: null
+				}
 				<bookmark-done-checkbox .item=${this.item}></bookmark-done-checkbox>
 				<bookmark-tags-form .item=${this.item}></bookmark-tags-form>
+				<button type="button" @click=${this.onShareClick}>Share</button>
 				${
 					this.item.mastoBookmark
 						? html`<masto-bookmark-item .mastoBookmark=${this.item.mastoBookmark}></masto-bookmark-item>`
@@ -128,6 +128,21 @@ export class BookmarkItem extends LitElement {
 				}
             </li>
         `;
+	}
+
+	getCardDetails() {
+		const bookmark = this.item.bookmark;
+		const mastoCard = this.item.mastoBookmark?.card;
+
+		const title = bookmark?.title ?? mastoCard?.title ?? "";
+		const text = bookmark?.content ?? mastoCard?.description ?? "";
+		const url = bookmark?.url ?? this.item.mastoBookmark?.uri ?? "";
+
+		return { title, text, url };
+	}
+
+	onShareClick() {
+		navigator.share(this.getCardDetails());
 	}
 }
 

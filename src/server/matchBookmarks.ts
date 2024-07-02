@@ -68,5 +68,22 @@ export const matchBookmarks = ({
 		bookmarkTags: bookmarkTags.get(bookmark.id) ?? [],
 	}));
 
-	return [...fromMasto, ...fromDb];
+	return [...fromMasto, ...fromDb].toSorted(sortBookmarks);
+};
+
+const getBookmarkDate = (match: MatchBookmarksResult) => {
+	return (
+		match.bookmark?.createdAt.getTime() ??
+		(match.mastoBookmark && Date.parse(match.mastoBookmark.created_at)) ??
+		0
+	);
+};
+
+const sortBookmarks = (
+	left: MatchBookmarksResult,
+	right: MatchBookmarksResult,
+) => {
+	const leftDate = getBookmarkDate(left);
+	const rightDate = getBookmarkDate(right);
+	return rightDate - leftDate;
 };
