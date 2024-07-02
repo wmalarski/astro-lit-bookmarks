@@ -97,7 +97,9 @@ export const findBookmarks = (
 export type FindBookmarksResult = ReturnType<typeof findBookmarks>;
 
 type CreateBookmarkArgs = {
-	content: string;
+	content: string | null;
+	title: string | null;
+	url: string | null;
 	mastoBookmarkId: string | null;
 	priority: number;
 	done: boolean;
@@ -105,7 +107,7 @@ type CreateBookmarkArgs = {
 
 export const createBookmark = (
 	context: ActionAPIContext,
-	{ content, mastoBookmarkId, priority, done }: CreateBookmarkArgs,
+	{ content, title, url, mastoBookmarkId, priority, done }: CreateBookmarkArgs,
 ) => {
 	const session = validateContextSession(context);
 
@@ -116,6 +118,8 @@ export const createBookmark = (
 			content,
 			userId: session.userId,
 			createdAt: new Date(),
+			title,
+			url,
 			done,
 			id: bookmarkId,
 			mastoBookmarkId,

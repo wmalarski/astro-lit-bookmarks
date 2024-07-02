@@ -19,7 +19,9 @@ export const bookmarks = {
 		}),
 		handler: (args, context) => {
 			const bookmark = findOrCreateBookmark(context, {
-				content: "",
+				content: null,
+				title: null,
+				url: null,
 				mastoBookmarkId: args.mastoBookmarkId ?? null,
 				priority: 0,
 				done: false,
@@ -49,7 +51,9 @@ export const bookmarks = {
 		handler: (args, context) => {
 			const bookmark = findOrCreateBookmark(context, {
 				mastoBookmarkId: args.mastoBookmarkId ?? null,
-				content: "",
+				content: null,
+				title: null,
+				url: null,
 				done: args.done,
 				priority: 0,
 				id: args.bookmarkId,

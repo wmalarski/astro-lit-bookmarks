@@ -1,17 +1,12 @@
 import { defineConfig } from "astro/config";
 import AstroPWA from "@vite-pwa/astro";
 import lit from "@astrojs/lit";
-import basicSsl from "@vitejs/plugin-basic-ssl";
 
 import node from "@astrojs/node";
 
 // https://astro.build/config
 export default defineConfig({
 	output: "server",
-	vite: {
-		plugins: [basicSsl()],
-		server: { https: true },
-	},
 	integrations: [
 		lit(),
 		AstroPWA({

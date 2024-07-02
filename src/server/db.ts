@@ -26,6 +26,8 @@ export const bookmarkTable = sqliteTable("bookmark", {
 		.notNull()
 		.references(() => userTable.id),
 	content: text("content"),
+	title: text("title"),
+	url: text("url"),
 	mastoBookmarkId: text("masto_bookmark_id"),
 	priority: integer("priority").default(0).notNull(),
 	done: integer("done", { mode: "boolean" }).default(false).notNull(),
