@@ -24,14 +24,14 @@ export const GET = async (context: APIContext): Promise<Response> => {
 		if (existingUser) {
 			await setSessionCookie(context, existingUser.id, tokens);
 
-			return context.redirect(paths.index());
+			return context.redirect(paths.index);
 		}
 
 		const newUser = insertUser(mastoUser);
 
 		await setSessionCookie(context, newUser.id, tokens);
 
-		return context.redirect(paths.index());
+		return context.redirect(paths.index);
 	} catch (error) {
 		console.error({ error });
 

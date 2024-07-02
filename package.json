@@ -39,6 +39,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",
+		"@types/node": "^20.14.9",
 		"@types/better-sqlite3": "^7.6.11",
 		"@vite-pwa/astro": "^0.4.0",
 		"@vitejs/plugin-basic-ssl": "^1.1.0",

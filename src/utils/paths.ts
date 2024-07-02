@@ -1,7 +1,5 @@
-import { buildSearchParams } from "./searchParams";
-
 export const paths = {
-	index: (done = false) => `/?${buildSearchParams({ done })}`,
+	index: "/",
 	login: "/login",
 	loginMastodon: "/login/mastodon",
 	logout: "/logout",
