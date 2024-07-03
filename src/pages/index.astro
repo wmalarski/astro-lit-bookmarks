@@ -13,10 +13,14 @@ import { tagsContextDefault } from "@modules/tags/TagsContext";
 import { TypedBookmarkProvider } from "@modules/bookmarks/BookmarkProvider";
 import { bookmarkContextDefault } from "@modules/bookmarks/BookmarkContext";
 import { listMastoBookmarks } from "@server/masto";
+import BookmarkFilters from "@modules/bookmarks/BookmarkFilters.astro";
+import { z } from "astro/zod";
 
 if (!Astro.locals.session) {
   return Astro.redirect(paths.login);
 }
+
+const showDone = z.coerce.boolean().parse(Astro.url.searchParams.get("done"));
 
 const tags = findTags(Astro);
 
@@ -37,6 +41,7 @@ const matchedBookmarks = matchBookmarks({
   bookmarksForMasto,
   bookmarksResult,
   mastoBookmarks,
+  showDone,
 });
 ---
 
@@ -46,6 +51,7 @@ const matchedBookmarks = matchBookmarks({
     value={{
       ...tagsContextDefault,
       tags,
+      showDone,
       tagsMap: new Map(tags.map((tag) => [tag.id, tag])),
     }}
   >
@@ -70,6 +76,7 @@ const matchedBookmarks = matchBookmarks({
         <div class="container">
           <BookmarkList client:only="lit" />
           <aside class="aside">
+            <BookmarkFilters showDone={showDone} />
             <TagsList client:only="lit" />
           </aside>
         </div>

@@ -76,9 +76,9 @@ export const bookmarks = {
 	findBookmarks: defineAction({
 		accept: "json",
 		input: z.object({
-			done: z.coerce.boolean(),
 			maxId: z.string(),
 			endDate: z.coerce.date(),
+			showDone: z.coerce.boolean(),
 		}),
 		handler: async (args, context) => {
 			const { mastoBookmarks, minId, startDate, maxId } =
@@ -89,7 +89,6 @@ export const bookmarks = {
 			});
 
 			const bookmarksResult = findBookmarks(context, {
-				done: args.done,
 				endDate: args.endDate,
 				startDate,
 			});
@@ -98,6 +97,7 @@ export const bookmarks = {
 				bookmarksForMasto,
 				bookmarksResult,
 				mastoBookmarks,
+				showDone: args.showDone,
 			});
 
 			return { matchedBookmarks, startDate, minId, maxId };

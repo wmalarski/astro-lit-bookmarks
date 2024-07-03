@@ -8,6 +8,7 @@ export type TagsContextValue = {
 	optimisticTag: string | null;
 	error: string | null;
 	removingTagId: string | null;
+	showDone: boolean;
 };
 
 export const tagsContext = createContext<TagsContextValue>("tags");
@@ -18,4 +19,5 @@ export const tagsContextDefault: TagsContextValue = {
 	tags: [],
 	error: null,
 	removingTagId: null,
+	showDone: true,
 };

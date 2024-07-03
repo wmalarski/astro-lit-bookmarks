@@ -238,9 +238,9 @@ export class BookmarkProvider extends LitElement {
 		this.startPending();
 		await this.findBookmarksTask.run([
 			{
-				done: this.value.showDone,
 				endDate: new Date(),
 				maxId: this.value.maxId,
+				showDone: this.value.showDone,
 			},
 		]);
 	}

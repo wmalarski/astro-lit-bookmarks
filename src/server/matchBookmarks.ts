@@ -10,6 +10,7 @@ type MatchBookmarksArgs = {
 	mastoBookmarks: Status[];
 	bookmarksForMasto: FindBookmarksByMastoIdsResult;
 	bookmarksResult: FindBookmarksResult;
+	showDone: boolean;
 };
 
 export type MatchBookmarksResult = {
@@ -22,6 +23,7 @@ export const matchBookmarks = ({
 	mastoBookmarks,
 	bookmarksResult,
 	bookmarksForMasto,
+	showDone,
 }: MatchBookmarksArgs): MatchBookmarksResult[] => {
 	const bookmarks = new Map<string, InferSelectModel<typeof bookmarkTable>>();
 	const bookmarkTags = new Map<
@@ -68,7 +70,13 @@ export const matchBookmarks = ({
 		bookmarkTags: bookmarkTags.get(bookmark.id) ?? [],
 	}));
 
-	return [...fromMasto, ...fromDb].toSorted(sortBookmarks);
+	const sorted = [...fromMasto, ...fromDb].toSorted(sortBookmarks);
+
+	const filtered = showDone
+		? sorted
+		: sorted.filter((entry) => !entry.bookmark?.done);
+
+	return filtered;
 };
 
 const getBookmarkDate = (match: MatchBookmarksResult) => {
