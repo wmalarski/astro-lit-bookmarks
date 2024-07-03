@@ -13,6 +13,7 @@ import {
 } from "@modules/tags/TagsContext";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import type { PreviewCard, Status } from "@type/mastodon";
+import { RemoveBookmarkEvent } from "./events";
 
 @customElement(MastoBookmarkCard.elementName)
 export class MastoBookmarkCard extends LitElement {
@@ -73,6 +74,30 @@ export class MastoBookmarkItem extends LitElement {
 	}
 }
 
+@customElement(RemoveBookmarkButton.elementName)
+export class RemoveBookmarkButton extends LitElement {
+	static readonly elementName = "remove-bookmark-button" as const;
+
+	@property({ attribute: false })
+	item!: MatchBookmarksResult;
+
+	override render() {
+		return html`
+			<button @click=${this.onRemoveClick}>Remove</button>
+        `;
+	}
+
+	onRemoveClick() {
+		if (!this.item.bookmark) {
+			return;
+		}
+
+		this.dispatchEvent(
+			new RemoveBookmarkEvent({ bookmarkId: this.item.bookmark.id }),
+		);
+	}
+}
+
 @customElement(BookmarkItem.elementName)
 export class BookmarkItem extends LitElement {
 	static readonly elementName = "bookmark-item" as const;
@@ -120,6 +145,11 @@ export class BookmarkItem extends LitElement {
 				}
 				<bookmark-done-checkbox .item=${this.item}></bookmark-done-checkbox>
 				<bookmark-tags-form .item=${this.item}></bookmark-tags-form>
+				${
+					!this.item.mastoBookmark && this.item.bookmark
+						? html`<remove-bookmark-button .item=${this.item}></remove-bookmark-button>`
+						: null
+				}
 				<button type="button" @click=${this.onShareClick}>Share</button>
 				${
 					this.item.mastoBookmark
@@ -151,5 +181,6 @@ declare global {
 		[BookmarkItem.elementName]: BookmarkItem;
 		[MastoBookmarkItem.elementName]: MastoBookmarkItem;
 		[MastoBookmarkCard.elementName]: MastoBookmarkCard;
+		[RemoveBookmarkButton.elementName]: RemoveBookmarkButton;
 	}
 }

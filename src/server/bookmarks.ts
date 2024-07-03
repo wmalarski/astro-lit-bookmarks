@@ -185,12 +185,12 @@ export const updateBookmark = (
 };
 
 type DeleteBookmarkArgs = {
-	tagId: string;
+	bookmarkId: string;
 };
 
 export const deleteBookmark = (
 	context: ActionAPIContext,
-	{ tagId }: DeleteBookmarkArgs,
+	{ bookmarkId }: DeleteBookmarkArgs,
 ) => {
 	const session = validateContextSession(context);
 
@@ -198,7 +198,7 @@ export const deleteBookmark = (
 		.delete(bookmarkTable)
 		.where(
 			and(
-				eq(bookmarkTable.id, tagId),
+				eq(bookmarkTable.id, bookmarkId),
 				eq(bookmarkTable.userId, session.userId),
 			),
 		)

@@ -1,6 +1,7 @@
 import { defineAction, z } from "astro:actions";
 import { createBookmarkTags, deleteBookmarkTag } from "@server/bookmarkTags";
 import {
+	deleteBookmark,
 	findBookmarks,
 	findBookmarksByMastoIds,
 	findOrCreateBookmark,
@@ -35,6 +36,11 @@ export const bookmarks = {
 
 			return { bookmark, bookmarkTags };
 		},
+	}),
+	removeBookmark: defineAction({
+		accept: "json",
+		input: z.object({ bookmarkId: z.string() }),
+		handler: (args, context) => deleteBookmark(context, args),
 	}),
 	removeBookmarkTag: defineAction({
 		accept: "json",

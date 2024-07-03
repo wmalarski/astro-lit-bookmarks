@@ -59,6 +59,21 @@ export class CheckDoneBookmarkEvent extends Event {
 	}
 }
 
+type RemoveBookmarkEventArgs = {
+	bookmarkId: string;
+};
+
+export class RemoveBookmarkEvent extends Event {
+	static readonly eventName = "bookmark-remove" as const;
+
+	readonly bookmarkId: string;
+
+	constructor({ bookmarkId }: RemoveBookmarkEventArgs) {
+		super(RemoveBookmarkEvent.eventName, { bubbles: true, composed: true });
+		this.bookmarkId = bookmarkId;
+	}
+}
+
 export class LoadMoreBookmarksEvent extends Event {
 	static readonly eventName = "bookmarks-load-more" as const;
 
@@ -73,5 +88,6 @@ declare global {
 		[RemoveBookmarkTagEvent.eventName]: RemoveBookmarkTagEvent;
 		[CheckDoneBookmarkEvent.eventName]: CheckDoneBookmarkEvent;
 		[LoadMoreBookmarksEvent.eventName]: LoadMoreBookmarksEvent;
+		[RemoveBookmarkEvent.eventName]: RemoveBookmarkEvent;
 	}
 }

@@ -15,7 +15,7 @@ export const sessionTable = sqliteTable("session", {
 	id: text("id").notNull().primaryKey(),
 	userId: text("user_id")
 		.notNull()
-		.references(() => userTable.id),
+		.references(() => userTable.id, { onDelete: "cascade" }),
 	expiresAt: integer("expires_at").notNull(),
 	accessToken: text("access_token").notNull(),
 });
@@ -24,7 +24,7 @@ export const bookmarkTable = sqliteTable("bookmark", {
 	id: text("id").notNull().primaryKey(),
 	userId: text("user_id")
 		.notNull()
-		.references(() => userTable.id),
+		.references(() => userTable.id, { onDelete: "cascade" }),
 	content: text("content"),
 	title: text("title"),
 	url: text("url"),
@@ -43,11 +43,11 @@ export const bookmarkTagTable = sqliteTable("bookmark_tag", {
 	id: text("id").notNull().primaryKey(),
 	userId: text("user_id")
 		.notNull()
-		.references(() => userTable.id),
+		.references(() => userTable.id, { onDelete: "cascade" }),
 	tagId: text("tag_id")
 		.notNull()
-		.references(() => tagTable.id),
+		.references(() => tagTable.id, { onDelete: "cascade" }),
 	bookmarkId: text("bookmark_id")
 		.notNull()
-		.references(() => bookmarkTable.id),
+		.references(() => bookmarkTable.id, { onDelete: "cascade" }),
 });

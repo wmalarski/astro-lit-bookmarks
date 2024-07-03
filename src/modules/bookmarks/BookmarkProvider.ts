@@ -8,6 +8,7 @@ import { tagsContext, type TagsContextValue } from "@modules/tags/TagsContext";
 import type {
 	CheckDoneBookmarkEvent,
 	CreateBookmarkTagEvent,
+	RemoveBookmarkEvent,
 	RemoveBookmarkTagEvent,
 } from "./events";
 
@@ -95,6 +96,32 @@ export class BookmarkProvider extends LitElement {
 		},
 	});
 
+	private removeBookmarkTask = new Task<
+		Parameters<typeof actions.removeBookmark>,
+		Awaited<ReturnType<typeof actions.removeBookmark>>
+	>(this, {
+		autoRun: false,
+		task: ([args]) => actions.removeBookmark(args),
+		onComplete: (result) => {
+			this.value = {
+				...this.value,
+				isPending: false,
+				error: null,
+				bookmarks: this.value.bookmarks.flatMap((entry) =>
+					entry.bookmark?.id === result.id ? [] : [entry],
+				),
+			};
+		},
+		onError: (error) => {
+			console.error(error);
+			this.value = {
+				...this.value,
+				isPending: false,
+				error: "Bookmark remove error",
+			};
+		},
+	});
+
 	private updateBookmarkDoneTask = new Task<
 		Parameters<typeof actions.updateBookmarkDone>,
 		Awaited<ReturnType<typeof actions.updateBookmarkDone>>
@@ -154,6 +181,7 @@ export class BookmarkProvider extends LitElement {
 			@bookmark-tag-remove=${this.onRemoveBookmarkTag}
 			@bookmark-check-done=${this.onCheckDoneBookmark}
 			@bookmarks-load-more=${this.onLoadMoreBookmarks}
+			@bookmark-remove=${this.onRemoveBookmark}
         ></slot>`;
 	}
 
@@ -175,6 +203,12 @@ export class BookmarkProvider extends LitElement {
 				mastoBookmarkId: event.mastoBookmarkId,
 			},
 		]);
+	}
+
+	async onRemoveBookmark(event: RemoveBookmarkEvent) {
+		this.startPending();
+
+		await this.removeBookmarkTask.run([{ bookmarkId: event.bookmarkId }]);
 	}
 
 	async onRemoveBookmarkTag(event: RemoveBookmarkTagEvent) {
