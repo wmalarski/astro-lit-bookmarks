@@ -169,7 +169,11 @@ export class BookmarkProvider extends LitElement {
 		this.startPending();
 
 		await this.createBookmarkTagTask.run([
-			{ bookmarkId: event.bookmarkId, tagIds: event.tagIds },
+			{
+				bookmarkId: event.bookmarkId,
+				tagIds: event.tagIds,
+				mastoBookmarkId: event.mastoBookmarkId,
+			},
 		]);
 	}
 
