@@ -72,17 +72,17 @@ export const matchBookmarks = ({
 
 	const sorted = [...fromMasto, ...fromDb].toSorted(sortBookmarks);
 
-	const filtered = showDone
-		? sorted
-		: sorted.filter((entry) => !entry.bookmark?.done);
+	if (showDone) {
+		return sorted;
+	}
 
-	return filtered;
+	return sorted.filter((entry) => !entry.bookmark?.done);
 };
 
 const getBookmarkDate = (match: MatchBookmarksResult) => {
 	return (
-		match.bookmark?.createdAt.getTime() ??
 		(match.mastoBookmark && Date.parse(match.mastoBookmark.created_at)) ??
+		match.bookmark?.createdAt.getTime() ??
 		0
 	);
 };

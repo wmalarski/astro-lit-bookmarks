@@ -18,7 +18,7 @@ export class BookmarkDoneCheckbox extends LitElement {
 		return html`
 			<form @change=${this.onChange}>
 				<label>
-                    <input name="done" type="checkbox" value=${this.item.bookmark?.done} />
+                    <input name="done" type="checkbox" ?checked=${this.item.bookmark?.done} />
 					Done
 				</label>
 			</form>

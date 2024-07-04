@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
 import "@components/Button/Button";
 import "./BookmarkItem";
 import {
@@ -31,10 +32,10 @@ export class BookmarkList extends LitElement {
 		return html`
 			<div>
 				<ul>
-					${this.bookmarkContext.bookmarks.map(
-						(item) => html`
-							<bookmark-item .item=${item}></bookmark-item>
-						`,
+					${repeat(
+						this.bookmarkContext.bookmarks,
+						(item) => item.bookmark?.id ?? item.mastoBookmark?.id,
+						(item) => html`<bookmark-item .item=${item}></bookmark-item>`,
 					)}
 				</ul>
 				<alb-button @click=${this.onLoadMoreClick}>

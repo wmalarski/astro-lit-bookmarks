@@ -51,7 +51,6 @@ const matchedBookmarks = matchBookmarks({
     value={{
       ...tagsContextDefault,
       tags,
-      showDone,
       tagsMap: new Map(tags.map((tag) => [tag.id, tag])),
     }}
   >
@@ -62,6 +61,7 @@ const matchedBookmarks = matchBookmarks({
         bookmarks: matchedBookmarks,
         minId,
         maxId,
+        showDone,
       }}
     >
       <main>

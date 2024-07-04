@@ -133,11 +133,15 @@ export class BookmarkProvider extends LitElement {
 				...this.value,
 				isPending: false,
 				error: null,
-				bookmarks: this.value.bookmarks.map((entry) =>
-					entry.bookmark?.id === result.id
-						? { ...entry, bookmark: result }
-						: entry,
-				),
+				bookmarks: this.value.showDone
+					? this.value.bookmarks.map((entry) =>
+							entry.bookmark?.id === result.id
+								? { ...entry, bookmark: result }
+								: entry,
+						)
+					: this.value.bookmarks.flatMap((entry) =>
+							entry.bookmark?.id === result.id ? [] : [entry],
+						),
 			};
 		},
 		onError: () => {
