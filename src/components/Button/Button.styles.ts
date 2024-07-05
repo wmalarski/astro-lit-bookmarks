@@ -1,84 +1,50 @@
-import { css } from "lit";
-import { cva, type VariantProps } from "class-variance-authority";
+import type { VariantProps } from "class-variance-authority";
+import { twCva } from "@components/utils/twCva";
 
-export const buttonRecipe = cva("button", {
+export const buttonRecipe = twCva("btn no-animation flex items-center gap-1", {
+	defaultVariants: {
+		color: null,
+		isLoading: false,
+		shape: null,
+		size: "md",
+		variant: null,
+	},
 	variants: {
-		variant: {
-			primary: "primary",
-			secondary: "secondary",
+		color: {
+			accent: "btn-accent",
+			error: "btn-error",
+			info: "btn-info",
+			primary: "btn-primary",
+			secondary: "btn-secondary",
+			success: "btn-success",
+			warning: "btn-warning",
+		},
+		isLoading: {
+			false: "",
+			true: "after:loading after:loading-spinner pointer-events-none",
+		},
+		shape: {
+			block: "btn-block",
+			circle: "btn-circle",
+			ellipsis: "btn-circle w-[unset]",
+			square: "btn-square",
+			wide: "btn-wide",
 		},
 		size: {
-			small: "small",
-			medium: "medium",
-			large: "large",
+			lg: "btn-lg",
+			md: "btn-md",
+			sm: "btn-sm",
+			xs: "btn-xs",
 		},
-	},
-	defaultVariants: {
-		variant: "primary",
-		size: "medium",
+		variant: {
+			active: "btn-active",
+			disabled: "btn-disabled",
+			ghost: "btn-ghost",
+			glass: "glass",
+			link: "btn-link",
+			outline: "btn-outline",
+		},
 	},
 });
 
 export type ButtonProps = VariantProps<typeof buttonRecipe>;
-
-export const buttonStyles = css`
-:host {
-  button {
-    all: unset;
-    box-sizing: border-box;
-
-    border-radius: 1.5rem;
-    line-height: 1.5rem;
-    font-size: 1rem;
-
-    &.primary {
-      color: rgb(var(--white));
-      background-color: rgb(var(--purple-500));
-      transition: background-color var(--transition-fast) ease-in-out;
-
-      &:hover {
-        background-color: rgb(var(--purple-700));
-      }
-      &:active {
-        background-color: rgb(var(--purple-800));
-      }
-      &:focus-visible {
-        outline: 1px solid rgb(var(--white));
-      }
-      &:disabled {
-        background-color: rgba(var(--purple-500), var(--op-disabled));
-      }
-    }
-
-    &.secondary {
-      color: rgb(var(--neutral-900));
-      background-color: rgb(var(--neutral-200));
-      transition: background-color var(--transition-fast) ease-in-out;
-
-      &:hover {
-        background-color: rgb(var(--neutral-300));
-      }
-      &:active {
-        background-color: rgb(var(--neutral-400));
-      }
-      &:focus-visible {
-        outline: 1px solid rgb(var(--black));
-      }
-      &:disabled {
-        color: rgba(var(--neutral-900), var(--op-disabled));
-        background-color: rgb(var(--neutral-100));
-      }
-    }
-
-    &.small {
-        padding: 0.375rem 0.75rem;
-    }
-    &.medium {
-        padding: 0.5rem 1.25rem;
-    }
-    &.large {
-        padding: 0.75rem 1.5rem;
-    }
-  }
-}
-`;

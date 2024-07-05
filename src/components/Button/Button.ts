@@ -1,16 +1,26 @@
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { buttonRecipe, buttonStyles, type ButtonProps } from "./Button.styles";
+import { buttonRecipe, type ButtonProps } from "./Button.styles";
+import { tailwindStyles } from "@styles/tailwind";
 
 @customElement(AlbButton.elementName)
 export class AlbButton extends LitElement {
 	static readonly elementName = "alb-button" as const;
 
 	@property({ type: String, reflect: true })
-	variant: ButtonProps["variant"] = "primary";
+	color: ButtonProps["color"] = "primary";
+
+	@property({ type: Boolean, reflect: true })
+	isLoading: ButtonProps["isLoading"] = false;
 
 	@property({ type: String, reflect: true })
-	size: ButtonProps["size"] = "medium";
+	shape: ButtonProps["shape"] = null;
+
+	@property({ type: String, reflect: true })
+	size: ButtonProps["size"] = "md";
+
+	@property({ type: String, reflect: true })
+	variant: ButtonProps["variant"] = null;
 
 	@property({ type: String })
 	type: "button" | "submit" | "reset" = "button";
@@ -18,12 +28,18 @@ export class AlbButton extends LitElement {
 	@property({ type: Boolean, reflect: true })
 	disabled = false;
 
-	static override styles = [buttonStyles];
+	static override styles = [tailwindStyles];
 
 	override render() {
 		return html`
 		<button 
-			class=${buttonRecipe({ size: this.size, variant: this.variant })} 
+			class=${buttonRecipe({
+				size: this.size,
+				variant: this.variant,
+				color: this.color,
+				isLoading: this.isLoading,
+				shape: this.shape,
+			})} 
 			type=${this.type} 
 			?disabled=${this.disabled}>
 	      <slot></slot>
@@ -31,3 +47,18 @@ export class AlbButton extends LitElement {
 		`;
 	}
 }
+
+declare global {
+	interface HTMLElementTagNameMap {
+		[AlbButton.elementName]: AlbButton;
+	}
+}
+
+type AlbButtonProps = ButtonProps & {
+	disabled?: boolean;
+};
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+type AlbButtonComponent = (props: AlbButtonProps) => any;
+
+export const TypedAlbButton = AlbButton as unknown as AlbButtonComponent;

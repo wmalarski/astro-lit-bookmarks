@@ -4,6 +4,7 @@ import { property } from "lit/decorators.js";
 import { RemoveBookmarkTagEvent } from "./events";
 import type { InferSelectModel } from "drizzle-orm";
 import type { bookmarkTagTable, tagTable } from "@server/db";
+import "@components/Button/Button";
 
 @customElement(BookmarkTag.elementName)
 export class BookmarkTag extends LitElement {
@@ -19,7 +20,7 @@ export class BookmarkTag extends LitElement {
 		return html`
 			<li>
 				<span>${this.tag.name}</span>
-				<button type="button" @click=${this.onRemoveClick}>Remove</button>
+				<alb-button type="button" @click=${this.onRemoveClick}>Remove</button>
 			</li>
 		`;
 	}

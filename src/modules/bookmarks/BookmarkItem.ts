@@ -4,6 +4,7 @@ import { property } from "lit/decorators.js";
 import "./BookmarkTagsForm";
 import "./BookmarkTag";
 import "./BookmarkDoneCheckbox";
+import "@components/Button/Button";
 import type { MatchBookmarksResult } from "../../server/matchBookmarks";
 import { consume } from "@lit/context";
 import {
@@ -87,7 +88,7 @@ export class RemoveBookmarkButton extends LitElement {
 
 	override render() {
 		return html`
-			<button @click=${this.onRemoveClick}>Remove</button>
+			<alb-button @click=${this.onRemoveClick}>Remove</button>
         `;
 	}
 
@@ -154,7 +155,7 @@ export class BookmarkItem extends LitElement {
 						? html`<remove-bookmark-button .item=${this.item}></remove-bookmark-button>`
 						: null
 				}
-				<button type="button" @click=${this.onShareClick}>Share</button>
+				<alb-button type="button" @click=${this.onShareClick}>Share</button>
 				${
 					this.item.mastoBookmark
 						? html`<masto-bookmark-item .mastoBookmark=${this.item.mastoBookmark}></masto-bookmark-item>`
