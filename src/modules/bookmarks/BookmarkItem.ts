@@ -14,6 +14,7 @@ import {
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import type { PreviewCard, Status } from "@type/mastodon";
 import { RemoveBookmarkEvent } from "./events";
+import { tailwindStyles } from "@styles/tailwind";
 
 @customElement(MastoBookmarkCard.elementName)
 export class MastoBookmarkCard extends LitElement {
@@ -44,7 +45,9 @@ export class MastoBookmarkItem extends LitElement {
 	@property({ attribute: false })
 	mastoBookmark!: Status;
 
-	static override styles = css`
+	static override styles = [
+		tailwindStyles,
+		css`
 		.avatar {
 			--size: 3rem;
 			width: var(--size);
@@ -56,11 +59,12 @@ export class MastoBookmarkItem extends LitElement {
 			flex-direction: column;
 			gap: 0.5rem;
 		}
-	`;
+	`,
+	];
 
 	override render() {
 		return html`
-            <div class="container">
+            <div class="flex flex-col gap-2">
 				<span>${this.mastoBookmark.created_at}</span>
 				<span>${this.mastoBookmark.uri}</span>
 				<div>

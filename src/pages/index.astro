@@ -64,8 +64,8 @@ const matchedBookmarks = matchBookmarks({
         showDone,
       }}
     >
-      <main>
-        <nav class="nav">
+      <main class="relative">
+        <nav class="flex nav">
           <alb-anchor href={paths.index}>Home</alb-anchor>
           <alb-anchor href={paths.loginMastodon}>
             Sign in with Mastodon
@@ -86,12 +86,7 @@ const matchedBookmarks = matchBookmarks({
 </Layout>
 
 <style>
-  main {
-    position: relative;
-  }
-
   .nav {
-    display: flex;
     padding: 1.5rem;
     border-bottom: var(--border);
     gap: 1rem;
