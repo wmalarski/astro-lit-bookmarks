@@ -5,6 +5,7 @@ import "./BookmarkTagsForm";
 import "./BookmarkTag";
 import "./BookmarkDoneCheckbox";
 import "@components/Button/Button";
+import "@components/Anchor/Anchor";
 import type { MatchBookmarksResult } from "../../server/matchBookmarks";
 import { consume } from "@lit/context";
 import {
@@ -32,9 +33,9 @@ export class MastoBookmarkCard extends LitElement {
 
 	override render() {
 		return html`
-			<a href=${this.card.url}>
+			<alb-anchor href=${this.card.url}>
 				<img class="card" src=${this.card.image} alt=${this.card.title} />
-			</a>
+			</alb-anchor>
         `;
 	}
 }

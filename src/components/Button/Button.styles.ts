@@ -47,4 +47,4 @@ export const buttonRecipe = twCva("btn no-animation flex items-center gap-1", {
 	},
 });
 
-export type ButtonProps = VariantProps<typeof buttonRecipe>;
+export type ButtonVariants = VariantProps<typeof buttonRecipe>;

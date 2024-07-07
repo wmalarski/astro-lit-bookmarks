@@ -1,4 +1,6 @@
 ---
+import { Button } from "@components/Button/Button";
+
 interface Props {
     showDone: boolean;
 }
@@ -6,18 +8,10 @@ interface Props {
 const { showDone } = Astro.props;
 ---
 
-<form class="container" method="get">
+<form class="flex flex-col gap-4" method="get">
     <label>
         <input name="done" type="checkbox" checked={showDone} />
         Show Done
     </label>
-    <button type="submit">Filter</button>
+    <Button type="submit">Filter</Button>
 </form>
-
-<style>
-    .container {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-</style>
