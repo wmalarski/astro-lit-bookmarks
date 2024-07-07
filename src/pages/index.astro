@@ -65,12 +65,14 @@ const matchedBookmarks = matchBookmarks({
       }}
     >
       <main class="relative">
-        <nav class="flex nav">
-          <alb-anchor href={paths.index}>Home</alb-anchor>
-          <alb-anchor href={paths.loginMastodon}>
+        <nav class="navbar">
+          <alb-anchor variant="ghost" size="lg" href={paths.index}
+            >Home</alb-anchor
+          >
+          <alb-anchor variant="ghost" href={paths.loginMastodon}>
             Sign in with Mastodon
           </alb-anchor>
-          <alb-anchor href={paths.logout}>Sign out</alb-anchor>
+          <alb-anchor variant="ghost" href={paths.logout}>Sign out</alb-anchor>
         </nav>
 
         <div class="container">
