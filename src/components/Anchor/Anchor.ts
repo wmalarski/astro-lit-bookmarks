@@ -45,10 +45,3 @@ declare global {
 		[AlbAnchor.elementName]: AlbAnchor;
 	}
 }
-
-type AnchorProps = Partial<Pick<AlbAnchor, keyof ButtonVariants | "href">>;
-
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-type AnchorComponent = (props: AnchorProps) => any;
-
-export const Anchor = AlbAnchor as unknown as AnchorComponent;

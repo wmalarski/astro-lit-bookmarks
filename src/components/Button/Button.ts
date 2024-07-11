@@ -53,12 +53,3 @@ declare global {
 		[AlbButton.elementName]: AlbButton;
 	}
 }
-
-type ButtonProps = Partial<
-	Pick<AlbButton, keyof ButtonVariants | "disabled" | "type">
->;
-
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-type ButtonComponent = (props: ButtonProps) => any;
-
-export const Button = AlbButton as unknown as ButtonComponent;

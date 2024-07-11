@@ -1,5 +1,5 @@
 ---
-import { Button } from "@components/Button/Button";
+import { buttonRecipe } from "@components/Button/Button.styles";
 
 interface Props {
     showDone: boolean;
@@ -13,5 +13,5 @@ const { showDone } = Astro.props;
         <input name="done" type="checkbox" checked={showDone} />
         Show Done
     </label>
-    <Button type="submit">Filter</Button>
+    <button class={buttonRecipe()} type="submit">Filter</button>
 </form>

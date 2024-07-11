@@ -1,12 +1,15 @@
 ---
-import "@components/Link/Anchor";
+import { buttonRecipe } from "@components/Button/Button.styles";
 ---
 
 <div>
     <h2>Login</h2>
     <div>
-        <alb-anchor variant="primary" size="large" href="/login/mastodon">
+        <a
+            class={buttonRecipe({ color: "primary", size: "lg" })}
+            href="/login/mastodon"
+        >
             Sign In using Mastodon!
-        </alb-anchor>
+        </a>
     </div>
 </div>

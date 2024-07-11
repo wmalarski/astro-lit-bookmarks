@@ -1,5 +1,5 @@
 ---
-import { Button } from "@components/Button/Button";
+import { buttonRecipe } from "@components/Button/Button.styles";
 import Layout from "@layouts/Layout.astro";
 ---
 
@@ -17,6 +17,6 @@ import Layout from "@layouts/Layout.astro";
             Url
             <input name="url" type="url" />
         </label>
-        <Button type="submit">Submit</Button>
+        <button class={buttonRecipe()} type="submit">Submit</button>
     </form>
 </Layout>
