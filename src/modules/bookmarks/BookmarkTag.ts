@@ -20,7 +20,7 @@ export class BookmarkTag extends LitElement {
 		return html`
 			<li>
 				<span>${this.tag.name}</span>
-				<alb-button type="button" @click=${this.onRemoveClick}>Remove</button>
+				<alb-button type="button" @click=${this.onRemoveClick}>Remove</alb-button>
 			</li>
 		`;
 	}

@@ -25,12 +25,6 @@ export class MastoBookmarkCard extends LitElement {
 	@property({ attribute: false })
 	card!: PreviewCard;
 
-	static override styles = css`
-		img {
-			width: 100%;
-		}
-	`;
-
 	override render() {
 		return html`
 			<alb-anchor href=${this.card.url}>
@@ -47,22 +41,7 @@ export class MastoBookmarkItem extends LitElement {
 	@property({ attribute: false })
 	mastoBookmark!: Status;
 
-	static override styles = [
-		tailwindStyles,
-		css`
-		.avatar {
-			--size: 3rem;
-			width: var(--size);
-			height: var(--size);
-		}
-
-		.container {
-			display: flex;
-			flex-direction: column;
-			gap: 0.5rem;
-		}
-	`,
-	];
+	static override styles = tailwindStyles;
 
 	override render() {
 		return html`
@@ -71,7 +50,7 @@ export class MastoBookmarkItem extends LitElement {
 				<span>${this.mastoBookmark.uri}</span>
 				<div>
 					<span>${this.mastoBookmark.account.display_name}</span>
-					<img class="avatar" src=${this.mastoBookmark.account.avatar_static} />
+					<img class="avatar w-8 h-8" src=${this.mastoBookmark.account.avatar_static} />
 				</div>
 				<div>${unsafeHTML(this.mastoBookmark.content)}</div>
 				${this.mastoBookmark.card?.image && html`<masto-bookmark-card .card=${this.mastoBookmark.card}></masto-bookmark-card>`}
@@ -89,7 +68,7 @@ export class RemoveBookmarkButton extends LitElement {
 
 	override render() {
 		return html`
-			<alb-button @click=${this.onRemoveClick}>Remove</button>
+			<alb-button @click=${this.onRemoveClick}>Remove</alb-button>
         `;
 	}
 
@@ -114,15 +93,7 @@ export class BookmarkItem extends LitElement {
 	@consume({ context: tagsContext, subscribe: true })
 	tagsContext: TagsContextValue = tagsContextDefault;
 
-	static override styles = css`
-		li { 
-			display: flex;
-			flex-direction: column;
-			gap: 0.25rem;
-			border-bottom: var(--border);
-			padding: 1rem;
-		}
-  `;
+	static override styles = tailwindStyles;
 
 	override render() {
 		const { text, title } = this.getCardDetails();
@@ -133,7 +104,7 @@ export class BookmarkItem extends LitElement {
 		});
 
 		return html`
-            <li>
+			<div class="flex flex-col gap-2">
 				<strong>${title}</strong>
 				<span>${text}</span>
 				${
@@ -156,13 +127,13 @@ export class BookmarkItem extends LitElement {
 						? html`<remove-bookmark-button .item=${this.item}></remove-bookmark-button>`
 						: null
 				}
-				<alb-button type="button" @click=${this.onShareClick}>Share</button>
+				<alb-button type="button" @click=${this.onShareClick}>Share</alb-button>
 				${
 					this.item.mastoBookmark
 						? html`<masto-bookmark-item .mastoBookmark=${this.item.mastoBookmark}></masto-bookmark-item>`
 						: null
 				}
-            </li>
+			</div>
         `;
 	}
 
