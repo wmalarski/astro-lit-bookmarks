@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators.js";
 import "./BookmarkTagsForm";
@@ -27,9 +27,9 @@ export class MastoBookmarkCard extends LitElement {
 
 	override render() {
 		return html`
-			<alb-anchor href=${this.card.url}>
-				<img class="card" src=${this.card.image} alt=${this.card.title} />
-			</alb-anchor>
+			<a href=${this.card.url}>
+				<img class="card" src=${this.card.image} alt=${this.card.title}>
+			</a>
         `;
 	}
 }
@@ -104,7 +104,7 @@ export class BookmarkItem extends LitElement {
 		});
 
 		return html`
-			<div class="flex flex-col gap-2">
+			<div class="flex flex-col gap-2 p-4 border-b-[1px] border-b-base-content">
 				<strong>${title}</strong>
 				<span>${text}</span>
 				${
