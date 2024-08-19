@@ -1,0 +1,28 @@
+---
+import { buttonRecipe } from "@components/Button/Button.styles";
+import { paths } from "@utils/paths";
+---
+
+<nav
+    class="navbar gap-4 sticky top-0 bg-base-100 z-10 border-b-[1px] border-b-base-content"
+>
+    <div class="navbar-start">
+        <a
+            class={buttonRecipe({ variant: "ghost", size: "lg" })}
+            href={paths.index}
+        >
+            Home
+        </a>
+    </div>
+    <div class="navbar-end">
+        <a
+            class={buttonRecipe({ variant: "ghost" })}
+            href={paths.loginMastodon}
+        >
+            Sign in with Mastodon
+        </a>
+        <a class={buttonRecipe({ variant: "ghost" })} href={paths.logout}>
+            Sign out
+        </a>
+    </div>
+</nav>

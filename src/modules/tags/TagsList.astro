@@ -1,0 +1,18 @@
+---
+import type { tagTable } from "@server/db";
+import type { InferSelectModel } from "drizzle-orm";
+
+export type Props = {
+	tags: InferSelectModel<typeof tagTable>[];
+};
+
+const { tags } = Astro.props;
+---
+
+<div>
+	<create-tag-form></create-tag-form>
+
+	<ul>
+		{tags.map((tag) => <tags-list-item tag={tag} />)}
+	</ul>
+</div>
