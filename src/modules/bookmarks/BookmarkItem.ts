@@ -28,7 +28,7 @@ export class MastoBookmarkCard extends LitElement {
 	override render() {
 		return html`
 			<a href=${this.card.url}>
-				<img class="card" src=${this.card.image} alt=${this.card.title}>
+				<img class="card" src=${this.card.image} alt=${this.card.title} />
 			</a>
         `;
 	}
