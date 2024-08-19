@@ -1,9 +1,9 @@
+import type { Status } from "@type/mastodon";
+import { buildSearchParams } from "@utils/searchParams";
 import type { APIContext } from "astro";
 import { createRestAPIClient } from "masto";
 import { validateContextSession } from "./auth";
-import { buildSearchParams } from "@utils/searchParams";
-import type { ActionAPIContext } from "astro/actions/runtime/store.js";
-import type { Status } from "@type/mastodon";
+import type { ActionAPIContext } from "./types";
 
 export const mastoMiddleware = async (context: APIContext) => {
   const accessToken = context.locals.session?.accessToken;

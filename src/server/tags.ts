@@ -1,10 +1,10 @@
-import { eq } from "drizzle-orm";
-import { db, tagTable } from "./db";
-import { validateContextSession } from "./auth";
-import type { ActionAPIContext } from "astro/actions/runtime/store.js";
-import { ActionError } from "astro:actions";
-import { DB_ERROR } from "./errors";
 import type { APIContext } from "astro";
+import { ActionError } from "astro:actions";
+import { eq } from "drizzle-orm";
+import { validateContextSession } from "./auth";
+import { db, tagTable } from "./db";
+import { DB_ERROR } from "./errors";
+import type { ActionAPIContext } from "./types";
 
 const TAG_LIMIT = 100;
 

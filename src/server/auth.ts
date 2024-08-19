@@ -6,6 +6,7 @@ import { ActionError } from "astro:actions";
 import { verifyRequestOrigin } from "lucia";
 import { createOAuthAPIClient } from "masto";
 import { UNAUTHORIZED_ERROR } from "./errors";
+import type { ActionAPIContext } from "./types";
 
 const CODE_KEY = "code";
 const CODE_VERIFIER_KEY = "code_verifier";
@@ -128,7 +129,7 @@ export const authMiddleware = async (context: APIContext) => {
   context.locals.user = user;
 };
 
-export const validateContextSession = (context: APIContext) => {
+export const validateContextSession = (context: ActionAPIContext) => {
   const session = context.locals.session;
   if (!session) {
     throw new ActionError(UNAUTHORIZED_ERROR);

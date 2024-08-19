@@ -1,10 +1,10 @@
-import { and, eq, inArray, isNull, gte, lt } from "drizzle-orm";
-import { bookmarkTable, bookmarkTagTable, db } from "./db";
-import { validateContextSession } from "./auth";
-import type { ActionAPIContext } from "astro/actions/runtime/store.js";
-import { ActionError } from "astro:actions";
-import { DB_ERROR } from "./errors";
 import type { Status } from "@type/mastodon";
+import { ActionError } from "astro:actions";
+import { and, eq, gte, inArray, isNull, lt } from "drizzle-orm";
+import { validateContextSession } from "./auth";
+import { bookmarkTable, bookmarkTagTable, db } from "./db";
+import { DB_ERROR } from "./errors";
+import type { ActionAPIContext } from "./types";
 
 type FindMastoBookmarksArgs = {
   mastoBookmarks: Status[];

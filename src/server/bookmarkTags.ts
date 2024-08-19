@@ -1,9 +1,9 @@
-import { and, eq } from "drizzle-orm";
-import { bookmarkTagTable, db } from "./db";
-import { validateContextSession } from "./auth";
-import type { ActionAPIContext } from "astro/actions/runtime/store.js";
 import { ActionError } from "astro:actions";
+import { and, eq } from "drizzle-orm";
+import { validateContextSession } from "./auth";
+import { bookmarkTagTable, db } from "./db";
 import { DB_ERROR } from "./errors";
+import type { ActionAPIContext } from "./types";
 
 type CreateBookmarkTagsArgs = {
   tagIds: string[];
