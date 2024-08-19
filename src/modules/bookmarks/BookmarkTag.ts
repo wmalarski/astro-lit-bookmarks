@@ -8,30 +8,30 @@ import "@components/Button/Button";
 
 @customElement(BookmarkTag.elementName)
 export class BookmarkTag extends LitElement {
-	static readonly elementName = "bookmark-tag" as const;
+  static readonly elementName = "bookmark-tag" as const;
 
-	@property({ attribute: false })
-	tag!: InferSelectModel<typeof tagTable>;
+  @property({ attribute: false })
+  tag!: InferSelectModel<typeof tagTable>;
 
-	@property({ attribute: false })
-	bookmarkTag!: InferSelectModel<typeof bookmarkTagTable>;
+  @property({ attribute: false })
+  bookmarkTag!: InferSelectModel<typeof bookmarkTagTable>;
 
-	override render() {
-		return html`
+  override render() {
+    return html`
 			<li>
 				<span>${this.tag.name}</span>
 				<alb-button type="button" @click=${this.onRemoveClick}>Remove</alb-button>
 			</li>
 		`;
-	}
+  }
 
-	onRemoveClick() {
-		this.dispatchEvent(new RemoveBookmarkTagEvent(this.bookmarkTag.id));
-	}
+  onRemoveClick() {
+    this.dispatchEvent(new RemoveBookmarkTagEvent(this.bookmarkTag.id));
+  }
 }
 
 declare global {
-	interface HTMLElementTagNameMap {
-		[BookmarkTag.elementName]: BookmarkTag;
-	}
+  interface HTMLElementTagNameMap {
+    [BookmarkTag.elementName]: BookmarkTag;
+  }
 }

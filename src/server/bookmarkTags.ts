@@ -6,60 +6,60 @@ import { ActionError } from "astro:actions";
 import { DB_ERROR } from "./errors";
 
 type CreateBookmarkTagsArgs = {
-	tagIds: string[];
-	bookmarkId: string;
+  tagIds: string[];
+  bookmarkId: string;
 };
 
 export const createBookmarkTags = (
-	context: ActionAPIContext,
-	{ bookmarkId, tagIds }: CreateBookmarkTagsArgs,
+  context: ActionAPIContext,
+  { bookmarkId, tagIds }: CreateBookmarkTagsArgs,
 ) => {
-	const session = validateContextSession(context);
+  const session = validateContextSession(context);
 
-	const result = db
-		.insert(bookmarkTagTable)
-		.values(
-			tagIds.map((tagId) => ({
-				bookmarkId,
-				tagId,
-				userId: session.userId,
-				id: crypto.randomUUID(),
-			})),
-		)
-		.returning()
-		.all();
+  const result = db
+    .insert(bookmarkTagTable)
+    .values(
+      tagIds.map((tagId) => ({
+        bookmarkId,
+        tagId,
+        userId: session.userId,
+        id: crypto.randomUUID(),
+      })),
+    )
+    .returning()
+    .all();
 
-	if (result.length === 0) {
-		throw new ActionError(DB_ERROR);
-	}
+  if (result.length === 0) {
+    throw new ActionError(DB_ERROR);
+  }
 
-	return result;
+  return result;
 };
 
 type DeleteBookmarkTagArgs = {
-	bookmarkTagId: string;
+  bookmarkTagId: string;
 };
 
 export const deleteBookmarkTag = (
-	context: ActionAPIContext,
-	{ bookmarkTagId }: DeleteBookmarkTagArgs,
+  context: ActionAPIContext,
+  { bookmarkTagId }: DeleteBookmarkTagArgs,
 ) => {
-	const session = validateContextSession(context);
+  const session = validateContextSession(context);
 
-	const result = db
-		.delete(bookmarkTagTable)
-		.where(
-			and(
-				eq(bookmarkTagTable.id, bookmarkTagId),
-				eq(bookmarkTagTable.userId, session.userId),
-			),
-		)
-		.returning()
-		.get();
+  const result = db
+    .delete(bookmarkTagTable)
+    .where(
+      and(
+        eq(bookmarkTagTable.id, bookmarkTagId),
+        eq(bookmarkTagTable.userId, session.userId),
+      ),
+    )
+    .returning()
+    .get();
 
-	if (!result) {
-		throw new ActionError(DB_ERROR);
-	}
+  if (!result) {
+    throw new ActionError(DB_ERROR);
+  }
 
-	return result;
+  return result;
 };
