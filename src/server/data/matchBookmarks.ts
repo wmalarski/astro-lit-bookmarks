@@ -1,10 +1,10 @@
-import type { Status } from "@type/mastodon";
+import type { Status } from "@server/masto/types";
+import type { InferSelectModel } from "drizzle-orm";
+import type { bookmarkTable, bookmarkTagTable } from "../db";
 import type {
   FindBookmarksByMastoIdsResult,
   FindBookmarksResult,
 } from "./bookmarks";
-import type { bookmarkTable, bookmarkTagTable } from "./db";
-import type { InferSelectModel } from "drizzle-orm";
 
 type MatchBookmarksArgs = {
   mastoBookmarks: Status[];

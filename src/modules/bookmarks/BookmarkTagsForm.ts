@@ -1,13 +1,13 @@
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators/custom-element.js";
-import { property, query } from "lit/decorators.js";
 import { consume } from "@lit/context";
 import {
+  type TagsContextValue,
   tagsContext,
   tagsContextDefault,
-  type TagsContextValue,
 } from "@modules/tags/TagsContext";
-import type { MatchBookmarksResult } from "../../server/matchBookmarks";
+import { LitElement, html } from "lit";
+import { property, query } from "lit/decorators.js";
+import { customElement } from "lit/decorators/custom-element.js";
+import type { MatchBookmarksResult } from "../../server/data/matchBookmarks";
 import { CreateBookmarkTagEvent } from "./events";
 
 @customElement(BookmarkTagsForm.elementName)

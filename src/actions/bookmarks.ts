@@ -1,14 +1,17 @@
-import { defineAction, z } from "astro:actions";
-import { createBookmarkTags, deleteBookmarkTag } from "@server/bookmarkTags";
+import {
+  createBookmarkTags,
+  deleteBookmarkTag,
+} from "@server/data/bookmarkTags";
 import {
   deleteBookmark,
   findBookmarks,
   findBookmarksByMastoIds,
   findOrCreateBookmark,
   updateBookmark,
-} from "@server/bookmarks";
-import { matchBookmarks } from "@server/matchBookmarks";
-import { listMastoBookmarks } from "@server/masto";
+} from "@server/data/bookmarks";
+import { matchBookmarks } from "@server/data/matchBookmarks";
+import { listMastoBookmarks } from "@server/masto/helpers";
+import { defineAction, z } from "astro:actions";
 
 export const bookmarks = {
   createBookmarkTags: defineAction({

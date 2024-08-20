@@ -1,22 +1,17 @@
-import type { Status } from "@type/mastodon";
+import { validateContextSession } from "@server/auth/middleware";
+import type { Status } from "@server/masto/types";
+import type { ActionAPIContext } from "@server/types";
 import { buildSearchParams } from "@utils/searchParams";
-import type { APIContext } from "astro";
+import type { Tokens } from "arctic";
 import { createRestAPIClient } from "masto";
-import { validateContextSession } from "./auth/middleware";
-import type { ActionAPIContext } from "./types";
 
-export const mastoMiddleware = async (context: APIContext) => {
-  const accessToken = context.locals.session?.accessToken;
-  if (!accessToken) {
-    return;
-  }
-
-  const mastoRestAPIClient = createRestAPIClient({
+export const verifyMastoCredentials = (tokens: Tokens) => {
+  const client = createRestAPIClient({
     url: import.meta.env.MASTODON_URL,
-    accessToken,
+    accessToken: tokens.accessToken,
   });
 
-  context.locals.mastoClient = mastoRestAPIClient;
+  return client.v1.accounts.verifyCredentials();
 };
 
 type ListMastoBookmarksArgs = {

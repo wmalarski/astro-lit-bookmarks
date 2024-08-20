@@ -1,10 +1,10 @@
-import type { Status } from "@type/mastodon";
+import type { Status } from "@server/masto/types";
 import { ActionError } from "astro:actions";
 import { and, eq, gte, inArray, isNull, lt } from "drizzle-orm";
-import { validateContextSession } from "./auth/middleware";
-import { bookmarkTable, bookmarkTagTable, db } from "./db";
-import { DB_ERROR } from "./errors";
-import type { ActionAPIContext } from "./types";
+import { validateContextSession } from "../auth/middleware";
+import { bookmarkTable, bookmarkTagTable, db } from "../db";
+import { DB_ERROR } from "../errors";
+import type { ActionAPIContext } from "../types";
 
 type FindMastoBookmarksArgs = {
   mastoBookmarks: Status[];

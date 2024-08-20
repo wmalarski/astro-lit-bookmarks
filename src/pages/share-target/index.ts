@@ -1,7 +1,7 @@
-import type { APIContext } from "astro";
+import { createBookmark } from "@server/data/bookmarks";
 import { paths } from "@utils/paths";
+import type { APIContext } from "astro";
 import { z } from "astro/zod";
-import { createBookmark } from "@server/bookmarks";
 
 export const POST = async (context: APIContext): Promise<Response> => {
   const form = await context.request.formData();

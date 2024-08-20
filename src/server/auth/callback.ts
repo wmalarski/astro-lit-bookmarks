@@ -4,11 +4,8 @@ import {
   setSessionCookie,
   validateAuthorizationCode,
 } from "@server/auth/session";
-import {
-  getUserByMastoId,
-  insertUser,
-  verifyMastoCredentials,
-} from "@server/user";
+import { getUserByMastoId, insertUser } from "@server/data/user";
+import { verifyMastoCredentials } from "@server/masto/helpers";
 import { paths } from "@utils/paths";
 import type { APIContext } from "astro";
 

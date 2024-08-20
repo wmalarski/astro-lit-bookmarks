@@ -1,4 +1,4 @@
-import { createTag, deleteTag, updateTag } from "@server/tags";
+import { createTag, deleteTag, updateTag } from "@server/data/tags";
 import { defineAction, z } from "astro:actions";
 
 export const tags = {

@@ -1,22 +1,22 @@
-import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators/custom-element.js";
-import { property } from "lit/decorators.js";
-import "./BookmarkTagsForm";
-import "./BookmarkTag";
-import "./BookmarkDoneCheckbox";
-import "@components/Button/Button";
 import "@components/Anchor/Anchor";
-import type { MatchBookmarksResult } from "../../server/matchBookmarks";
+import "@components/Button/Button";
 import { consume } from "@lit/context";
 import {
+  type TagsContextValue,
   tagsContext,
   tagsContextDefault,
-  type TagsContextValue,
 } from "@modules/tags/TagsContext";
-import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import type { PreviewCard, Status } from "@type/mastodon";
-import { RemoveBookmarkEvent } from "./events";
+import type { PreviewCard, Status } from "@server/masto/types";
 import { tailwindStyles } from "@styles/tailwind";
+import { LitElement, html } from "lit";
+import { property } from "lit/decorators.js";
+import { customElement } from "lit/decorators/custom-element.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import type { MatchBookmarksResult } from "../../server/data/matchBookmarks";
+import "./BookmarkDoneCheckbox";
+import "./BookmarkTag";
+import "./BookmarkTagsForm";
+import { RemoveBookmarkEvent } from "./events";
 
 @customElement(MastoBookmarkCard.elementName)
 export class MastoBookmarkCard extends LitElement {

@@ -1,9 +1,9 @@
 import { ActionError } from "astro:actions";
 import { and, eq } from "drizzle-orm";
-import { validateContextSession } from "./auth/middleware";
-import { bookmarkTagTable, db } from "./db";
-import { DB_ERROR } from "./errors";
-import type { ActionAPIContext } from "./types";
+import { validateContextSession } from "../auth/middleware";
+import { bookmarkTagTable, db } from "../db";
+import { DB_ERROR } from "../errors";
+import type { ActionAPIContext } from "../types";
 
 type CreateBookmarkTagsArgs = {
   tagIds: string[];
