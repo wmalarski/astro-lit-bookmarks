@@ -1,5 +1,6 @@
 ---
 import { buttonRecipe } from "@components/Button/Button.styles";
+import { paths } from "@utils/paths";
 ---
 
 <div>
@@ -7,7 +8,7 @@ import { buttonRecipe } from "@components/Button/Button.styles";
     <div>
         <a
             class={buttonRecipe({ color: "primary", size: "lg" })}
-            href="/login/mastodon"
+            href={paths.loginMastodon}
         >
             Sign In using Mastodon!
         </a>

@@ -1,7 +1,7 @@
 import type { Status } from "@type/mastodon";
 import { ActionError } from "astro:actions";
 import { and, eq, gte, inArray, isNull, lt } from "drizzle-orm";
-import { validateContextSession } from "./auth";
+import { validateContextSession } from "./auth/middleware";
 import { bookmarkTable, bookmarkTagTable, db } from "./db";
 import { DB_ERROR } from "./errors";
 import type { ActionAPIContext } from "./types";

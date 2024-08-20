@@ -2,7 +2,7 @@ import type { Status } from "@type/mastodon";
 import { buildSearchParams } from "@utils/searchParams";
 import type { APIContext } from "astro";
 import { createRestAPIClient } from "masto";
-import { validateContextSession } from "./auth";
+import { validateContextSession } from "./auth/middleware";
 import type { ActionAPIContext } from "./types";
 
 export const mastoMiddleware = async (context: APIContext) => {

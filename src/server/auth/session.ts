@@ -1,12 +1,9 @@
 import { type Tokens, generateCodeVerifier, generateState } from "arctic";
 
-import { client, lucia } from "@server/session";
+import { client, lucia } from "@server/auth/lucia";
 import type { APIContext, AstroCookieSetOptions } from "astro";
-import { ActionError } from "astro:actions";
 import { verifyRequestOrigin } from "lucia";
 import { createOAuthAPIClient } from "masto";
-import { UNAUTHORIZED_ERROR } from "./errors";
-import type { ActionAPIContext } from "./types";
 
 const CODE_KEY = "code";
 const CODE_VERIFIER_KEY = "code_verifier";
@@ -33,6 +30,8 @@ export const createAuthorizationUrl = async (
 
   context.cookies.set(STATE_KEY, state, COOKIE_OPTIONS);
   context.cookies.set(CODE_VERIFIER_KEY, codeVerifier, COOKIE_OPTIONS);
+
+  console.log({ url, state, codeVerifier });
 
   return url.toString();
 };
@@ -98,41 +97,4 @@ export const verifyRequest = (context: APIContext) => {
     hostHeader &&
     verifyRequestOrigin(originHeader, [hostHeader])
   );
-};
-
-export const authMiddleware = async (context: APIContext) => {
-  const sessionId = context.cookies.get(lucia.sessionCookieName)?.value ?? null;
-
-  if (!sessionId) {
-    context.locals.user = null;
-    context.locals.session = null;
-    return;
-  }
-
-  const { session, user } = await lucia.validateSession(sessionId);
-
-  if (session?.fresh) {
-    const sessionCookie = lucia.createSessionCookie(session.id);
-
-    context.cookies.set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes,
-    );
-  }
-
-  if (!session) {
-    setBlankSessionCookie(context);
-  }
-
-  context.locals.session = session;
-  context.locals.user = user;
-};
-
-export const validateContextSession = (context: ActionAPIContext) => {
-  const session = context.locals.session;
-  if (!session) {
-    throw new ActionError(UNAUTHORIZED_ERROR);
-  }
-  return session;
 };

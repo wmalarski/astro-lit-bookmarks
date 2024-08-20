@@ -1,9 +1,9 @@
 import { DrizzleSQLiteAdapter } from "@lucia-auth/adapter-drizzle";
+import type { Tokens } from "arctic";
+import type { InferSelectModel } from "drizzle-orm";
 import { Lucia } from "lucia";
 import { OAuth2Client } from "oslo/oauth2";
-import { db, sessionTable, userTable } from "./db";
-import type { InferSelectModel } from "drizzle-orm";
-import type { Tokens } from "arctic";
+import { db, sessionTable, userTable } from "../db";
 
 export const adapter = new DrizzleSQLiteAdapter(db, sessionTable, userTable);
 
