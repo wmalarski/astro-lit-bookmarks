@@ -1,37 +1,25 @@
-import { type Tokens, generateCodeVerifier, generateState } from "arctic";
+import type { Tokens } from "arctic";
 
-import { client, lucia } from "@server/auth/lucia";
-import type { APIContext, AstroCookieSetOptions } from "astro";
+import { lucia } from "@server/auth/lucia";
+import { buildSearchParams } from "@utils/searchParams";
+import type { APIContext } from "astro";
 import { verifyRequestOrigin } from "lucia";
 import { createOAuthAPIClient } from "masto";
 
 const CODE_KEY = "code";
-const CODE_VERIFIER_KEY = "code_verifier";
-const STATE_KEY = "state";
 
-const COOKIE_OPTIONS: AstroCookieSetOptions = {
-  httpOnly: true,
-  maxAge: 60 * 10, // 10 min
-  path: "/",
-  secure: import.meta.env.PROD,
-};
-
-export const createAuthorizationUrl = async (
-  context: APIContext,
-): Promise<string> => {
-  const state = generateState();
-  const codeVerifier = generateCodeVerifier();
-
-  const url = await client.createAuthorizationURL({
-    state,
-    codeVerifier,
-    scopes: ["read"],
+export const createAuthorizationUrl = async (): Promise<string> => {
+  const params = buildSearchParams({
+    response_type: "code",
+    client_id: import.meta.env.MASTODON_CLIENT_ID,
+    redirect_uri: import.meta.env.MASTODON_REDIRECT_URL,
+    scope: "read",
   });
 
-  context.cookies.set(STATE_KEY, state, COOKIE_OPTIONS);
-  context.cookies.set(CODE_VERIFIER_KEY, codeVerifier, COOKIE_OPTIONS);
-
-  console.log({ url, state, codeVerifier });
+  const url = new URL(
+    `/oauth/authorize?${params.toString()}`,
+    import.meta.env.MASTODON_URL,
+  );
 
   return url.toString();
 };
@@ -40,12 +28,8 @@ export const validateAuthorizationCode = async (
   context: APIContext,
 ): Promise<Tokens | null> => {
   const code = context.url.searchParams.get(CODE_KEY);
-  const state = context.url.searchParams.get(STATE_KEY);
 
-  const storedState = context.cookies.get(STATE_KEY)?.value;
-  const storedCodeVerifier = context.cookies.get(CODE_VERIFIER_KEY)?.value;
-
-  if (!code || !storedState || !storedCodeVerifier || state !== storedState) {
+  if (!code) {
     return Promise.resolve(null);
   }
 
