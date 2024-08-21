@@ -1,6 +1,8 @@
 ---
 import type { tagTable } from "@server/db";
 import type { InferSelectModel } from "drizzle-orm";
+import CreateTagForm from "./CreateTagForm.astro";
+import TagsListItem from "./TagsListItem.astro";
 
 export type Props = {
 	tags: InferSelectModel<typeof tagTable>[];
@@ -10,9 +12,9 @@ const { tags } = Astro.props;
 ---
 
 <div>
-	<create-tag-form></create-tag-form>
-	AAA
+	<CreateTagForm />
+
 	<ul>
-		{tags.map((tag) => <tags-list-item tag={tag} />)}
+		{tags.map((tag) => <TagsListItem tag={tag} />)}
 	</ul>
 </div>

@@ -18,6 +18,7 @@ const { tag } = Astro.props;
 </tags-li>
 
 <script>
+  import { queryClient } from "@utils/queryClient";
   import { actions } from "astro:actions";
 
   class TagLi extends HTMLElement {
@@ -30,16 +31,16 @@ const { tag } = Astro.props;
       button?.addEventListener("click", async () => {
         button.disabled = true;
 
-        const { data, error } = await actions.deleteTag({ tagId });
+        const { data } = await actions.deleteTag({ tagId });
 
         if (data) {
+          await queryClient.invalidateQueries({ queryKey: ["tags"] });
+
           this.remove();
           return;
         }
 
         button.disabled = false;
-
-        console.log({ data, error });
       });
     }
   }

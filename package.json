@@ -23,6 +23,7 @@
     "@lit/context": "^1.1.2",
     "@lit/task": "^1.0.1",
     "@lucia-auth/adapter-drizzle": "^1.1.0",
+    "@tanstack/query-core": "^5.52.0",
     "@webcomponents/template-shadowroot": "^0.2.1",
     "arctic": "^1.9.2",
     "astro": "^4.14.2",
