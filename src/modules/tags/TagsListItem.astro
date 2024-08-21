@@ -1,0 +1,48 @@
+---
+import type { InferSelectModel } from "drizzle-orm";
+import type { tagTable } from "@server/db";
+import { buttonRecipe } from "@components/Button/Button.styles";
+
+export type Props = {
+  tag: InferSelectModel<typeof tagTable>;
+};
+
+const { tag } = Astro.props;
+---
+
+<tags-li data-tag-id={tag.id}>
+  <span>{tag.name}</span>
+  <button class={buttonRecipe({ color: "error", size: "sm" })} type="button">
+    Delete
+  </button>
+</tags-li>
+
+<script>
+  import { actions } from "astro:actions";
+
+  class TagLi extends HTMLElement {
+    constructor() {
+      super();
+
+      const tagId = this.dataset["tag-id"]!;
+      const button = this.querySelector("button");
+
+      button?.addEventListener("click", async () => {
+        button.disabled = true;
+
+        const { data, error } = await actions.deleteTag({ tagId });
+
+        if (data) {
+          this.remove();
+          return;
+        }
+
+        button.disabled = false;
+
+        console.log({ data, error });
+      });
+    }
+  }
+
+  customElements.define("tags-li", TagLi, { extends: "li" });
+</script>
