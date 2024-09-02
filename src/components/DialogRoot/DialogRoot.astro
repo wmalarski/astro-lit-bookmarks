@@ -1,0 +1,26 @@
+---
+
+---
+
+<dialog-root>
+    <slot />
+</dialog-root>
+
+<script>
+    class DialogRoot extends HTMLDialogElement {
+        constructor() {
+            super();
+
+            const dialog = this.querySelector<HTMLDialogElement>("dialog");
+            const trigger = this.querySelector<HTMLButtonElement>(
+                "[data-dialog-trigger]",
+            );
+
+            trigger?.addEventListener("click", async () => {
+                dialog?.showModal();
+            });
+        }
+    }
+
+    customElements.define("dialog-root", DialogRoot, { extends: "dialog" });
+</script>

@@ -1,49 +1,57 @@
 ---
-import type { InferSelectModel } from "drizzle-orm";
-import type { tagTable } from "@server/db";
 import { buttonRecipe } from "@components/Button/Button.styles";
+import DialogRoot from "@components/DialogRoot/DialogRoot.astro";
+import {
+  dialogActionsRecipe,
+  dialogContainerRecipe,
+  dialogContentRecipe,
+} from "@components/DialogRoot/DialogRoot.styles";
+import type { tagTable } from "@server/db";
+import { actions } from "astro:actions";
+import type { InferSelectModel } from "drizzle-orm";
 
 export type Props = {
   tag: InferSelectModel<typeof tagTable>;
 };
 
 const { tag } = Astro.props;
+const formId = crypto.randomUUID();
 ---
 
-<tags-li data-tag-id={tag.id}>
+<li>
   <span>{tag.name}</span>
-  <button class={buttonRecipe({ color: "error", size: "sm" })} type="button">
-    Delete
-  </button>
-</tags-li>
-
-<script>
-  import { queryClient } from "@utils/queryClient";
-  import { actions } from "astro:actions";
-
-  class TagLi extends HTMLElement {
-    constructor() {
-      super();
-
-      const tagId = this.dataset["tag-id"]!;
-      const button = this.querySelector("button");
-
-      button?.addEventListener("click", async () => {
-        button.disabled = true;
-
-        const { data } = await actions.deleteTag({ tagId });
-
-        if (data) {
-          await queryClient.invalidateQueries({ queryKey: ["tags"] });
-
-          this.remove();
-          return;
-        }
-
-        button.disabled = false;
-      });
-    }
-  }
-
-  customElements.define("tags-li", TagLi, { extends: "li" });
-</script>
+  <DialogRoot>
+    <button
+      data-dialog-trigger
+      type="button"
+      class={buttonRecipe({ color: "error", size: "sm" })}
+    >
+      Delete
+    </button>
+    <dialog class={dialogContainerRecipe()}>
+      <div class={dialogContentRecipe()}>
+        <form id={formId} method="POST" action={actions.deleteTag}>
+          <input name="tagId" value={tag.id} type="hidden" />
+          <button
+            class={buttonRecipe({ color: "error", size: "sm" })}
+            type="submit"
+          >
+            Delete
+          </button>
+        </form>
+        <footer class={dialogActionsRecipe()}>
+          <form method="dialog">
+            <button type="submit" class={buttonRecipe({})}>Close</button>
+          </form>
+          <button
+            class={buttonRecipe({ size: "sm", color: "error" })}
+            form={formId}
+            type="submit"
+          >
+            Submit
+          </button>
+        </footer>
+      </div>
+    </dialog>
+  </DialogRoot>
+</li>

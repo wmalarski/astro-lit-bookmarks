@@ -11,7 +11,8 @@ import {
 } from "@server/data/bookmarks";
 import { matchBookmarks } from "@server/data/matchBookmarks";
 import { listMastoBookmarks } from "@server/masto/helpers";
-import { defineAction, z } from "astro:actions";
+import { defineAction } from "astro:actions";
+import { z } from "astro:schema";
 
 export const bookmarks = {
   createBookmarkTags: defineAction({

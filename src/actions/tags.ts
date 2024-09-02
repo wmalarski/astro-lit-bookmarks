@@ -1,5 +1,6 @@
 import { createTag, deleteTag, updateTag } from "@server/data/tags";
-import { defineAction, z } from "astro:actions";
+import { z } from "astro/zod";
+import { defineAction } from "astro:actions";
 
 export const tags = {
   createTag: defineAction({
@@ -13,7 +14,7 @@ export const tags = {
     handler: (args, context) => updateTag(context, args),
   }),
   deleteTag: defineAction({
-    accept: "json",
+    accept: "form",
     input: z.object({ tagId: z.string() }),
     handler: (args, context) => deleteTag(context, args),
   }),
