@@ -1,0 +1,43 @@
+---
+import { buttonRecipe } from "@components/Button/Button.styles";
+import DialogRoot from "@components/DialogRoot/DialogRoot.astro";
+import {
+  dialogActionsRecipe,
+  dialogContainerRecipe,
+  dialogContentRecipe,
+} from "@components/DialogRoot/DialogRoot.styles";
+import type { MatchBookmarksResult } from "@server/data/matchBookmarks";
+import { actions } from "astro:actions";
+
+export type Props = {
+  item: MatchBookmarksResult;
+};
+
+const { item } = Astro.props;
+---
+
+<DialogRoot>
+  <button
+    data-dialog-trigger
+    type="button"
+    class={buttonRecipe({ color: "error", size: "sm" })}
+  >
+    Delete
+  </button>
+  <dialog class={dialogContainerRecipe()}>
+    <div class={dialogContentRecipe()}>
+      <p>Delete bookmark?</p>
+      <footer class={dialogActionsRecipe()}>
+        <form method="dialog">
+          <button class={buttonRecipe()}>Close</button>
+        </form>
+        <form method="POST" action={actions.removeBookmark}>
+          <input name="bookmarkId" value={item.bookmark?.id} type="hidden" />
+          <button class={buttonRecipe({ size: "sm", color: "error" })}>
+            Submit
+          </button>
+        </form>
+      </footer>
+    </div>
+  </dialog>
+</DialogRoot>

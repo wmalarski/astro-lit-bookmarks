@@ -5,8 +5,7 @@ import { BookmarkList } from "@modules/bookmarks/BookmarkList";
 import { TypedBookmarkProvider } from "@modules/bookmarks/BookmarkProvider";
 import Navbar from "@modules/common/Navbar.astro";
 import { tagsContextDefault } from "@modules/tags/TagsContext";
-import { TagsList } from "@modules/tags/TagsList";
-import AstroTagsList from "@modules/tags/TagsList.astro";
+import TagsList from "@modules/tags/TagsList.astro";
 import { TypedTagsProvider } from "@modules/tags/TagsProvider";
 import { findBookmarks, findBookmarksByMastoIds } from "@server/data/bookmarks";
 import { matchBookmarks } from "@server/data/matchBookmarks";
@@ -73,8 +72,7 @@ const matchedBookmarks = matchBookmarks({
             class="block sticky top-0 border-x-[1px] border-x-base-content"
           >
             <BookmarkFilters showDone={showDone} />
-            <TagsList client:only="lit" />
-            <AstroTagsList tags={tags} />
+            <TagsList tags={tags} />
           </aside>
         </div>
       </main>

@@ -15,7 +15,6 @@ export type Props = {
 };
 
 const { tag } = Astro.props;
-const formId = crypto.randomUUID();
 ---
 
 <li>
@@ -30,26 +29,17 @@ const formId = crypto.randomUUID();
     </button>
     <dialog class={dialogContainerRecipe()}>
       <div class={dialogContentRecipe()}>
-        <form id={formId} method="POST" action={actions.deleteTag}>
-          <input name="tagId" value={tag.id} type="hidden" />
-          <button
-            class={buttonRecipe({ color: "error", size: "sm" })}
-            type="submit"
-          >
-            Delete
-          </button>
-        </form>
+        <p>Delete tag {tag.name}?</p>
         <footer class={dialogActionsRecipe()}>
           <form method="dialog">
-            <button type="submit" class={buttonRecipe({})}>Close</button>
+            <button class={buttonRecipe()}>Close</button>
           </form>
-          <button
-            class={buttonRecipe({ size: "sm", color: "error" })}
-            form={formId}
-            type="submit"
-          >
-            Submit
-          </button>
+          <form method="POST" action={actions.deleteTag}>
+            <input name="tagId" value={tag.id} type="hidden" />
+            <button class={buttonRecipe({ size: "sm", color: "error" })}>
+              Submit
+            </button>
+          </form>
         </footer>
       </div>
     </dialog>
