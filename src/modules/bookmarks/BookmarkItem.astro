@@ -1,0 +1,53 @@
+---
+import type { MatchBookmarksResult } from "@server/data/matchBookmarks";
+import type { tagTable } from "@server/db";
+import type { InferSelectModel } from "drizzle-orm";
+import RemoveBookmarkButton from "./RemoveBookmarkButton.astro";
+import ShareBookmarkButton from "./ShareBookmarkButton.astro";
+
+export type Props = {
+    item: MatchBookmarksResult;
+    tagsMap: Map<string, InferSelectModel<typeof tagTable>>;
+};
+
+const { item, tagsMap } = Astro.props;
+
+const bookmark = item.bookmark;
+const mastoCard = item.mastoBookmark?.card;
+
+const title = bookmark?.title ?? mastoCard?.title ?? "";
+const text = bookmark?.content ?? mastoCard?.description ?? "";
+const url = bookmark?.url ?? item.mastoBookmark?.uri ?? "";
+
+const assignedTags = item.bookmarkTags.flatMap((bookmarkTag) => {
+    const tag = tagsMap.get(bookmarkTag.tagId);
+    return tag ? [{ tag, bookmarkTag }] : [];
+});
+---
+
+<div class="flex flex-col gap-2 p-4 border-b-[1px] border-b-base-content">
+    <strong>{title}</strong>
+    <span>{text}</span>
+    {
+        assignedTags && assignedTags.length > 0 ? (
+            <ul>
+                {assignedTags.map(({ tag, bookmarkTag }) => (
+                    <bookmark-tag tag={tag} bookmarkTag={bookmarkTag} />
+                ))}
+            </ul>
+        ) : null
+    }
+    <bookmark-done-checkbox item={item}></bookmark-done-checkbox>
+    <bookmark-tags-form item={item}></bookmark-tags-form>
+    {
+        !item.mastoBookmark && item.bookmark ? (
+            <RemoveBookmarkButton item={item} />
+        ) : null
+    }
+    <ShareBookmarkButton title={title} text={text} url={url} />
+    {
+        item.mastoBookmark ? (
+            <masto-bookmark-item mastoBookmark={item.mastoBookmark} />
+        ) : null
+    }
+</div>

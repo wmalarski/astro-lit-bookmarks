@@ -7,7 +7,7 @@
 </dialog-root>
 
 <script>
-    class DialogRoot extends HTMLDialogElement {
+    class DialogRoot extends HTMLElement {
         constructor() {
             super();
 
@@ -22,5 +22,5 @@
         }
     }
 
-    customElements.define("dialog-root", DialogRoot, { extends: "dialog" });
+    customElements.define("dialog-root", DialogRoot);
 </script>

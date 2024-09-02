@@ -1,0 +1,21 @@
+---
+import type { MatchBookmarksResult } from "@server/data/matchBookmarks";
+
+export type Props = {
+  bookmarks: MatchBookmarksResult[];
+};
+
+const { bookmarks } = Astro.props;
+---
+
+<div class="border-l-[1px] border-l-base-content">
+  <ul class="flex flex-col">
+    {
+      bookmarks.map((bookmark) => (
+        <li>
+          <bookmark-item item={bookmark} />
+        </li>
+      ))
+    }
+  </ul>
+</div>
