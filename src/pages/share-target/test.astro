@@ -4,19 +4,19 @@ import Layout from "@layouts/Layout.astro";
 ---
 
 <Layout title="Test">
-    <form method="post" action="/share-target" class="flex flex-col gap-4">
-        <label>
-            Title
-            <input name="title" />
-        </label>
-        <label>
-            Text
-            <input name="text" />
-        </label>
-        <label>
-            Url
-            <input name="url" type="url" />
-        </label>
-        <button class={buttonRecipe()} type="submit">Submit</button>
-    </form>
+  <form method="post" action="/share-target" class="flex flex-col gap-4">
+    <label>
+      Title
+      <input name="title" />
+    </label>
+    <label>
+      Text
+      <input name="text" />
+    </label>
+    <label>
+      Url
+      <input name="url" type="url" />
+    </label>
+    <button class={buttonRecipe()} type="submit">Submit</button>
+  </form>
 </Layout>

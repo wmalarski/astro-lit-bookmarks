@@ -1,0 +1,28 @@
+---
+import type { tagTable } from "@server/db";
+import { actions } from "astro:actions";
+import type { InferSelectModel } from "drizzle-orm";
+import type { MatchBookmarksResult } from "../../server/data/matchBookmarks";
+
+export type Props = {
+  item: MatchBookmarksResult;
+  tags: InferSelectModel<typeof tagTable>[];
+};
+
+const { item, tags } = Astro.props;
+
+const tagsIds = new Set(
+  item.bookmarkTags.map((bookmarkTag) => bookmarkTag.tagId),
+);
+const unassignedTags = tags.filter((tag) => !tagsIds.has(tag.id));
+---
+
+<form method="post" action={actions.createBookmarkTags}>
+  <label>
+    Tags
+    <select name="tagIds">
+      <option value="" disabled selected>Please choose</option>
+      {unassignedTags.map((tag) => <option value={tag.id}>{tag.name}</option>)}
+    </select>
+  </label>
+</form>

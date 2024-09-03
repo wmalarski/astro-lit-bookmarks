@@ -1,0 +1,48 @@
+---
+import { buttonRecipe } from "@components/Button/Button.styles";
+import DialogRoot from "@components/DialogRoot/DialogRoot.astro";
+import {
+  dialogActionsRecipe,
+  dialogContainerRecipe,
+  dialogContentRecipe,
+} from "@components/DialogRoot/DialogRoot.styles";
+import type { bookmarkTagTable, tagTable } from "@server/db";
+import { actions } from "astro:actions";
+import type { InferSelectModel } from "drizzle-orm";
+
+export type Props = {
+  tag: InferSelectModel<typeof tagTable>;
+  bookmarkTag: InferSelectModel<typeof bookmarkTagTable>;
+};
+
+const { tag, bookmarkTag } = Astro.props;
+---
+
+<li>
+  <span>{tag.name}</span>
+  <DialogRoot>
+    <button
+      data-dialog-trigger
+      type="button"
+      class={buttonRecipe({ color: "error", size: "sm" })}
+    >
+      Delete
+    </button>
+    <dialog class={dialogContainerRecipe()}>
+      <div class={dialogContentRecipe()}>
+        <p>Delete bookmark tag {tag.name}?</p>
+        <footer class={dialogActionsRecipe()}>
+          <form method="dialog">
+            <button class={buttonRecipe()}>Close</button>
+          </form>
+          <form method="POST" action={actions.removeBookmarkTag}>
+            <input name="bookmarkTagId" value={bookmarkTag.id} type="hidden" />
+            <button class={buttonRecipe({ size: "sm", color: "error" })}>
+              Submit
+            </button>
+          </form>
+        </footer>
+      </div>
+    </dialog>
+  </DialogRoot>
+</li>

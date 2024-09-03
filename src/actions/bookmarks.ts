@@ -16,7 +16,7 @@ import { z } from "astro:schema";
 
 export const bookmarks = {
   createBookmarkTags: defineAction({
-    accept: "json",
+    accept: "form",
     input: z.object({
       bookmarkId: z.string().optional(),
       mastoBookmarkId: z.string().optional(),

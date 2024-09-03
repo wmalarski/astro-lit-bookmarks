@@ -2,40 +2,40 @@
 import { buttonRecipe } from "@components/Button/Button.styles";
 
 export type Props = {
-    title: string;
-    text: string;
-    url: string;
+  title: string;
+  text: string;
+  url: string;
 };
 
 const { url, text, title } = Astro.props;
 ---
 
 <share-bookmark-button
-    type="button"
-    class={buttonRecipe()}
-    url={url}
-    text={text}
-    title={title}
+  type="button"
+  class={buttonRecipe()}
+  url={url}
+  text={text}
+  title={title}
 >
-    Share
+  Share
 </share-bookmark-button>
 
 <script>
-    class ShareBookmarkButton extends HTMLButtonElement {
-        constructor() {
-            super();
+  class ShareBookmarkButton extends HTMLButtonElement {
+    constructor() {
+      super();
 
-            this?.addEventListener("click", async () => {
-                navigator.share({
-                    url: this.getAttribute("url")!,
-                    text: this.getAttribute("text")!,
-                    title: this.getAttribute("title")!,
-                });
-            });
-        }
+      this?.addEventListener("click", async () => {
+        navigator.share({
+          url: this.getAttribute("url")!,
+          text: this.getAttribute("text")!,
+          title: this.getAttribute("title")!,
+        });
+      });
     }
+  }
 
-    customElements.define("share-bookmark-button", ShareBookmarkButton, {
-        extends: "button",
-    });
+  customElements.define("share-bookmark-button", ShareBookmarkButton, {
+    extends: "button",
+  });
 </script>

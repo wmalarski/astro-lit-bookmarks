@@ -43,6 +43,8 @@ const matchedBookmarks = matchBookmarks({
   mastoBookmarks,
   showDone,
 });
+
+const tagsMap = new Map(tags.map((tag) => [tag.id, tag]));
 ---
 
 <Layout title="Welcome to Astro.">
@@ -51,7 +53,7 @@ const matchedBookmarks = matchBookmarks({
     value={{
       ...tagsContextDefault,
       tags,
-      tagsMap: new Map(tags.map((tag) => [tag.id, tag])),
+      tagsMap,
     }}
   >
     <TypedBookmarkProvider
@@ -69,7 +71,7 @@ const matchedBookmarks = matchBookmarks({
 
         <div class="container grid grid-cols-[2fr_1fr] max-w-5xl my-0 mx-auto">
           <BookmarkList client:only="lit" />
-          <AstroBookmarkList bookmarks={matchedBookmarks} />
+          <AstroBookmarkList bookmarks={matchedBookmarks} tagsMap={tagsMap} />
           <aside
             class="block sticky top-0 border-x-[1px] border-x-base-content"
           >

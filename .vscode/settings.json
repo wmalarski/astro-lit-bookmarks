@@ -13,6 +13,8 @@
     "vanillajs",
     "webcomponents"
   ],
+  "editor.indentSize": "tabSize",
+  "editor.tabSize": 2,
   "editor.defaultFormatter": "biomejs.biome",
   "editor.codeActionsOnSave": {
     "quickfix.biome": "always",

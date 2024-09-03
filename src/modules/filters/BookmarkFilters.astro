@@ -2,16 +2,16 @@
 import { buttonRecipe } from "@components/Button/Button.styles";
 
 interface Props {
-    showDone: boolean;
+  showDone: boolean;
 }
 
 const { showDone } = Astro.props;
 ---
 
 <form class="flex flex-col gap-4" method="get">
-    <label>
-        <input name="done" type="checkbox" checked={showDone} />
-        Show Done
-    </label>
-    <button class={buttonRecipe()} type="submit">Filter</button>
+  <label>
+    <input name="done" type="checkbox" checked={showDone} />
+    Show Done
+  </label>
+  <button class={buttonRecipe()} type="submit">Filter</button>
 </form>

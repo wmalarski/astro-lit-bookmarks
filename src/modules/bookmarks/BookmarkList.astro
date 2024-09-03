@@ -1,11 +1,15 @@
 ---
 import type { MatchBookmarksResult } from "@server/data/matchBookmarks";
+import type { tagTable } from "@server/db";
+import type { InferSelectModel } from "drizzle-orm";
+import BookmarkItem from "./BookmarkItem.astro";
 
 export type Props = {
   bookmarks: MatchBookmarksResult[];
+  tagsMap: Map<string, InferSelectModel<typeof tagTable>>;
 };
 
-const { bookmarks } = Astro.props;
+const { bookmarks, tagsMap } = Astro.props;
 ---
 
 <div class="border-l-[1px] border-l-base-content">
@@ -13,7 +17,7 @@ const { bookmarks } = Astro.props;
     {
       bookmarks.map((bookmark) => (
         <li>
-          <bookmark-item item={bookmark} />
+          <BookmarkItem tagsMap={tagsMap} item={bookmark} />
         </li>
       ))
     }
