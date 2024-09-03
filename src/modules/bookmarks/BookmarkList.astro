@@ -7,9 +7,10 @@ import BookmarkItem from "./BookmarkItem.astro";
 export type Props = {
   bookmarks: MatchBookmarksResult[];
   tagsMap: Map<string, InferSelectModel<typeof tagTable>>;
+  tags: InferSelectModel<typeof tagTable>[];
 };
 
-const { bookmarks, tagsMap } = Astro.props;
+const { bookmarks, tagsMap, tags } = Astro.props;
 ---
 
 <div class="border-l-[1px] border-l-base-content">
@@ -17,7 +18,7 @@ const { bookmarks, tagsMap } = Astro.props;
     {
       bookmarks.map((bookmark) => (
         <li>
-          <BookmarkItem tagsMap={tagsMap} item={bookmark} />
+          <BookmarkItem tagsMap={tagsMap} tags={tags} item={bookmark} />
         </li>
       ))
     }

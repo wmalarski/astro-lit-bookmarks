@@ -1,4 +1,5 @@
 ---
+import { buttonRecipe } from "@components/Button/Button.styles";
 import type { tagTable } from "@server/db";
 import { actions } from "astro:actions";
 import type { InferSelectModel } from "drizzle-orm";
@@ -18,6 +19,8 @@ const unassignedTags = tags.filter((tag) => !tagsIds.has(tag.id));
 ---
 
 <form method="post" action={actions.createBookmarkTags}>
+  <input name="bookmarkId" value={item.bookmark?.id} type="hidden" />
+  <input name="mastoBookmarkId" value={item.mastoBookmark?.id} type="hidden" />
   <label>
     Tags
     <select name="tagIds">
@@ -25,4 +28,5 @@ const unassignedTags = tags.filter((tag) => !tagsIds.has(tag.id));
       {unassignedTags.map((tag) => <option value={tag.id}>{tag.name}</option>)}
     </select>
   </label>
+  <button class={buttonRecipe()}>Save</button>
 </form>

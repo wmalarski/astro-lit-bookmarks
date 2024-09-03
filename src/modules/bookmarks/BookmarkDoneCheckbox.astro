@@ -1,0 +1,34 @@
+---
+import type { MatchBookmarksResult } from "../../server/data/matchBookmarks";
+
+export type Props = {
+  item: MatchBookmarksResult;
+};
+---
+
+<form @change="${this.onChange}">
+  <label>
+    <alb-checkbox name="done" ?checked="${this.item.bookmark?.done}"
+    ></alb-checkbox>
+    Done
+  </label>
+</form>
+<!-- `;
+  }
+
+  onChange() {
+    this.dispatchEvent(
+      new CheckDoneBookmarkEvent({
+        done: this.tagInput.checked,
+        bookmarkId: this.item.bookmark?.id,
+        mastoBookmarkId: this.item.mastoBookmark?.id,
+      }),
+    );
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    [BookmarkDoneCheckbox.elementName]: BookmarkDoneCheckbox;
+  }
+} -->

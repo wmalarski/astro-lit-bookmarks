@@ -3,15 +3,17 @@ import type { MatchBookmarksResult } from "@server/data/matchBookmarks";
 import type { tagTable } from "@server/db";
 import type { InferSelectModel } from "drizzle-orm";
 import BookmarkTag from "./BookmarkTag.astro";
+import BookmarkTagsForm from "./BookmarkTagsForm.astro";
 import RemoveBookmarkButton from "./RemoveBookmarkButton.astro";
 import ShareBookmarkButton from "./ShareBookmarkButton.astro";
 
 export type Props = {
   item: MatchBookmarksResult;
+  tags: InferSelectModel<typeof tagTable>[];
   tagsMap: Map<string, InferSelectModel<typeof tagTable>>;
 };
 
-const { item, tagsMap } = Astro.props;
+const { item, tagsMap, tags } = Astro.props;
 
 const bookmark = item.bookmark;
 const mastoCard = item.mastoBookmark?.card;
@@ -39,7 +41,7 @@ const assignedTags = item.bookmarkTags.flatMap((bookmarkTag) => {
     ) : null
   }
   <bookmark-done-checkbox item={item}></bookmark-done-checkbox>
-  <bookmark-tags-form item={item}></bookmark-tags-form>
+  <BookmarkTagsForm item={item} tags={tags} />
   {
     !item.mastoBookmark && item.bookmark ? (
       <RemoveBookmarkButton item={item} />
