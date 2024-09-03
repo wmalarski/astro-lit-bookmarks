@@ -1,0 +1,13 @@
+---
+import type { PreviewCard } from "@server/masto/types";
+
+export type Props = {
+  card: PreviewCard;
+};
+
+const { card } = Astro.props;
+---
+
+<a href={card.url}>
+  <img class="card" src={card.image} alt={card.title} />
+</a>

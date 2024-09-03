@@ -1,0 +1,21 @@
+---
+import type { Status } from "@server/masto/types";
+import MastoBookmarkCard from "./MastoBookmarkCard.astro";
+
+export type Props = {
+  mastoBookmark: Status;
+};
+
+const { mastoBookmark } = Astro.props;
+---
+
+<div class="flex flex-col gap-2">
+  <span>{mastoBookmark.created_at}</span>
+  <span>{mastoBookmark.uri}</span>
+  <div>
+    <span>{mastoBookmark.account.display_name}</span>
+    <img class="avatar w-8 h-8" src={mastoBookmark.account.avatar_static} />
+  </div>
+  <div set:html={mastoBookmark.content} />
+  {mastoBookmark.card?.image && <MastoBookmarkCard card={mastoBookmark.card} />}
+</div>
