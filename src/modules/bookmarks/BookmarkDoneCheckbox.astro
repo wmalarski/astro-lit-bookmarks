@@ -1,15 +1,18 @@
 ---
+import { checkboxRecipe } from "@components/Checkbox/Checkbox.styles";
+import { actions } from "astro:actions";
 import type { MatchBookmarksResult } from "../../server/data/matchBookmarks";
 
 export type Props = {
   item: MatchBookmarksResult;
 };
+
+const { item } = Astro.props;
 ---
 
-<form @change="${this.onChange}">
+<form method="post" action={actions.updateBookmarkDone}>
   <label>
-    <alb-checkbox name="done" ?checked="${this.item.bookmark?.done}"
-    ></alb-checkbox>
+    <input name="done" checked={item.bookmark?.done} class={checkboxRecipe()} />
     Done
   </label>
 </form>

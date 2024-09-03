@@ -17,11 +17,8 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
-    "@astrojs/lit": "^4.3.0",
     "@astrojs/node": "^8.3.3",
     "@astrojs/tailwind": "^5.1.0",
-    "@lit/context": "^1.1.2",
-    "@lit/task": "^1.0.1",
     "@lucia-auth/adapter-drizzle": "^1.1.0",
     "@tanstack/query-core": "^5.53.1",
     "@webcomponents/template-shadowroot": "^0.2.1",
@@ -30,7 +27,6 @@
     "better-sqlite3": "^11.2.1",
     "class-variance-authority": "^0.7.0",
     "drizzle-orm": "^0.33.0",
-    "lit": "^3.2.0",
     "lucia": "^3.2.0",
     "masto": "^6.8.0",
     "oslo": "^1.2.1",
