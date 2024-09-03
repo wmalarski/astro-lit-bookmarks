@@ -1,5 +1,6 @@
 ---
 import { buttonRecipe } from "@recipes/Button.recipe";
+import { selectRecipe } from "@recipes/Select.recipe";
 import type { tagTable } from "@server/db";
 import { actions } from "astro:actions";
 import type { InferSelectModel } from "drizzle-orm";
@@ -23,8 +24,14 @@ const unassignedTags = tags.filter((tag) => !tagsIds.has(tag.id));
   <input name="mastoBookmarkId" value={item.mastoBookmark?.id} type="hidden" />
   <label>
     Tags
-    <select name="tagIds">
-      <option value="" disabled selected>Please choose</option>
+    <select
+      required
+      value=""
+      class={selectRecipe({ size: "sm", variant: "bordered" })}
+      name="tagIds"
+      disabled={unassignedTags.length < 1}
+    >
+      <option value="" disabled>Please choose</option>
       {unassignedTags.map((tag) => <option value={tag.id}>{tag.name}</option>)}
     </select>
   </label>

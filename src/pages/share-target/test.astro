@@ -1,22 +1,49 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import { buttonRecipe } from "@recipes/Button.recipe";
+import { formControlRecipe } from "@recipes/FormControl.recipe";
+import { labelRecipe, labelTextRecipe } from "@recipes/Label.recipe";
+import { textFieldRecipe } from "@recipes/TextField.recipe";
 ---
 
 <Layout title="Test">
   <form method="post" action="/share-target" class="flex flex-col gap-4">
-    <label>
-      Title
-      <input name="title" />
+    <label class={formControlRecipe()}>
+      <div class={labelRecipe()}>
+        <span class={labelTextRecipe()}>Title</span>
+      </div>
+      <input
+        class={textFieldRecipe({ variant: "bordered", size: "sm" })}
+        type="text"
+        name="title"
+        required
+      />
     </label>
-    <label>
-      Text
-      <input name="text" />
+
+    <label class={formControlRecipe()}>
+      <div class={labelRecipe()}>
+        <span class={labelTextRecipe()}>Text</span>
+      </div>
+      <input
+        class={textFieldRecipe({ variant: "bordered", size: "sm" })}
+        type="text"
+        name="text"
+        required
+      />
     </label>
-    <label>
-      Url
-      <input name="url" type="url" />
+
+    <label class={formControlRecipe()}>
+      <div class={labelRecipe()}>
+        <span class={labelTextRecipe()}>Url</span>
+      </div>
+      <input
+        class={textFieldRecipe({ variant: "bordered", size: "sm" })}
+        type="url"
+        name="url"
+        required
+      />
     </label>
+
     <button class={buttonRecipe()} type="submit">Submit</button>
   </form>
 </Layout>

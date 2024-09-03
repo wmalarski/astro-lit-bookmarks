@@ -1,10 +1,22 @@
 ---
+import { formControlRecipe } from "@recipes/FormControl.recipe";
+import { labelRecipe, labelTextRecipe } from "@recipes/Label.recipe";
+import { textFieldRecipe } from "@recipes/TextField.recipe";
 import { actions } from "astro:actions";
 ---
 
-<form method="POST" action={actions.createTag}>
-  <label>
-    <span>New tag</span>
-    <input name="name" autofocus autocomplete="off" />
+<form method="post" action={actions.createTag}>
+  <label class={formControlRecipe()}>
+    <div class={labelRecipe()}>
+      <span class={labelTextRecipe()}>New tag</span>
+    </div>
+    <input
+      class={textFieldRecipe({ variant: "bordered", size: "sm" })}
+      type="text"
+      name="name"
+      autofocus
+      autocomplete="off"
+      required
+    />
   </label>
 </form>

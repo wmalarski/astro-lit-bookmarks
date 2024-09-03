@@ -35,7 +35,7 @@ const { tag, bookmarkTag } = Astro.props;
           <form method="dialog">
             <button class={buttonRecipe()}>Close</button>
           </form>
-          <form method="POST" action={actions.removeBookmarkTag}>
+          <form method="post" action={actions.removeBookmarkTag}>
             <input name="bookmarkTagId" value={bookmarkTag.id} type="hidden" />
             <button class={buttonRecipe({ size: "sm", color: "error" })}>
               Submit

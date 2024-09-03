@@ -1,5 +1,8 @@
 ---
 import { buttonRecipe } from "@recipes/Button.recipe";
+import { checkboxRecipe } from "@recipes/Checkbox.recipe";
+import { formControlRecipe } from "@recipes/FormControl.recipe";
+import { labelRecipe, labelTextRecipe } from "@recipes/Label.recipe";
 
 interface Props {
   showDone: boolean;
@@ -9,9 +12,16 @@ const { showDone } = Astro.props;
 ---
 
 <form class="flex flex-col gap-4" method="get">
-  <label>
-    <input name="done" type="checkbox" checked={showDone} />
-    Show Done
+  <label class={formControlRecipe()}>
+    <div class={labelRecipe()}>
+      <span class={labelTextRecipe()}>Show Done</span>
+    </div>
+    <input
+      name="done"
+      type="checkbox"
+      checked={showDone}
+      class={checkboxRecipe()}
+    />
   </label>
   <button class={buttonRecipe()} type="submit">Filter</button>
 </form>

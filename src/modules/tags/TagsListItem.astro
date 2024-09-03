@@ -34,7 +34,7 @@ const { tag } = Astro.props;
           <form method="dialog">
             <button class={buttonRecipe()}>Close</button>
           </form>
-          <form method="POST" action={actions.deleteTag}>
+          <form method="post" action={actions.deleteTag}>
             <input name="tagId" value={tag.id} type="hidden" />
             <button class={buttonRecipe({ size: "sm", color: "error" })}>
               Submit

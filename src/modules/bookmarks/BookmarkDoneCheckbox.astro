@@ -1,5 +1,7 @@
 ---
 import { checkboxRecipe } from "@recipes/Checkbox.recipe";
+import { formControlRecipe } from "@recipes/FormControl.recipe";
+import { labelRecipe, labelTextRecipe } from "@recipes/Label.recipe";
 import { actions } from "astro:actions";
 import type { MatchBookmarksResult } from "../../server/data/matchBookmarks";
 
@@ -11,9 +13,16 @@ const { item } = Astro.props;
 ---
 
 <form method="post" action={actions.updateBookmarkDone}>
-  <label>
-    <input name="done" checked={item.bookmark?.done} class={checkboxRecipe()} />
-    Done
+  <label class={formControlRecipe()}>
+    <input
+      name="done"
+      checked={item.bookmark?.done}
+      class={checkboxRecipe()}
+      type="checkbox"
+    />
+    <div class={labelRecipe()}>
+      <span class={labelTextRecipe()}>Done</span>
+    </div>
   </label>
 </form>
 <!-- `;
