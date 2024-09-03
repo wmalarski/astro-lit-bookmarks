@@ -2,10 +2,10 @@
 import DialogRoot from "@components/DialogRoot/DialogRoot.astro";
 import { buttonRecipe } from "@recipes/Button.recipe";
 import {
-  dialogActionsRecipe,
-  dialogContainerRecipe,
-  dialogContentRecipe,
-} from "@recipes/DialogRoot.recipe";
+  modalActionsRecipe,
+  modalContainerRecipe,
+  modalContentRecipe,
+} from "@recipes/Modal.recipe";
 import type { MatchBookmarksResult } from "@server/data/matchBookmarks";
 import { actions } from "astro:actions";
 
@@ -24,10 +24,10 @@ const { item } = Astro.props;
   >
     Delete
   </button>
-  <dialog class={dialogContainerRecipe()}>
-    <div class={dialogContentRecipe()}>
+  <dialog class={modalContainerRecipe()}>
+    <div class={modalContentRecipe()}>
       <p>Delete bookmark?</p>
-      <footer class={dialogActionsRecipe()}>
+      <footer class={modalActionsRecipe()}>
         <form method="dialog">
           <button class={buttonRecipe()}>Close</button>
         </form>
