@@ -1,8 +1,8 @@
 import { validateContextSession } from "@server/auth/middleware";
 import type { Status } from "@server/masto/types";
-import type { ActionAPIContext } from "@server/types";
 import { buildSearchParams } from "@utils/searchParams";
 import type { Tokens } from "arctic";
+import type { ActionAPIContext } from "astro:actions";
 import { createRestAPIClient } from "masto";
 
 export const verifyMastoCredentials = (tokens: Tokens) => {

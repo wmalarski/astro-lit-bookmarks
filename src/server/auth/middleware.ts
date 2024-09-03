@@ -1,7 +1,6 @@
 import { UNAUTHORIZED_ERROR } from "@server/errors";
-import type { ActionAPIContext } from "@server/types";
 import type { APIContext } from "astro";
-import { ActionError } from "astro:actions";
+import { type ActionAPIContext, ActionError } from "astro:actions";
 import { lucia } from "./lucia";
 import { setBlankSessionCookie } from "./session";
 
