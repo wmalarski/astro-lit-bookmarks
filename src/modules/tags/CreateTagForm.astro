@@ -1,42 +1,10 @@
 ---
-
+import { actions } from "astro:actions";
 ---
 
-<add-tag-form>
+<form method="POST" action={actions.createTag}>
   <label>
     <span>New tag</span>
     <input name="name" autofocus autocomplete="off" />
   </label>
-</add-tag-form>
-
-<script>
-  import { queryClient } from "@utils/queryClient";
-  import { actions } from "astro:actions";
-
-  class AddTagForm extends HTMLElement {
-    constructor() {
-      super();
-
-      const input = this.querySelector("input")!;
-
-      this.addEventListener("submit", async () => {
-        if (input.value.length < 1) {
-          return;
-        }
-
-        input.disabled = true;
-
-        const { data } = await actions.createTag({ name: input.value });
-
-        if (data) {
-          await queryClient.invalidateQueries({ queryKey: ["tags"] });
-        }
-
-        input.disabled = false;
-        input.value = "";
-      });
-    }
-  }
-
-  customElements.define("add-tag-form", AddTagForm, { extends: "form" });
-</script>
+</form>

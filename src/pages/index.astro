@@ -7,12 +7,11 @@ import { findBookmarks, findBookmarksByMastoIds } from "@server/data/bookmarks";
 import { matchBookmarks } from "@server/data/matchBookmarks";
 import { findTags } from "@server/data/tags";
 import { listMastoBookmarks } from "@server/masto/helpers";
-import { paths } from "@utils/paths";
 import { z } from "astro/zod";
 import Layout from "../layouts/Layout.astro";
 
 if (!Astro.locals.session) {
-  return Astro.redirect(paths.login);
+  return Astro.redirect("/login");
 }
 
 const showDone = z.coerce.boolean().parse(Astro.url.searchParams.get("done"));

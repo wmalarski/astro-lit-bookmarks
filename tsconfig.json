@@ -1,17 +1,18 @@
 {
-	"extends": "astro/tsconfigs/strictest",
-	"compilerOptions": {
-		"experimentalDecorators": true,
-		"useDefineForClassFields": false,
-		"baseUrl": ".",
-		"paths": {
-			"@components/*": ["src/components/*"],
-			"@type/*": ["src/type/*"],
-			"@layouts/*": ["src/layouts/*"],
-			"@styles/*": ["src/styles/*"],
-			"@utils/*": ["src/utils/*"],
-			"@server/*": ["src/server/*"],
-			"@modules/*": ["src/modules/*"]
-		}
-	}
+  "extends": "astro/tsconfigs/strictest",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@type/*": ["src/type/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@styles/*": ["src/styles/*"],
+      "@utils/*": ["src/utils/*"],
+      "@server/*": ["src/server/*"],
+      "@modules/*": ["src/modules/*"],
+      "@recipes/*": ["src/recipes/*"]
+    }
+  }
 }

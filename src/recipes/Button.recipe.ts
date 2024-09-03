@@ -1,5 +1,4 @@
-import type { VariantProps } from "class-variance-authority";
-import { twCva } from "@components/utils/twCva";
+import { twCva } from "@utils/twCva";
 
 export const buttonRecipe = twCva("btn no-animation flex items-center gap-1", {
   defaultVariants: {
@@ -46,5 +45,3 @@ export const buttonRecipe = twCva("btn no-animation flex items-center gap-1", {
     },
   },
 });
-
-export type ButtonVariants = VariantProps<typeof buttonRecipe>;

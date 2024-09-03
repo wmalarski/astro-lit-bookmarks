@@ -1,11 +1,11 @@
 ---
-import { buttonRecipe } from "@components/Button/Button.styles";
 import DialogRoot from "@components/DialogRoot/DialogRoot.astro";
+import { buttonRecipe } from "@recipes/Button.recipe";
 import {
   dialogActionsRecipe,
   dialogContainerRecipe,
   dialogContentRecipe,
-} from "@components/DialogRoot/DialogRoot.styles";
+} from "@recipes/DialogRoot.recipe";
 import type { bookmarkTagTable, tagTable } from "@server/db";
 import { actions } from "astro:actions";
 import type { InferSelectModel } from "drizzle-orm";

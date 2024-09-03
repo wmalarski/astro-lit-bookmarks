@@ -1,5 +1,4 @@
-import type { VariantProps } from "class-variance-authority";
-import { twCva } from "@components/utils/twCva";
+import { twCva } from "@utils/twCva";
 
 export const checkboxRecipe = twCva("checkbox", {
   defaultVariants: {
@@ -24,5 +23,3 @@ export const checkboxRecipe = twCva("checkbox", {
     },
   },
 });
-
-export type CheckboxVariants = VariantProps<typeof checkboxRecipe>;
