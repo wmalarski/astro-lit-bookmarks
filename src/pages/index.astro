@@ -1,13 +1,8 @@
 ---
-import { bookmarkContextDefault } from "@modules/bookmarks/BookmarkContext";
-import { BookmarkList } from "@modules/bookmarks/BookmarkList";
-import AstroBookmarkList from "@modules/bookmarks/BookmarkList.astro";
-import { TypedBookmarkProvider } from "@modules/bookmarks/BookmarkProvider";
+import BookmarkList from "@modules/bookmarks/BookmarkList.astro";
 import Navbar from "@modules/common/Navbar.astro";
 import BookmarkFilters from "@modules/filters/BookmarkFilters.astro";
-import { tagsContextDefault } from "@modules/tags/TagsContext";
 import TagsList from "@modules/tags/TagsList.astro";
-import { TypedTagsProvider } from "@modules/tags/TagsProvider";
 import { findBookmarks, findBookmarksByMastoIds } from "@server/data/bookmarks";
 import { matchBookmarks } from "@server/data/matchBookmarks";
 import { findTags } from "@server/data/tags";
@@ -24,7 +19,7 @@ const showDone = z.coerce.boolean().parse(Astro.url.searchParams.get("done"));
 
 const tags = findTags(Astro);
 
-const { mastoBookmarks, minId, maxId } = await listMastoBookmarks(Astro, {
+const { mastoBookmarks } = await listMastoBookmarks(Astro, {
   maxId: null,
 });
 
@@ -43,47 +38,18 @@ const matchedBookmarks = matchBookmarks({
   mastoBookmarks,
   showDone,
 });
-
-const tagsMap = new Map(tags.map((tag) => [tag.id, tag]));
 ---
 
 <Layout title="Welcome to Astro.">
-  <TypedTagsProvider
-    client:only="lit"
-    value={{
-      ...tagsContextDefault,
-      tags,
-      tagsMap,
-    }}
-  >
-    <TypedBookmarkProvider
-      client:only="lit"
-      value={{
-        ...bookmarkContextDefault,
-        bookmarks: matchedBookmarks,
-        minId,
-        maxId,
-        showDone,
-      }}
-    >
-      <main class="relative">
-        <Navbar />
+  <main class="relative">
+    <Navbar />
 
-        <div class="container grid grid-cols-[2fr_1fr] max-w-5xl my-0 mx-auto">
-          <BookmarkList client:only="lit" />
-          <AstroBookmarkList
-            tags={tags}
-            bookmarks={matchedBookmarks}
-            tagsMap={tagsMap}
-          />
-          <aside
-            class="block sticky top-0 border-x-[1px] border-x-base-content"
-          >
-            <BookmarkFilters showDone={showDone} />
-            <TagsList tags={tags} />
-          </aside>
-        </div>
-      </main>
-    </TypedBookmarkProvider>
-  </TypedTagsProvider>
+    <div class="container grid grid-cols-[2fr_1fr] max-w-5xl my-0 mx-auto">
+      <BookmarkList tags={tags} bookmarks={matchedBookmarks} />
+      <aside class="block sticky top-0 border-x-[1px] border-x-base-content">
+        <BookmarkFilters showDone={showDone} />
+        <TagsList tags={tags} />
+      </aside>
+    </div>
+  </main>
 </Layout>
