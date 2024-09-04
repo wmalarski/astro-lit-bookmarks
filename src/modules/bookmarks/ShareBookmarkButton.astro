@@ -24,14 +24,22 @@ const { url, text, title } = Astro.props;
   class ShareBookmarkButton extends HTMLButtonElement {
     constructor() {
       super();
+    }
 
-      this?.addEventListener("click", async () => {
-        navigator.share({
-          url: this.getAttribute("url")!,
-          text: this.getAttribute("text")!,
-          title: this.getAttribute("title")!,
-        });
+    onShareClick() {
+      navigator.share({
+        url: this.getAttribute("url")!,
+        text: this.getAttribute("text")!,
+        title: this.getAttribute("title")!,
       });
+    }
+
+    connectedCallback() {
+      this.addEventListener("click", this.onShareClick);
+    }
+
+    disconnectedCallback() {
+      this.removeEventListener("click", this.onShareClick);
     }
   }
 

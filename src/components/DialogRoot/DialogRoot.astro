@@ -3,24 +3,32 @@
 ---
 
 <dialog-root>
-    <slot />
+  <slot />
 </dialog-root>
 
 <script>
-    class DialogRoot extends HTMLElement {
-        constructor() {
-            super();
-
-            const dialog = this.querySelector<HTMLDialogElement>("dialog");
-            const trigger = this.querySelector<HTMLButtonElement>(
-                "[data-dialog-trigger]",
-            );
-
-            trigger?.addEventListener("click", async () => {
-                dialog?.showModal();
-            });
-        }
+  class DialogRoot extends HTMLElement {
+    constructor() {
+      super();
     }
 
-    customElements.define("dialog-root", DialogRoot);
+    onTriggerClick() {
+      const dialog = this.querySelector<HTMLDialogElement>("dialog");
+      dialog?.showModal();
+    }
+
+    getButton() {
+      return this.querySelector<HTMLButtonElement>("[data-dialog-trigger]");
+    }
+
+    connectedCallback() {
+      this.getButton()?.addEventListener("click", this.onTriggerClick);
+    }
+
+    disconnectedCallback() {
+      this.getButton()?.removeEventListener("click", this.onTriggerClick);
+    }
+  }
+
+  customElements.define("dialog-root", DialogRoot);
 </script>
