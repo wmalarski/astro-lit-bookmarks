@@ -13,11 +13,11 @@ const { item } = Astro.props;
 ---
 
 <form method="post" action={actions.updateBookmarkDone}>
-  <label class={formControlRecipe()}>
+  <label class={formControlRecipe({ class: "flex flex-row items-center" })}>
     <input
       name="done"
       checked={item.bookmark?.done}
-      class={checkboxRecipe()}
+      class={checkboxRecipe({ size: "sm" })}
       type="checkbox"
     />
     <div class={labelRecipe()}>

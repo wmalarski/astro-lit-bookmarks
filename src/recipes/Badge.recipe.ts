@@ -1,6 +1,6 @@
 import { twCva } from "@utils/twCva";
 
-export const badgeRecipe = twCva("badge", {
+export const badgeRecipe = twCva("badge gap-2", {
   defaultVariants: {
     color: null,
     size: null,
@@ -19,6 +19,7 @@ export const badgeRecipe = twCva("badge", {
       ghost: "badge-ghost",
     },
     size: {
+      xl: "badge-lg h-8",
       lg: "badge-lg",
       md: "badge-md",
       sm: "badge-sm",

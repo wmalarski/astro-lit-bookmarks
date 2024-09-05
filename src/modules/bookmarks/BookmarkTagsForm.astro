@@ -19,9 +19,23 @@ const tagsIds = new Set(
   item.bookmarkTags.map((bookmarkTag) => bookmarkTag.tagId),
 );
 const unassignedTags = tags.filter((tag) => !tagsIds.has(tag.id));
+
+const id = crypto.randomUUID();
 ---
 
-<form method="post" action={actions.createBookmarkTags}>
+<button
+  popovertarget={id}
+  class={buttonRecipe({
+    size: "sm",
+    color: "secondary",
+    class: "add-bookmark-tag-anchor",
+  })}
+  aria-label="Add tag to bookmark"
+>
+  +
+</button>
+
+<form id={id} method="post" action={actions.createBookmarkTags} popover>
   <input name="bookmarkId" value={item.bookmark?.id} type="hidden" />
   <input name="mastoBookmarkId" value={item.mastoBookmark?.id} type="hidden" />
   <label class={formControlRecipe()}>
@@ -41,3 +55,16 @@ const unassignedTags = tags.filter((tag) => !tagsIds.has(tag.id));
   </label>
   <button class={buttonRecipe()}>Save</button>
 </form>
+
+<style>
+  .add-bookmark-tag-anchor {
+    /* anchor-name: --bookmark-tag-form; */
+  }
+
+  form {
+    /* position-anchor: --bookmark-tag-form; */
+    /* inset: auto; */
+    /* position-area: block-start; */
+    /* position-try-fallbacks: flip-block; */
+  }
+</style>

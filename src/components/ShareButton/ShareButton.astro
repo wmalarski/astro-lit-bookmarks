@@ -1,22 +1,14 @@
 ---
-import { buttonRecipe } from "@recipes/Button.recipe";
-
-export type Props = {
+export type Props = astroHTML.JSX.ButtonHTMLAttributes & {
   title: string;
   text: string;
   url: string;
 };
 
-const { url, text, title } = Astro.props;
+const { url, text, title, ...rest } = Astro.props;
 ---
 
-<share-button
-  type="button"
-  class={buttonRecipe()}
-  url={url}
-  text={text}
-  title={title}
->
+<share-button {...rest} type="button" url={url} text={text} title={title}>
   <slot />
 </share-button>
 

@@ -1,5 +1,6 @@
 ---
 import ShareButton from "@components/ShareButton/ShareButton.astro";
+import { buttonRecipe } from "@recipes/Button.recipe";
 import type { MatchBookmarksResult } from "@server/data/matchBookmarks";
 import type { tagTable } from "@server/db";
 import type { InferSelectModel } from "drizzle-orm";
@@ -39,17 +40,24 @@ const assignedTags = item.bookmarkTags.flatMap((bookmarkTag) => {
         {assignedTags.map(({ tag, bookmarkTag }) => (
           <BookmarkTag tag={tag} bookmarkTag={bookmarkTag} />
         ))}
+        <li>
+          <BookmarkTagsForm item={item} tags={tags} />
+        </li>
       </ul>
     ) : null
   }
   <BookmarkDoneCheckbox item={item} />
-  <BookmarkTagsForm item={item} tags={tags} />
   {
     !item.mastoBookmark && item.bookmark ? (
       <RemoveBookmarkButton item={item} />
     ) : null
   }
-  <ShareButton title={title} text={text} url={url}>Share</ShareButton>
+  <ShareButton
+    class={buttonRecipe({ size: "sm", color: "primary" })}
+    title={title}
+    text={text}
+    url={url}>Share</ShareButton
+  >
   {
     item.mastoBookmark ? (
       <MastoBookmarkItem mastoBookmark={item.mastoBookmark} />
