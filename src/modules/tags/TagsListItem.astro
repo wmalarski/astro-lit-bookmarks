@@ -32,10 +32,10 @@ const { tag } = Astro.props;
     </button>
     <dialog class={modalContainerRecipe()}>
       <div class={modalContentRecipe()}>
-        <p>Delete tag {tag.name}?</p>
+        <strong>Delete tag {tag.name}?</strong>
         <footer class={modalActionsRecipe()}>
           <form method="dialog">
-            <button class={buttonRecipe()}>Close</button>
+            <button class={buttonRecipe({ size: "sm" })}>Close</button>
           </form>
           <form method="post" action={actions.deleteTag}>
             <input name="tagId" value={tag.id} type="hidden" />

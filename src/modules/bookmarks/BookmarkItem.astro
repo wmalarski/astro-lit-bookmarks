@@ -35,7 +35,7 @@ const assignedTags = item.bookmarkTags.flatMap((bookmarkTag) => {
   <span>{text}</span>
   {
     assignedTags && assignedTags.length > 0 ? (
-      <ul>
+      <ul class="flex flex-wrap gap-2">
         {assignedTags.map(({ tag, bookmarkTag }) => (
           <BookmarkTag tag={tag} bookmarkTag={bookmarkTag} />
         ))}

@@ -1,5 +1,7 @@
 ---
 import DialogRoot from "@components/DialogRoot/DialogRoot.astro";
+import XIcon from "@components/Icons/XIcon.astro";
+import { badgeRecipe } from "@recipes/Badge.recipe";
 import { buttonRecipe } from "@recipes/Button.recipe";
 import {
   modalActionsRecipe,
@@ -18,22 +20,23 @@ export type Props = {
 const { tag, bookmarkTag } = Astro.props;
 ---
 
-<li>
+<li class={badgeRecipe({ size: "lg", color: "secondary" })}>
   <span>{tag.name}</span>
   <DialogRoot>
     <button
       data-dialog-trigger
       type="button"
-      class={buttonRecipe({ color: "error", size: "sm" })}
+      class={buttonRecipe({ size: "xs", shape: "square", variant: "ghost" })}
+      aria-label="Delete"
     >
-      Delete
+      <XIcon />
     </button>
     <dialog class={modalContainerRecipe()}>
       <div class={modalContentRecipe()}>
-        <p>Delete bookmark tag {tag.name}?</p>
+        <strong>Delete bookmark tag {tag.name}?</strong>
         <footer class={modalActionsRecipe()}>
           <form method="dialog">
-            <button class={buttonRecipe()}>Close</button>
+            <button class={buttonRecipe({ size: "sm" })}>Close</button>
           </form>
           <form method="post" action={actions.removeBookmarkTag}>
             <input name="bookmarkTagId" value={bookmarkTag.id} type="hidden" />

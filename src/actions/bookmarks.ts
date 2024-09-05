@@ -47,7 +47,7 @@ export const bookmarks = {
     handler: (args, context) => deleteBookmark(context, args),
   }),
   removeBookmarkTag: defineAction({
-    accept: "json",
+    accept: "form",
     input: z.object({ bookmarkTagId: z.string() }),
     handler: (args, context) => deleteBookmarkTag(context, args),
   }),
