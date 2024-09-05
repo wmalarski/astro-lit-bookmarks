@@ -1,4 +1,5 @@
 ---
+import ShareButton from "@components/ShareButton/ShareButton.astro";
 import type { MatchBookmarksResult } from "@server/data/matchBookmarks";
 import type { tagTable } from "@server/db";
 import type { InferSelectModel } from "drizzle-orm";
@@ -7,7 +8,6 @@ import BookmarkTag from "./BookmarkTag.astro";
 import BookmarkTagsForm from "./BookmarkTagsForm.astro";
 import MastoBookmarkItem from "./MastoBookmarkItem.astro";
 import RemoveBookmarkButton from "./RemoveBookmarkButton.astro";
-import ShareBookmarkButton from "./ShareBookmarkButton.astro";
 
 export type Props = {
   item: MatchBookmarksResult;
@@ -49,7 +49,7 @@ const assignedTags = item.bookmarkTags.flatMap((bookmarkTag) => {
       <RemoveBookmarkButton item={item} />
     ) : null
   }
-  <ShareBookmarkButton title={title} text={text} url={url} />
+  <ShareButton title={title} text={text} url={url}>Share</ShareButton>
   {
     item.mastoBookmark ? (
       <MastoBookmarkItem mastoBookmark={item.mastoBookmark} />

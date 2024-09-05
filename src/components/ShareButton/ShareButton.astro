@@ -10,15 +10,15 @@ export type Props = {
 const { url, text, title } = Astro.props;
 ---
 
-<share-bookmark-button
+<share-button
   type="button"
   class={buttonRecipe()}
   url={url}
   text={text}
   title={title}
 >
-  Share
-</share-bookmark-button>
+  <slot />
+</share-button>
 
 <script>
   class ShareBookmarkButton extends HTMLButtonElement {
@@ -26,15 +26,18 @@ const { url, text, title } = Astro.props;
       super();
     }
 
-    onShareClick() {
+    onShareClick = () => {
+      console.log("onShareClick", this);
+
       navigator.share({
         url: this.getAttribute("url")!,
         text: this.getAttribute("text")!,
         title: this.getAttribute("title")!,
       });
-    }
+    };
 
     connectedCallback() {
+      console.log("connectedCallback", this);
       this.addEventListener("click", this.onShareClick);
     }
 
@@ -43,7 +46,7 @@ const { url, text, title } = Astro.props;
     }
   }
 
-  customElements.define("share-bookmark-button", ShareBookmarkButton, {
+  customElements.define("share-button", ShareBookmarkButton, {
     extends: "button",
   });
 </script>
