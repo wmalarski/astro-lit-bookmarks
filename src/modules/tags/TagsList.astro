@@ -1,19 +1,18 @@
 ---
 import type { tagTable } from "@server/db";
 import type { InferSelectModel } from "drizzle-orm";
-import CreateTagForm from "./CreateTagForm.astro";
 import TagsListItem from "./TagsListItem.astro";
 
 export type Props = {
-	tags: InferSelectModel<typeof tagTable>[];
+  tags: InferSelectModel<typeof tagTable>[];
 };
 
 const { tags } = Astro.props;
 ---
 
-<div>
-	<CreateTagForm />
-	<ul>
-		{tags.map((tag) => <TagsListItem tag={tag} />)}
-	</ul>
-</div>
+<section class="flex flex-col gap-2">
+  <h3 class="text-lg font-semibold">Tag List</h3>
+  <ul class="flex flex-wrap gap-2">
+    {tags.map((tag) => <TagsListItem tag={tag} />)}
+  </ul>
+</section>

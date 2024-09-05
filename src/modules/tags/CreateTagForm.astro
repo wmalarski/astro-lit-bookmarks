@@ -1,22 +1,29 @@
 ---
+import { buttonRecipe } from "@recipes/Button.recipe";
 import { formControlRecipe } from "@recipes/FormControl.recipe";
 import { labelRecipe, labelTextRecipe } from "@recipes/Label.recipe";
 import { textFieldRecipe } from "@recipes/TextField.recipe";
 import { actions } from "astro:actions";
 ---
 
-<form method="post" action={actions.createTag}>
-  <label class={formControlRecipe()}>
-    <div class={labelRecipe()}>
-      <span class={labelTextRecipe()}>New tag</span>
-    </div>
-    <input
-      class={textFieldRecipe({ variant: "bordered", size: "sm" })}
-      type="text"
-      name="name"
-      autofocus
-      autocomplete="off"
-      required
-    />
-  </label>
-</form>
+<section class="flex flex-col">
+  <h3 class="text-lg font-semibold">Create new tag</h3>
+  <form method="post" action={actions.createTag} class="flex flex-col gap-2">
+    <label class={formControlRecipe()}>
+      <div class={labelRecipe()}>
+        <span class={labelTextRecipe()}>Name</span>
+      </div>
+      <input
+        class={textFieldRecipe({ variant: "bordered", size: "sm" })}
+        type="text"
+        name="name"
+        autofocus
+        autocomplete="off"
+        required
+      />
+    </label>
+    <button class={buttonRecipe({ color: "primary", size: "sm" })}>
+      Add
+    </button>
+  </form>
+</section>

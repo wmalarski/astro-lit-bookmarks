@@ -60,9 +60,6 @@ export default defineConfig({
     }),
     tailwind(),
   ],
-  experimental: {
-    actions: true,
-  },
   adapter: node({
     mode: "standalone",
   }),

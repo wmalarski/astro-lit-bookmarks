@@ -12,10 +12,9 @@
       super();
     }
 
-    onTriggerClick() {
-      const dialog = this.querySelector<HTMLDialogElement>("dialog");
-      dialog?.showModal();
-    }
+    onTriggerClick = () => {
+      this.querySelector<HTMLDialogElement>("dialog")?.showModal();
+    };
 
     getButton() {
       return this.querySelector<HTMLButtonElement>("[data-dialog-trigger]");

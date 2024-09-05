@@ -1,5 +1,7 @@
 ---
 import { buttonRecipe } from "@recipes/Button.recipe";
+import { formControlRecipe } from "@recipes/FormControl.recipe";
+import { labelRecipe, labelTextRecipe } from "@recipes/Label.recipe";
 import { selectRecipe } from "@recipes/Select.recipe";
 import type { tagTable } from "@server/db";
 import { actions } from "astro:actions";
@@ -22,8 +24,10 @@ const unassignedTags = tags.filter((tag) => !tagsIds.has(tag.id));
 <form method="post" action={actions.createBookmarkTags}>
   <input name="bookmarkId" value={item.bookmark?.id} type="hidden" />
   <input name="mastoBookmarkId" value={item.mastoBookmark?.id} type="hidden" />
-  <label>
-    Tags
+  <label class={formControlRecipe()}>
+    <div class={labelRecipe()}>
+      <span class={labelTextRecipe()}>Tags</span>
+    </div>
     <select
       required
       value=""

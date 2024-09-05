@@ -36,31 +36,6 @@ export const createTag = (
   return result;
 };
 
-type UpdateTagArgs = {
-  name: string;
-  tagId: string;
-};
-
-export const updateTag = (
-  context: ActionAPIContext,
-  { name, tagId }: UpdateTagArgs,
-) => {
-  validateContextSession(context);
-
-  const result = db
-    .update(tagTable)
-    .set({ name })
-    .where(eq(tagTable.id, tagId))
-    .returning()
-    .get();
-
-  if (!result) {
-    throw new ActionError(DB_ERROR);
-  }
-
-  return result;
-};
-
 type DeleteTagArgs = {
   tagId: string;
 };
